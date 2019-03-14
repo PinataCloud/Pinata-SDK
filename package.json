@@ -1,23 +1,62 @@
 {
-  "name": "pinata-sdk",
-  "version": "1.0.0",
-  "description": "Official SDK for the Pinata IPFS service",
-  "main": "src/index.js",
+  "name": "pinata-client",
+  "version": "1.0.8",
+  "description": "Official SDK for the Pinata IPFS platform",
+  "main": "lib/pinata-client.js",
   "scripts": {
-    "test": "jest"
+    "build": "webpack --env dev && webpack --env build && npm run test",
+    "dev": "webpack --progress --colors --watch --env dev",
+    "test": "mocha --require babel-register --colors ./test/*.spec.js",
+    "test:watch": "mocha --require babel-register --colors -w ./test/*.spec.js",
+    "test:cover": "cross-env NODE_ENV=test nyc mocha --require babel-register --colors test/*.js",
+    "repl": "node -i -e \"$(< ./lib/pinata-client.js)\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PinataCloud/Pinata-SDK.git"
+    "url": "https://github.com/PinataCloud/Pinata-SDK.git"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "webpack",
+    "es6",
+    "starter",
+    "library",
+    "universal",
+    "umd",
+    "commonjs"
+  ],
+  "author": "Matt Ober",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
   },
-  "homepage": "https://github.com/PinataCloud/Pinata-SDK#readme",
+  "homepage": "https://github.com/PinataCloud/Pinata-SDK",
   "devDependencies": {
-    "jest": "^24.5.0"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-eslint": "^8.0.3",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-istanbul": "^5.1.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^7.0.0-beta.3",
+    "babel-register": "^7.0.0-beta.3",
+    "chai": "^4.1.2",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.15.1",
+    "eslint-loader": "^2.1.2",
+    "jsdom": "11.11.0",
+    "jsdom-global": "3.0.2",
+    "mocha": "^4.0.1",
+    "nyc": "^13.1.0",
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "yargs": "^10.0.3"
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false
   },
   "dependencies": {
     "axios": "^0.18.0"
