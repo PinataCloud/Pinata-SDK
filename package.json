@@ -1,0 +1,25 @@
+{
+  "name": "pinata-sdk",
+  "version": "1.0.0",
+  "description": "Official SDK for the Pinata IPFS service",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PinataCloud/Pinata-SDK.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
+  },
+  "homepage": "https://github.com/PinataCloud/Pinata-SDK#readme",
+  "devDependencies": {
+    "jest": "^24.5.0"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
