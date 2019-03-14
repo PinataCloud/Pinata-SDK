@@ -6,9 +6,7 @@
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --require babel-register --colors ./test/*.spec.js",
-    "test:watch": "mocha --require babel-register --colors -w ./test/*.spec.js",
-    "test:cover": "cross-env NODE_ENV=test nyc mocha --require babel-register --colors test/*.js",
+    "test": "jest",
     "repl": "node -i -e \"$(< ./lib/pinata-client.js)\""
   },
   "repository": {
@@ -41,13 +39,12 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^7.0.0-beta.3",
     "babel-register": "^7.0.0-beta.3",
-    "chai": "^4.1.2",
     "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
     "eslint-loader": "^2.1.2",
+    "jest": "^24.5.0",
     "jsdom": "11.11.0",
     "jsdom-global": "3.0.2",
-    "mocha": "^4.0.1",
     "nyc": "^13.1.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.29.6",
