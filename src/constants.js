@@ -1,2 +1,1 @@
-export const baseUrl = 'https://pinata.cloud';
-export const apiUrl = `${baseUrl}/api`;
+export const baseUrl = 'https://api.pinata.cloud';
