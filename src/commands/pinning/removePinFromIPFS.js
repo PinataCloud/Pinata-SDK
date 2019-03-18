@@ -1,33 +1,22 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateHostNodes, validateMetadata } from '../../util/validators';
+import { validateApiKeys } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 
-export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
+export default function removePinFromIPFS(pinataApiKey, pinataSecretApiKey, ipfsPinHash) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 
-    if (!hashToPin) {
-        throw new Error('hashToPin value is required for adding a hash to the pin queue');
+    if (!ipfsPinHash) {
+        throw new Error('ipfsPinHash value is required for removing a pin from Pinata');
     }
-    if (!isIPFS.cid(hashToPin)) {
-        throw new Error('hashToPin value is an invalid IPFS CID');
+    if (!isIPFS.cid(ipfsPinHash)) {
+        throw new Error(`${ipfsPinHash} is an invalid IPFS CID`);
     }
 
-    const endpoint = `${baseUrl}/pinning/addHashToPinQueue`;
+    const endpoint = `${baseUrl}/pinning/removePinFromIPFS`;
     const body = {
-        hashToPin: hashToPin
+        ipfs_pin_hash: ipfsPinHash
     };
-
-    if (options) {
-        if (options.host_nodes) {
-            validateHostNodes(options.host_nodes);
-            body.host_nodes = options.host_nodes;
-        }
-        if (options.pinataMetadata) {
-            validateMetadata(options.pinataMetadata);
-            body.pinataMetadata = options.pinataMetadata;
-        }
-    }
 
     return new Promise((resolve, reject) => {
         axios.post(
@@ -42,7 +31,7 @@ export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hash
             }).then(function (result) {
             if (result.status !== 200) {
                 reject({
-                    error: `unknown server response while adding to pin queue: ${result}`
+                    error: `unknown server response while removing pin from IPFS: ${result}`
                 });
             }
             resolve(result);

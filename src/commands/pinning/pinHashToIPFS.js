@@ -3,7 +3,7 @@ import { baseUrl } from './../../constants';
 import { validateApiKeys, validateHostNodes, validateMetadata } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 
-export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
+export default function pinHashToIPFS(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 
     if (!hashToPin) {
@@ -13,7 +13,7 @@ export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hash
         throw new Error('hashToPin value is an invalid IPFS CID');
     }
 
-    const endpoint = `${baseUrl}/pinning/addHashToPinQueue`;
+    const endpoint = `${baseUrl}/pinning/pinHashToIPFS`;
     const body = {
         hashToPin: hashToPin
     };
@@ -42,7 +42,7 @@ export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hash
             }).then(function (result) {
             if (result.status !== 200) {
                 reject({
-                    error: `unknown server response while adding to pin queue: ${result}`
+                    error: `unknown server response while pinning hash to IPFS: ${result}`
                 });
             }
             resolve(result);
