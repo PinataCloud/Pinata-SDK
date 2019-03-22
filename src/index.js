@@ -1,9 +1,11 @@
 import addHashToPinQueue from './commands/pinning/addHashToPinQueue';
+import pinFileToIPFS from './commands/pinning/pinFileToIPFS';
 import pinJSONToIPFS from './commands/pinning/pinJSONToIPFS';
 import pinHashToIPFS from './commands/pinning/pinHashToIPFS';
 import pinJobs from './commands/pinning/pinJobs/pinJobs';
 import removePinFromIPFS from './commands/pinning/removePinFromIPFS';
 import testAuthentication from './commands/data/testAuthentication';
+import userPinList from './commands/data/userPinList/userPinList';
 import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 
 export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
@@ -12,6 +14,9 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     //  setting up the actual calls you can make using this package
     client.addHashToPinQueue = function (hashToPin, options) {
         return addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hashToPin, options);
+    };
+    client.pinFileToIPFS = function (file, options) {
+        return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, file, options);
     };
     client.pinJSONToIPFS = function (body, options) {
         return pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options);
@@ -27,6 +32,9 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     };
     client.testAuthentication = function () {
         return testAuthentication(pinataApiKey, pinataSecretApiKey);
+    };
+    client.userPinList = function (filters) {
+        return userPinList(pinataApiKey, pinataSecretApiKey, filters);
     };
     client.userPinnedDataTotal = function () {
         return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);

@@ -1,6 +1,6 @@
 {
   "name": "pinata-client",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Official SDK for the Pinata IPFS platform",
   "main": "lib/pinata-client.js",
   "scripts": {
@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "form-data": "^2.3.3",
     "is-ipfs": "^0.6.0"
   }
 }
