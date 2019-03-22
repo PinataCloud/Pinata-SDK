@@ -20,7 +20,6 @@ const pinataSDK = require('@pinata/sdk');
 const pinata = pinataClient('yourPinataApiKey', 'yourPinataSecretApiKey');
 ```
 
-## Usage
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise. Here's an example of how you would test your authentication keys with the SDK.
 ```
 pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result) => {
@@ -30,7 +29,10 @@ pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result
 });
 ```
 
-## Readings
+## Usage
+
+
+## Functions
 
 * [Start your own JavaScript library using webpack and ES6](http://krasimirtsonev.com/blog/article/javascript-library-starter-using-webpack-es6)
 
