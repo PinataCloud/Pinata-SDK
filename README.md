@@ -1,33 +1,13 @@
-# Webpack library starter
+# Pinata SDK
 
-Webpack based boilerplate for producing libraries (Input: ES6, Output: universal library)
+Official NodeJS SDK for [Pinata](https://pinata.cloud)
 
-![Travis](https://travis-ci.org/krasimir/webpack-library-starter.svg?branch=master)
+## Overview
 
-## Features
+The Pinata NodeJS SDK provides the quickest / easiest path for interacting with the [Pinata API](https://pinata.cloud/documentation#GettingStarted).
 
-* Webpack 4 based.
-* ES6 as a source.
-* Exports in a [umd](https://github.com/umdjs/umd) format so your library works everywhere.
-* ES6 test setup with [Mocha](http://mochajs.org/) and [Chai](http://chaijs.com/).
-* Linting with [ESLint](http://eslint.org/).
-
-## Process
-
-```
-ES6 source files
-       |
-       |
-    webpack
-       |
-       +--- babel, eslint
-       |
-  ready to use
-     library
-  in umd format
-```
-
-*Have in mind that you have to build your library before publishing. The files under the `lib` folder are the ones that should be distributed.*
+## Installation
+npm install --save pinata-client
 
 ## Getting started
 
