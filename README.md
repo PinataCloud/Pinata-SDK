@@ -521,6 +521,6 @@ The metadata object can consist of the following values:
 }
 ```
 
-Questions? Issues? Suggestions? Feel free to file a github issue or email us at team@pinata.cloud 
+## Questions? Issues? Suggestions? Feel free to file a github issue or email us at team@pinata.cloud 
 
-We'd love to hear from you
+We'd love to hear from you!
