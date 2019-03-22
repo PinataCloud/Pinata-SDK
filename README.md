@@ -43,13 +43,15 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
   * [removePinFromIPFS](#removePinFromIPFS-anchor)
 
 * Data
-  * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
+  * [testAuthentication](#testAuthentication-anchor)
   * [userPinList](#userPinList-anchor)
+  * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
 <br />
 
 <a name="addHashToPinQueue-anchor"></a>
 ### `addHashToPinQueue`
 Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchronous version of this operation see: [pinHashToIPFS](#pinHashToIPFS-anchor)
+
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
 * `hashToPin` - A string for a valid IPFS Hash (Also known as a CID)
@@ -90,8 +92,9 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 ```
 
 <a name="pinFileToIPFS-anchor"></a>
-Send a file to to Pinata for direct pinning to IPFS.
 ### `pinFileToIPFS`
+Send a file to to Pinata for direct pinning to IPFS.
+
 ##### `pinata.pinFileToIPFS(readableStream, options)`
 ##### Params
 * `readableStream` - A [readableStream](https://nodejs.org/api/stream.html) of the file to be added 
@@ -129,6 +132,7 @@ pinata.pinFileToIPFS(readableStreamForFile, options).then((result) => {
 
 <a name="pinHashToIPFS-anchor"></a>
 Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS network. Pinata will then syncronously search for this content and pin it on Pinata once the content is found. For the asynchronous version of this operation see: [addHashToPinQueue](#addHashToPinQueue-anchor)
+
 ### `pinHashToIPFS`
 ##### `pinata.pinHashToIPFS(hashToPin, options)`
 ##### Params
@@ -171,9 +175,10 @@ pinata.pinHashToIPFS('yourHashHere', options).then((result) => {
 <a name="pinJobs-anchor"></a>
 ### `pinJobs`
 This endpoint allows users to search for the status of all hashes that are currently in Pinata's pin queue. Records in the pin queue arrived there through either the [addHashToPinQueue](#addHashToPinQueue-anchor) operation or by failing during a [pinHashToIPFS](#pinHashToIPFS-anchor) operation.
-##### `pinata.pinJobs(options)`
+
+##### `pinata.pinJobs(filters)`
 ##### Params
-* `options` (optional): An object that can consist of the following optional query parameters:
+* `filters` (optional): An object that can consist of the following optional query parameters:
   * `sort` (optional): How you wish for the records in the response to be sorted. Valid inputs for this are:
     * `'ASC'`
     * `'DESC'`
@@ -211,14 +216,14 @@ This endpoint allows users to search for the status of all hashes that are curre
 ```
 ##### Example Code
 ```javascript
-const options = {
+const filters = {
     sort: 'ASC',
     status: 'searching',
     ipfs_pin_hash: 'Qma6e8dovfLyiG2UUfdkSHNPAySzrWLX9qVXb44v1muqcp',
     limit: 10,
     offset: 0
 };
-pinata.pinJobs('yourHashHere', options).then((result) => {
+pinata.pinJobs('yourHashHere', filters).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {
@@ -230,11 +235,12 @@ pinata.pinJobs('yourHashHere', options).then((result) => {
 <a name="pinJSONToIPFS-anchor"></a>
 ### `pinJSONToIPFS`
 Send JSON to to Pinata for direct pinning to IPFS.
+
 ##### `pinata.pinJSONToIPFS(body, options)`
 ##### Params
 * `body` - Valid JSON you wish to pin to IPFS
 * `options` (optional): A JSON object that can contain the following keyvalues:
-  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+  * `metadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 #### Response
 ```
 {
@@ -268,15 +274,211 @@ pinata.pinJSONToIPFS(body, options).then((result) => {
 
 <a name="removePinFromIPFS-anchor"></a>
 ### `removePinFromIPFS`
-pinFileToIPFS
+Have Pinata unpin content that you've pinned through the service.
 
-<a name="userPinnedDataTotal-anchor"></a>
-### `userPinnedDataTotal`
-userPinnedDataTotal
+##### `pinata.removePinFromIPFS(ipfsPinHash)`
+##### Params
+* `ipfsPinHash` - Valid JSON you wish to pin to IPFS
+#### Response
+If the operation is successful, you will simply receive "OK" as your result
+##### Example Code
+```javascript
+pinata.removePinFromIPFS(ipfsPinHash).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
+
+<a name="testAuthentication-anchor"></a>
+### `testAuthentication`
+Tests that you can authenticate with Pinata correctly
+
+##### `pinata.testAuthentication()`
+##### Params
+None
+
+#### Response
+```
+{
+    authenticated: true
+}
+```
+
+##### Example Code
+```javascript
+pinata.testAuthentication().then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
 
 <a name="userPinList-anchor"></a>
 ### `userPinList`
-userPinList
+Retrieve pin records for your Pinata account
+
+##### `pinata.userPinList(filters)`
+##### Params
+* `filters` (optional): An object that can consist of the following optional query parameters:
+  * `hashContains` (optional): A string of alphanumeric characters that desires hashes must contain
+  * `pinStart` (optional): The earliest date the content is allowed to have been pinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `pinEnd` (optional): The earliest date the content is allowed to have been pinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `unpinStart` (optional): The earlist date the content is allowed to have been unpinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `unpinEnd` (optional): The latest date the content is allowed to have been unpinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `pinSizeMin` (optional): The minimum byte size that pin record you're looking for can have
+  * `pinSizeMax` (optional): The maximum byte size that pin record you're looking for can have
+  * `pinFilter` (optional): Filter pins using one of the following options
+    * `'all'` (Records for both pinned and unpinned content will be returned)
+    * `'pinned'` (Only records for pinned content will be returned)
+    * `'unpinned'` (Only records for unpinned content will be returned)
+  * `pageLimit` (optional): Limit the amount of results returned per page of results (default is 10, and max is 1000)
+  * `pageOffset` (optional): Provide the record offset for records being returned. This is how you retrieve records on additional pages (default is 0)
+   * `metadata` (optional): A JSON object that can be used to find records for content that had optional metadata included when it was added to Pinata. The metadata object is formatted as follows:
+ 
+##### Metadata filter object formatting
+```
+{
+    name: 'exampleName',
+    keyvalues: {
+        testKeyValue: {
+            value: 'exampleFilterValue',
+            op: 'exampleFilterOperation'
+        },
+        testKeyValue2: {
+            value: 'exampleFilterValue2',
+            op: 'exampleFilterOperation2'
+        }
+    }
+}
+```
+Filter explanations:
+* `name` (optional): If provided, any records returned must have a name that contains the string provided for the 'name'.
+* `keyvalues` (optional): Each keyvalue provided in this object have both a `value` and `op`
+  * `value` (required): This is the value which will be filtered on
+  * `op` (required): This is the filter operation that will be applied to the `value` that was provided. Valid op values are:
+     * `'gt'` (greater than the value provided)
+     * `'gte'` (greater than or equal to the value provided)
+     * `'lt'` (less than the value provided)
+     * `'lte'` (less than or equal to the value provided)
+     * `'ne'` (not equal to the value provided)
+     * `'eq'` (equal to the value provided)
+     * `'between'` (between the two values provided) - NOTE - This also requires a `secondValue` be provided as seen in the example below
+     * `'notBetween'` (not between the two values provided) - NOTE - This also requires a `secondValue` be provided as seen in the example below
+     * `'like'` (like the value provided)
+     * `'notLike'` (not like the value provided)
+     * `'iLike'` (case insensitive version of `like`)
+     * `'notILike'` (case insensitive version of `notLike`)
+     * `'regexp'` (filter the value provided based on a provided regular expression)
+     * `'iRegexp'` (case insensitive version of regexp)
+  
+As an example, the following filter would only find records whose name contains the letters 'invoice', have the metadata key 'company' with a value of 'exampleCompany', and have a metadata key 'total' with values between 500 and 1000:
+```
+{
+    name: 'invoice',
+    keyvalues: {
+        company: {
+            value: 'exampleCompany,
+            op: 'eq'
+        },
+        total: {
+            value: 500,
+            secondValue: 1000,
+            op: 'between'
+        }
+    }
+}
+```
+
+
+ 
+#### Response
+```
+{
+    count: (this is the total number of pin records that exist for the query filters you passed in),
+    rows: [
+        {
+            id: (the id of your pin instance record),
+            ipfs_pin_hash: (the IPFS multi-hash for the content you pinned),
+            size: (this is how large (in bytes) the content pinned is),
+            user_id: (this is your user id for Pinata),
+            date_pinned: (This is the timestamp for when this content was pinned - represented in ISO 8601 format),
+            date_unpinned: (This is the timestamp for when this content was unpinned (if null, then you still have the content pinned on Pinata),
+            metadata: {
+                name: (this will be the name of the file originally upuloaded, or the custom name you set),
+                keyvalues: {
+                    exampleCustomKey: "exampleCustomValue",
+                    exampleCustomKey2: "exampleCustomValue2",
+                    ...
+                }
+            }
+        },
+        {
+            same record format as above
+        }
+        .
+        .
+        .
+    ]
+}
+```
+##### Example Code
+```javascript
+const metadataFilter = {
+    name: 'exampleName',
+    keyvalues: {
+        testKeyValue: {
+            value: 'exampleFilterValue',
+            op: 'exampleFilterOperation'
+        },
+        testKeyValue2: {
+            value: 'exampleFilterValue2',
+            op: 'exampleFilterOperation2'
+        }
+    }
+};
+
+const filters = {
+    pinFilter : 'pinned',
+    pageLimit: 10,
+    pageOffset: 0,
+    metadata: metadataFilter
+};
+pinata.userPinList(filters).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
+
+<a name="userPinnedDataTotal-anchor"></a>
+### `userPinnedDataTotal`
+Returns the total combined size (in bytes) of all content you currently have pinned on Pinata.
+
+##### `pinata.userPinnedDataTotal()`
+##### Params
+None
+
+#### Response
+The response for this call will the total combined size of everything you currently have pinned on pinata.
+This value will be expressed in bytes
+
+##### Example Code
+```javascript
+pinata.userPinnedDataTotal().then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
 
 <a name="hostNode-anchor"></a>
 ## Host Node Multiaddresses
@@ -301,7 +503,7 @@ Here's an example of what a full external ipv4 multiaddress would look like (you
 ## Pinata Metadata
 For endpoints that allow you to add content, Pinata lets you add optionally metadata for that content. This metadata can later be used for querying on what you've pinned with our [userPinList](#userPinList-anchor) endpoint. Providing metadata does not alter your content or how it is stored on IPFS in any way.
 
-The pinataMetadata object can consist of the following values:
+The metadata object can consist of the following values:
 * name (optional) - A custom string to use as the name for your content
 * keyvalues (optional) - An object containing up to 10 custom key / value pairs. The values can be:
   * strings
