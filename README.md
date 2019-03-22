@@ -35,63 +35,43 @@ pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
 
 #### Pinning
-* [addHashToPinQueue](#addHashToPinQueue)
-* [pinFileToIPFS](#pinFileToIPFS)
-* [pinHashToIPFS](#pinHashToIPFS)
-* [pinJobs](#pinJobs)
-* [pinJSONToIPFS](#pinJSONToIPFS)
-* [removePinFromIPFS](#removePinFromIPFS)
+[addHashToPinQueue](#addHashToPinQueue)<br />
+[pinFileToIPFS](#pinFileToIPFS)<br />
+[pinHashToIPFS](#pinHashToIPFS)<br />
+[pinJobs](#pinJobs)<br />
+[pinJSONToIPFS](#pinJSONToIPFS)<br />
+[removePinFromIPFS](#removePinFromIPFS)<br />
 
-####
-
-* [userPinnedDataTotal](#userPinnedDataTotal)
-* [userPinList](#userPinList)
+#### Data
+[userPinnedDataTotal](#userPinnedDataTotal)<br />
+[userPinList](#userPinList)<br />
 
 #### `addHashToPinQueue`
 addHashToPinQueue
-.
-.
-.
-.
-.
-.
-.
+##### Params
+```
+test
+```
 
 #### `pinFileToIPFS`
 pinFileToIPFS
 
+#### `pinHashToIPFS`
+pinHashToIPFS
 
-## Functions
+#### `pinJobs`
+pinFileToIPFS
 
-* [Start your own JavaScript library using webpack and ES6](http://krasimirtsonev.com/blog/article/javascript-library-starter-using-webpack-es6)
+#### `pinJSONToIPFS`
+pinFileToIPFS
+
+#### `removePinFromIPFS`
+pinFileToIPFS
+
+#### `userPinnedDataTotal`
+userPinnedDataTotal
+
+#### `userPinList`
+userPinList
 
 ## Misc
-
-### An example of using dependencies that shouldn’t be resolved by webpack, but should become dependencies of the resulting bundle
-
-In the following example we are excluding React and Lodash:
-
-```js
-{
-  devtool: 'source-map',
-  output: {
-    path: '...',
-    libraryTarget: 'umd',
-    library: '...'
-  },
-  entry: '...',
-  ...
-  externals: {
-    react: 'react'
-    // Use more complicated mapping for lodash.
-    // We need to access it differently depending
-    // on the environment.
-    lodash: {
-      commonjs: 'lodash',
-      commonjs2: 'lodash',
-      amd: '_',
-      root: '_'
-    }
-  }
-}
-```
