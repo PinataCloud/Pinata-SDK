@@ -1,13 +1,13 @@
 {
-  "name": "pinata-client",
-  "version": "1.0.13",
+  "name": "@pinata/sdk",
+  "version": "1.0.14",
   "description": "Official SDK for the Pinata IPFS platform",
-  "main": "lib/pinata-client.js",
+  "main": "lib/pinata-sdk.js",
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "jest",
-    "repl": "node -i -e \"$(< ./lib/pinata-client.js)\""
+    "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
   },
   "repository": {
     "type": "git",
