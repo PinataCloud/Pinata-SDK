@@ -80,36 +80,36 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 });
 ```
 
-#### `pinFileToIPFS`
 <a name="pinFileToIPFS-anchor"></a>
+#### `pinFileToIPFS`
 pinFileToIPFS
 
-#### `pinHashToIPFS`
 <a name="pinHashToIPFS-anchor"></a>
+#### `pinHashToIPFS`
 pinHashToIPFS
 
-#### `pinJobs`
 <a name="pinJobs-anchor"></a>
+#### `pinJobs`
 pinFileToIPFS
 
-#### `pinJSONToIPFS`
 <a name="pinJSONToIPFS-anchor"></a>
+#### `pinJSONToIPFS`
 pinFileToIPFS
 
-#### `removePinFromIPFS`
 <a name="removePinFromIPFS-anchor"></a>
+#### `removePinFromIPFS`
 pinFileToIPFS
 
-#### `userPinnedDataTotal`
 <a name="userPinnedDataTotal-anchor"></a>
+#### `userPinnedDataTotal`
 userPinnedDataTotal
 
-#### `userPinList`
 <a name="userPinList-anchor"></a>
+#### `userPinList`
 userPinList
 
-## Host Node Multiaddresses
 <a name="hostNode-anchor"></a>
+## Host Node Multiaddresses
 For endpoints that involve Pinata finding and pinning content that already resides on the IPFS network, you can help Pinata find your content faster by optionally providing us with the "multiaddresses" up to five host nodes that your content already resides on.
 
 To find the multiaddresses of your nodes, simply run the following on your node's command line:
@@ -126,6 +126,6 @@ Here's an example of what a full external ipv4 multiaddress would look like (you
 
 ⚠️ Please make sure every node provided is online. Pinata will attempt to connect to all nodes before pinning the content, and if any these nodes are offline, your request will eventually fail.
 
-## Pinata Metadata
 <a name="metadata-anchor"></a>
+## Pinata Metadata
 testing
