@@ -49,7 +49,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 
 <a name="addHashToPinQueue-anchor"></a>
 ### `addHashToPinQueue`
-Adds a hash to Pinata's pin queue to be pinned asynchronously
+Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchronous version of this operation see: [pinHashToIPFS](#pinHashToIPFS-anchor)
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
 * hashToPin - A string for a valid IPFS Hash (Also known as a CID)
@@ -90,6 +90,7 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 ```
 
 <a name="pinFileToIPFS-anchor"></a>
+Send a file to to Pinata for direct pinning to IPFS.
 ### `pinFileToIPFS`
 ##### `pinata.pinFileToIPFS(readableStream, options)`
 ##### Params
@@ -99,10 +100,52 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 #### Response
 ```
 {
-    id: This is Pinata's ID for the pin job,
-    IpfsHash: This is the IPFS multi-hash provided to Pinata to pin,
-    status: The current status of the pin job. If the request was successful the status should be 'searching'.
-    name: The name of the pin (if provided initially)
+    IpfsHash: This is the IPFS multi-hash provided back for your content,
+    PinSize: This is how large (in bytes) the content you just pinned is,
+    Timestamp: This is the timestamp for your content pinning (represented in ISO 8601 format)
+}
+```
+##### Example Code
+```javascript
+const fs = require('fs');
+const readableStreamForFile = fs.createReadStream('./yourfile.png');
+const options = {
+    host_nodes: [
+        "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
+        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id"
+    ],
+    pinataMetadata: {
+        name: MyCustomName,
+        keyvalues: {
+            customKey: "customValue",
+            customKey2: "customValue2"
+        }
+    }
+};
+pinata.pinFileToIPFS(readableStreamForFile, options).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
+
+<a name="pinHashToIPFS-anchor"></a>
+Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS network. Pinata will then syncronously search for this content and pin it on Pinata once the content is found. For the asynchronous version of this operation see: [addHashToPinQueue](#addHashToPinQueue-anchor)
+### `pinHashToIPFS`
+##### `pinata.pinHashToIPFS(hashToPin, options)`
+##### Params
+* hashToPin - A string for a valid IPFS Hash (Also known as a CID)
+* options (optional): A JSON object that can contain following keyvalues:
+  * host_nodes (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
+  * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+#### Response
+```
+{
+    IpfsHash: This is the IPFS multi-hash provided back for your content,
+    PinSize: This is how large (in bytes) the content you just pinned is,
+    Timestamp: This is the timestamp for your content pinning (represented in ISO 8601 format)
 }
 ```
 ##### Example Code
@@ -120,7 +163,7 @@ const options = {
         }
     }
 };
-pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
+pinata.pinHashToIPFS('yourHashHere', options).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {
@@ -128,10 +171,6 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
     console.log(err);
 });
 ```
-
-<a name="pinHashToIPFS-anchor"></a>
-### `pinHashToIPFS`
-pinHashToIPFS
 
 <a name="pinJobs-anchor"></a>
 ### `pinJobs`
