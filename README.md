@@ -35,7 +35,7 @@ pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
 
 #### Pinning
-* [addHashToPinQueue](#addhashtopinqueue)
+* [addHashToPinQueue](#addHashToPinQueue)
 * [pinFileToIPFS](#pinFileToIPFS)
 * [pinHashToIPFS](#pinHashToIPFS)
 * [pinJobs](#pinJobs)
@@ -49,6 +49,16 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 
 #### `addHashToPinQueue`
 addHashToPinQueue
+.
+.
+.
+.
+.
+.
+.
+
+#### `pinFileToIPFS`
+pinFileToIPFS
 
 
 ## Functions
