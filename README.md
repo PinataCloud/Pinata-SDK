@@ -45,12 +45,27 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 * Data
   * [userPinnedDataTotal](#userPinnedDataTotal)
   * [userPinList](#userPinList)
+<br />
 
 #### `addHashToPinQueue`
-addHashToPinQueue
+Adds a hash to Pinata's pin queue to be pinned asynchronously
+##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
+* hashToPin - A string for a valid IPFS Hash (Also known as a CID)
+* options (optional): A JSON object with the following keyvalues:
+  * host_nodes (optional): An array of multiaddresses for nodes that are currently hosting the content to be pinned
+  * pinataMetadata (optional): A JSON object with [optional metadata](#Pinata Metadata) for the hash being pinned
 ```
-test
+{
+    host_nodes: [
+        /ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id,
+        /ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id
+    ],
+    pinataMetadata: {
+        name: 'exampleName',
+        
+    }
+}
 ```
 
 #### `pinFileToIPFS`
@@ -74,4 +89,5 @@ userPinnedDataTotal
 #### `userPinList`
 userPinList
 
-## Misc
+## Pinata Metadata
+testing
