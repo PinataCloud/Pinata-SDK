@@ -15,8 +15,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     client.addHashToPinQueue = function (hashToPin, options) {
         return addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hashToPin, options);
     };
-    client.pinFileToIPFS = function (file, options) {
-        return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, file, options);
+    client.pinFileToIPFS = function (readableStream, options) {
+        return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readableStream, options);
     };
     client.pinJSONToIPFS = function (body, options) {
         return pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options);

@@ -108,7 +108,6 @@ export default function queryBuilder(baseUrl, filters) {
                         throw new Error(`keyValue: ${key} is not an object`);
                     }
                     if (!value || !value.value || !value.op) {
-                        console.log('value: ', value);
                         throw new Error(`keyValue: ${key} must have both value and op attributes`);
                     }
                     if ((typeof value.value !== 'string') && (typeof value.value !== 'boolean') && (typeof value.value !== 'number')) {
