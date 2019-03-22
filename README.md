@@ -54,7 +54,7 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously
 * hashToPin - A string for a valid IPFS Hash (Also known as a CID)
 * options (optional): A JSON object with the following keyvalues:
   * host_nodes (optional): An array of multiaddresses for nodes that are currently hosting the content to be pinned
-  * pinataMetadata (optional): A JSON object with [optional metadata](#Pinata Metadata) for the hash being pinned
+  * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 ```
 {
     host_nodes: [
@@ -90,4 +90,5 @@ userPinnedDataTotal
 userPinList
 
 ## Pinata Metadata
+<a name="metadata-anchor"></a>
 testing
