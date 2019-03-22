@@ -17,7 +17,7 @@ npm install --save @pinata/sdk
 To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
 ```javascript
 const pinataSDK = require('@pinata/sdk');
-const pinata = pinataClient('yourPinataApiKey', 'yourPinataSecretApiKey');
+const pinata = pinataSDK('yourPinataApiKey', 'yourPinataSecretApiKey');
 ```
 
 Quickly test that you can connect to the API with the following call:
