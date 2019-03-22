@@ -35,12 +35,12 @@ pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
 
 * Pinning
-  * [addHashToPinQueue](#addHashToPinQueue)
-  * [pinFileToIPFS](#pinFileToIPFS)
-  * [pinHashToIPFS](#pinHashToIPFS)
-  * [pinJobs](#pinJobs)
-  * [pinJSONToIPFS](#pinJSONToIPFS)
-  * [removePinFromIPFS](#removePinFromIPFS)
+  * [addHashToPinQueue](#addHashToPinQueue-anchor)
+  * [pinFileToIPFS](#pinFileToIPFS-anchor)
+  * [pinHashToIPFS](#pinHashToIPFS-anchor)
+  * [pinJobs](#pinJobs-anchor)
+  * [pinJSONToIPFS](#pinJSONToIPFS-anchor)
+  * [removePinFromIPFS](#removePinFromIPFS-anchor)
 
 * Data
   * [userPinnedDataTotal](#userPinnedDataTotal)
@@ -54,7 +54,7 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously
 ##### Params
 * hashToPin - A string for a valid IPFS Hash (Also known as a CID)
 * options (optional): A JSON object with the following keyvalues:
-  * host_nodes (optional): An array of [multiaddresses for nodes](#hostnode-anchor) that are currently hosting the content to be pinned
+  * host_nodes (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
   * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 ##### Example Code
 ```javascript
@@ -81,28 +81,35 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 ```
 
 #### `pinFileToIPFS`
+<a name="pinFileToIPFS-anchor"></a>
 pinFileToIPFS
 
 #### `pinHashToIPFS`
+<a name="pinHashToIPFS-anchor"></a>
 pinHashToIPFS
 
 #### `pinJobs`
+<a name="pinJobs-anchor"></a>
 pinFileToIPFS
 
 #### `pinJSONToIPFS`
+<a name="pinJSONToIPFS-anchor"></a>
 pinFileToIPFS
 
 #### `removePinFromIPFS`
+<a name="removePinFromIPFS-anchor"></a>
 pinFileToIPFS
 
 #### `userPinnedDataTotal`
+<a name="userPinnedDataTotal-anchor"></a>
 userPinnedDataTotal
 
 #### `userPinList`
+<a name="userPinList-anchor"></a>
 userPinList
 
 ## Host Node Multiaddresses
-<a name="hostnode-anchor"></a>
+<a name="hostNode-anchor"></a>
 For endpoints that involve Pinata finding and pinning content that already resides on the IPFS network, you can help Pinata find your content faster by optionally providing us with the "multiaddresses" up to five host nodes that your content already resides on.
 
 To find the multiaddresses of your nodes, simply run the following on your node's command line:
