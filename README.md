@@ -43,12 +43,12 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
   * [removePinFromIPFS](#removePinFromIPFS-anchor)
 
 * Data
-  * [userPinnedDataTotal](#userPinnedDataTotal)
-  * [userPinList](#userPinList)
+  * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
+  * [userPinList](#userPinList-anchor)
 <br />
 
+<a name="addHashToPinQueue-anchor"></a>
 #### `addHashToPinQueue`
-<a name="addHashToPinQueue"></a>
 Adds a hash to Pinata's pin queue to be pinned asynchronously
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
@@ -56,12 +56,21 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously
 * options (optional): A JSON object with the following keyvalues:
   * host_nodes (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
   * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+#### Response
+```
+{
+    id: This is Pinata's ID for the pin job,
+    IpfsHash: This is the IPFS multi-hash provided to Pinata to pin,
+    status: The current status of the pin job. If the request was successful the status should be 'searching'.
+    name: The name of the pin (if provided initially)
+}
+```
 ##### Example Code
 ```javascript
 const options = {
     host_nodes: [
         "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
-        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id",
+        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id"
     ],
     pinataMetadata: {
         name: MyCustomName,
