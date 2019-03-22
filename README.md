@@ -1,3 +1,5 @@
+<img src="https://cdn-images-1.medium.com/max/1200/1*BTGStLRXsQUbkp0t-oxJhQ.png" width="200" />
+
 # Pinata SDK
 
 Official NodeJS SDK for [Pinata](https://pinata.cloud)
@@ -7,27 +9,26 @@ Official NodeJS SDK for [Pinata](https://pinata.cloud)
 The Pinata NodeJS SDK provides the quickest / easiest path for interacting with the [Pinata API](https://pinata.cloud/documentation#GettingStarted).
 
 ## Installation
-npm install --save pinata-client
+```
+npm install --save @pinata/sdk
+```
 
-## Getting started
+## Setup
+To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
+```
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataClient('yourPinataApiKey', 'yourPinataSecretApiKey');
+```
 
-1. Setting up the name of your library
-  * Open `webpack.config.js` file and change the value of `libraryName` variable.
-  * Open `package.json` file and change the value of `main` property so it matches the name of your library.
-2. Build your library
-  * Run `yarn install` (recommended) or `npm install` to get the project's dependencies
-  * Run `yarn build` or `npm run build` to produce minified version of your library.
-3. Development mode
-  * Having all the dependencies installed run `yarn dev` or `npm run dev`. This command will generate an non-minified version of your library and will run a watcher so you get the compilation on file change.
-4. Running the tests
-  * Run `yarn test` or `npm run test`
-
-## Scripts
-
-* `yarn build` or `npm run build` - produces production version of your library under the `lib` folder
-* `yarn dev` or `npm run dev` - produces development version of your library and runs a watcher
-* `yarn test` or `npm run test` - well ... it runs the tests :)
-* `yarn test:watch` or `npm run test:watch` - same as above but in a watch mode
+## Usage
+Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise. Here's an example of how you would test your authentication keys with the SDK.
+```
+pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result) => {
+    console.log(result);
+}).catch((err) => {
+    console.log(err);
+});
+```
 
 ## Readings
 
