@@ -230,7 +230,6 @@ pinata.pinJobs('yourHashHere', options).then((result) => {
 <a name="pinJSONToIPFS-anchor"></a>
 ### `pinJSONToIPFS`
 Send JSON to to Pinata for direct pinning to IPFS.
-### `pinJSONToIPFS`
 ##### `pinata.pinJSONToIPFS(body, options)`
 ##### Params
 * `body` - Valid JSON you wish to pin to IPFS
