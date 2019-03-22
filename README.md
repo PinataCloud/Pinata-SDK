@@ -53,7 +53,7 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
 * hashToPin - A string for a valid IPFS Hash (Also known as a CID)
-* options (optional): A JSON object with the following keyvalues:
+* options (optional): A JSON object that can contain following keyvalues:
   * host_nodes (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
   * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 #### Response
@@ -91,7 +91,43 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 
 <a name="pinFileToIPFS-anchor"></a>
 ### `pinFileToIPFS`
-pinFileToIPFS
+##### `pinata.pinFileToIPFS(readableStream, options)`
+##### Params
+* readableStream - A [readableStream](https://nodejs.org/api/stream.html) of the file to be added 
+* options (optional): A JSON object that can contain the following keyvalues:
+  * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+#### Response
+```
+{
+    id: This is Pinata's ID for the pin job,
+    IpfsHash: This is the IPFS multi-hash provided to Pinata to pin,
+    status: The current status of the pin job. If the request was successful the status should be 'searching'.
+    name: The name of the pin (if provided initially)
+}
+```
+##### Example Code
+```javascript
+const options = {
+    host_nodes: [
+        "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
+        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id"
+    ],
+    pinataMetadata: {
+        name: MyCustomName,
+        keyvalues: {
+            customKey: "customValue",
+            customKey2: "customValue2"
+        }
+    }
+};
+pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
 
 <a name="pinHashToIPFS-anchor"></a>
 ### `pinHashToIPFS`
