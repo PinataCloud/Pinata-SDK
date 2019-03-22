@@ -20,16 +20,35 @@ const pinataSDK = require('@pinata/sdk');
 const pinata = pinataClient('yourPinataApiKey', 'yourPinataSecretApiKey');
 ```
 
-Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise. Here's an example of how you would test your authentication keys with the SDK.
+Quickly test that you can connect to the API with the following call:
 ```
 pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result) => {
+    //handle successful authentication here
     console.log(result);
 }).catch((err) => {
+    //handle error here
     console.log(err);
 });
 ```
 
 ## Usage
+Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
+
+#### Pinning
+* [addHashToPinQueue](#addhashtopinqueue)
+* [pinFileToIPFS](#pinFileToIPFS)
+* [pinHashToIPFS](#pinHashToIPFS)
+* [pinJobs](#pinJobs)
+* [pinJSONToIPFS](#pinJSONToIPFS)
+* [removePinFromIPFS](#removePinFromIPFS)
+
+####
+
+* [userPinnedDataTotal](#userPinnedDataTotal)
+* [userPinList](#userPinList)
+
+#### `addHashToPinQueue`
+addHashToPinQueue
 
 
 ## Functions
