@@ -15,13 +15,13 @@ npm install --save @pinata/sdk
 
 ## Setup
 To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
-```
+```javascript
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataClient('yourPinataApiKey', 'yourPinataSecretApiKey');
 ```
 
 Quickly test that you can connect to the API with the following call:
-```
+```javascript
 pinata.testAuthentication(yourPinataApiKey, yourPinataSecretApiKey).then((result) => {
     //handle successful authentication here
     console.log(result);
@@ -48,6 +48,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 <br />
 
 #### `addHashToPinQueue`
+<a name="addHashToPinQueue"></a>
 Adds a hash to Pinata's pin queue to be pinned asynchronously
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
@@ -56,7 +57,7 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously
   * host_nodes (optional): An array of [multiaddresses for nodes](#hostnode-anchor) that are currently hosting the content to be pinned
   * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 ##### Example Code
-```
+```javascript
 const options = {
     host_nodes: [
         "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
