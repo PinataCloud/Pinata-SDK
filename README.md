@@ -52,10 +52,10 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchronous version of this operation see: [pinHashToIPFS](#pinHashToIPFS-anchor)
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
-* hashToPin - A string for a valid IPFS Hash (Also known as a CID)
-* options (optional): A JSON object that can contain following keyvalues:
-  * host_nodes (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
-  * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+* `hashToPin` - A string for a valid IPFS Hash (Also known as a CID)
+* `options` (optional): A JSON object that can contain following keyvalues:
+  * `host_nodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
+  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 #### Response
 ```
 {
@@ -69,14 +69,14 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchrono
 ```javascript
 const options = {
     host_nodes: [
-        "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
-        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id"
+        '/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id',
+        '/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id'
     ],
     pinataMetadata: {
         name: MyCustomName,
         keyvalues: {
-            customKey: "customValue",
-            customKey2: "customValue2"
+            customKey: 'customValue',
+            customKey2: 'customValue2'
         }
     }
 };
@@ -94,9 +94,9 @@ Send a file to to Pinata for direct pinning to IPFS.
 ### `pinFileToIPFS`
 ##### `pinata.pinFileToIPFS(readableStream, options)`
 ##### Params
-* readableStream - A [readableStream](https://nodejs.org/api/stream.html) of the file to be added 
-* options (optional): A JSON object that can contain the following keyvalues:
-  * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+* `readableStream` - A [readableStream](https://nodejs.org/api/stream.html) of the file to be added 
+* `options` (optional): A JSON object that can contain the following keyvalues:
+  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 #### Response
 ```
 {
@@ -111,8 +111,8 @@ const fs = require('fs');
 const readableStreamForFile = fs.createReadStream('./yourfile.png');
 const options = {
     host_nodes: [
-        "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
-        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id"
+        '/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id',
+        '/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id'
     ],
     pinataMetadata: {
         name: MyCustomName,
@@ -136,10 +136,10 @@ Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS
 ### `pinHashToIPFS`
 ##### `pinata.pinHashToIPFS(hashToPin, options)`
 ##### Params
-* hashToPin - A string for a valid IPFS Hash (Also known as a CID)
-* options (optional): A JSON object that can contain following keyvalues:
-  * host_nodes (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
-  * pinataMetadata (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+* `hashToPin` - A string for a valid IPFS Hash (Also known as a CID)
+* `options` (optional): A JSON object that can contain following keyvalues:
+  * `host_nodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
+  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
 #### Response
 ```
 {
@@ -152,14 +152,14 @@ Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS
 ```javascript
 const options = {
     host_nodes: [
-        "/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id",
-        "/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id"
+        '/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id',
+        '/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id'
     ],
     pinataMetadata: {
         name: MyCustomName,
         keyvalues: {
-            customKey: "customValue",
-            customKey2: "customValue2"
+            customKey: 'customValue',
+            customKey2: 'customValue2'
         }
     }
 };
@@ -174,7 +174,62 @@ pinata.pinHashToIPFS('yourHashHere', options).then((result) => {
 
 <a name="pinJobs-anchor"></a>
 ### `pinJobs`
-pinFileToIPFS
+This endpoint allows users to search for the status of all hashes that are currently in Pinata's pin queue. Records in the pin queue arrived there through either the [addHashToPinQueue](#addHashToPinQueue-anchor) operation or by failing during a [pinHashToIPFS](#pinHashToIPFS-anchor) operation.
+##### `pinata.pinJobs(options)`
+##### Params
+* `options` (optional): An object that can consist of the following optional query parameters:
+  * `sort` (optional): How you wish for the records in the response to be sorted. Valid inputs for this are:
+    * `ASC`
+    * `DESC`
+  * `status` (optional): What the current status of the record is in the pin queue. Valid statuses and their meanings are:
+    * `searching` - Pinata is actively searching for your content on the IPFS network. This may take some time if your content is isolated.
+    * `expired` - Pinata wasn't able to find your content after a day of searching the IPFS network. Please make sure your content is hosted on the IPFS network before trying to pin again.
+    * `over_free_limit` - Pinning this object would put you over the free tier limit. Please add a credit card to continue pinning content.
+    * `over_max_size` - This object is too large of an item to pin. If you're seeing this, please contact us for a more custom solution.
+    * `invalid_object` - The object you're attempting to pin isn't readable by IPFS nodes. Please contact us if you receive this, as we'd like to better understand what you're attempting to pin.
+    * `bad_host_node` - The provided host node(s) were either invalid or unreachable. Please make sure all provided host nodes are online and reachable.
+
+  * `ipfs_pin_hash` (optional): A string for a valid IPFS hash (also known as a CID) to search for 
+  * `limit` (optional): Limit the amount of results returned per page of results (default is 5, and max is also 1000)
+  * `offset` (optional): Provide the record offset for records being returned. This is how you retrieve records on additional pages (default is 0)
+#### Response
+```
+{
+    count: (this is the total number of pin job records that exist for the query filters you passed in),
+    rows: [
+        {
+            id: (the id for the pin job record),
+            ipfs_pin_hash: (the IPFS multi-hash for the content you pinned),
+            date_queued: (The date this hash was initially queued to be pinned - represented in ISO 8601 format),
+            name: (If you passed in a name for your hash, it will be listed here),
+            status: (The current status for the pin job)
+        },
+        {
+            same record format as above
+        }
+        .
+        .
+        .
+    ]
+}
+```
+##### Example Code
+```javascript
+const options = {
+    sort: 'ASC',
+    status: 'searching',
+    ipfs_pin_hash: 'Qma6e8dovfLyiG2UUfdkSHNPAySzrWLX9qVXb44v1muqcp',
+    limit: 10,
+    offset: 0
+};
+pinata.pinJobs('yourHashHere', options).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
 
 <a name="pinJSONToIPFS-anchor"></a>
 ### `pinJSONToIPFS`
