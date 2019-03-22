@@ -110,15 +110,11 @@ Send a file to to Pinata for direct pinning to IPFS.
 const fs = require('fs');
 const readableStreamForFile = fs.createReadStream('./yourfile.png');
 const options = {
-    host_nodes: [
-        '/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id',
-        '/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id'
-    ],
     pinataMetadata: {
         name: MyCustomName,
         keyvalues: {
-            customKey: "customValue",
-            customKey2: "customValue2"
+            customKey: 'customValue',
+            customKey2: 'customValue2'
         }
     }
 };
@@ -179,8 +175,8 @@ This endpoint allows users to search for the status of all hashes that are curre
 ##### Params
 * `options` (optional): An object that can consist of the following optional query parameters:
   * `sort` (optional): How you wish for the records in the response to be sorted. Valid inputs for this are:
-    * `ASC`
-    * `DESC`
+    * `'ASC'`
+    * `'DESC'`
   * `status` (optional): What the current status of the record is in the pin queue. Valid statuses and their meanings are:
     * `searching` - Pinata is actively searching for your content on the IPFS network. This may take some time if your content is isolated.
     * `expired` - Pinata wasn't able to find your content after a day of searching the IPFS network. Please make sure your content is hosted on the IPFS network before trying to pin again.
@@ -233,7 +229,43 @@ pinata.pinJobs('yourHashHere', options).then((result) => {
 
 <a name="pinJSONToIPFS-anchor"></a>
 ### `pinJSONToIPFS`
-pinFileToIPFS
+Send JSON to to Pinata for direct pinning to IPFS.
+### `pinJSONToIPFS`
+##### `pinata.pinJSONToIPFS(body, options)`
+##### Params
+* `body` - Valid JSON you wish to pin to IPFS
+* `options` (optional): A JSON object that can contain the following keyvalues:
+  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+#### Response
+```
+{
+    IpfsHash: This is the IPFS multi-hash provided back for your content,
+    PinSize: This is how large (in bytes) the content you just pinned is,
+    Timestamp: This is the timestamp for your content pinning (represented in ISO 8601 format)
+}
+```
+##### Example Code
+```javascript
+const body = {
+    message: 'Pinatas are awesome'
+};
+const options = {
+    pinataMetadata: {
+        name: MyCustomName,
+        keyvalues: {
+            customKey: 'customValue',
+            customKey2: 'customValue2'
+        }
+    }
+};
+pinata.pinJSONToIPFS(body, options).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
 
 <a name="removePinFromIPFS-anchor"></a>
 ### `removePinFromIPFS`
