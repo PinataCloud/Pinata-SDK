@@ -48,7 +48,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 <br />
 
 <a name="addHashToPinQueue-anchor"></a>
-#### `addHashToPinQueue`
+### `addHashToPinQueue`
 Adds a hash to Pinata's pin queue to be pinned asynchronously
 ##### `pinata.addHashToPinQueue(hashToPin, options)`
 ##### Params
@@ -90,31 +90,31 @@ pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
 ```
 
 <a name="pinFileToIPFS-anchor"></a>
-#### `pinFileToIPFS`
+### `pinFileToIPFS`
 pinFileToIPFS
 
 <a name="pinHashToIPFS-anchor"></a>
-#### `pinHashToIPFS`
+### `pinHashToIPFS`
 pinHashToIPFS
 
 <a name="pinJobs-anchor"></a>
-#### `pinJobs`
+### `pinJobs`
 pinFileToIPFS
 
 <a name="pinJSONToIPFS-anchor"></a>
-#### `pinJSONToIPFS`
+### `pinJSONToIPFS`
 pinFileToIPFS
 
 <a name="removePinFromIPFS-anchor"></a>
-#### `removePinFromIPFS`
+### `removePinFromIPFS`
 pinFileToIPFS
 
 <a name="userPinnedDataTotal-anchor"></a>
-#### `userPinnedDataTotal`
+### `userPinnedDataTotal`
 userPinnedDataTotal
 
 <a name="userPinList-anchor"></a>
-#### `userPinList`
+### `userPinList`
 userPinList
 
 <a name="hostNode-anchor"></a>
@@ -136,5 +136,24 @@ Here's an example of what a full external ipv4 multiaddress would look like (you
 ⚠️ Please make sure every node provided is online. Pinata will attempt to connect to all nodes before pinning the content, and if any these nodes are offline, your request will eventually fail.
 
 <a name="metadata-anchor"></a>
+
 ## Pinata Metadata
-testing
+For endpoints that allow you to add content, Pinata lets you add optionally metadata for that content. This metadata can later be used for querying on what you've pinned with our [userPinList](#userPinList-anchor) endpoint. Providing metadata does not alter your content or how it is stored on IPFS in any way.
+
+The pinataMetadata object can consist of the following values:
+* name (optional) - A custom string to use as the name for your content
+* keyvalues (optional) - An object containing up to 10 custom key / value pairs. The values can be:
+  * strings
+  * numbers (integers or decimals)
+  * dates (provided in ISO_8601 format)
+  
+##### Example metadata object
+```
+{
+    name: "customName",
+    keyvalues: {
+        customKey: "customValue",
+        customKey2: "customValue2"
+    }
+}
+```
