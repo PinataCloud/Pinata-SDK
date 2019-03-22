@@ -16,11 +16,12 @@ test('Result other than 200 status is returned', () => {
 
 test('200 status is returned', () => {
     const goodStatus = {
-        status: 200
+        status: 200,
+        data: 'testData'
     };
     axios.get.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(userPinList('test', 'test')).resolves.toEqual(goodStatus);
+    expect(userPinList('test', 'test')).resolves.toEqual(goodStatus.data);
 });
 
 test('Rejection handled', () => {

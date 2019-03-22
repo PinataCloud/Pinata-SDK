@@ -17,11 +17,12 @@ test('non-object is passed in', () => {
 
 test('200 status is returned', () => {
     const goodStatus = {
-        status: 200
+        status: 200,
+        data: 'testData'
     };
     axios.post.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinJSONToIPFS('test', 'test', goodJSON)).resolves.toEqual(goodStatus);
+    expect(pinJSONToIPFS('test', 'test', goodJSON)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {

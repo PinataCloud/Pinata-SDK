@@ -34,7 +34,7 @@ export default function removePinFromIPFS(pinataApiKey, pinataSecretApiKey, ipfs
                     error: `unknown server response while removing pin from IPFS: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {

@@ -45,7 +45,7 @@ export default function pinHashToIPFS(pinataApiKey, pinataSecretApiKey, hashToPi
                     error: `unknown server response while pinning hash to IPFS: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {

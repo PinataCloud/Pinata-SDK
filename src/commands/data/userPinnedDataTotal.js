@@ -22,7 +22,7 @@ export default function userPinnedDataTotal(pinataApiKey, pinataSecretApiKey) {
                     error: `unknown server response while attempting to retrieve pinned data total: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {

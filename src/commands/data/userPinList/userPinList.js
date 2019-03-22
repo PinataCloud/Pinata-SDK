@@ -24,7 +24,7 @@ export default function userPinList(pinataApiKey, pinataSecretApiKey, filters) {
                     error: `unknown server response while attempting to retrieve user pin list: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {

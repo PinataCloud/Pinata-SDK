@@ -21,11 +21,12 @@ test('Invalid HashToPin value is provided', () => {
 
 test('200 status is returned', () => {
     const goodStatus = {
-        status: 200
+        status: 200,
+        data: 'testData'
     };
     axios.post.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinHashToIPFS('test', 'test', goodHashToPin)).resolves.toEqual(goodStatus);
+    expect(pinHashToIPFS('test', 'test', goodHashToPin)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {

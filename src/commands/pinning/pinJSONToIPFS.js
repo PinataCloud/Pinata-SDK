@@ -39,7 +39,7 @@ export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, op
                     error: `unknown server response while pinning JSON to IPFS: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {

@@ -27,7 +27,7 @@ export default function pinJobs(pinataApiKey, pinataSecretApiKey, filters) {
                     error: `unknown server response while attempting to retrieve pin jobs: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {

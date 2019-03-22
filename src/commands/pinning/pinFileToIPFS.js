@@ -2,7 +2,7 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import NodeFormData from 'form-data';
 import stream from 'stream';
-import { validateApiKeys } from '../../util/validators';
+import {validateApiKeys, validateMetadata} from '../../util/validators';
 
 export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -21,6 +21,13 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
             });
         }
 
+        if (options) {
+            if (options.pinataMetadata) {
+                validateMetadata(options.pinataMetadata);
+                data.append('pinataMetadata', options.pinataMetadata);
+            }
+        }
+
         axios.post(
             endpoint,
             data,
@@ -37,7 +44,7 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
                     error: `unknown server response while pinning File to IPFS: ${result}`
                 });
             }
-            resolve(result);
+            resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
