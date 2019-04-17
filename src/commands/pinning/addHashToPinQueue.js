@@ -41,21 +41,15 @@ export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hash
                 }
             }).then(function (result) {
             if (result.status !== 200) {
-                reject({
-                    error: `unknown server response while adding to pin queue: ${result}`
-                });
+                reject(new Error(`unknown server response while adding to pin queue: ${result}`));
             }
             resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject({
-                    error: error.response.data.error
-                });
+                reject(new Error(error.response.data.error));
             } else {
-                reject({
-                    error: error
-                });
+                reject(error);
             }
         });
     });

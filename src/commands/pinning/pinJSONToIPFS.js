@@ -35,21 +35,15 @@ export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, op
                 }
             }).then(function (result) {
             if (result.status !== 200) {
-                reject({
-                    error: `unknown server response while pinning JSON to IPFS: ${result}`
-                });
+                reject(new Error(`unknown server response while pinning JSON to IPFS: ${result}`));
             }
             resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject({
-                    error: error.response.data.error
-                });
+                reject(new Error(error.response.data.error));
             } else {
-                reject({
-                    error: error
-                });
+                reject(error);
             }
         });
     });
