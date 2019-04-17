@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateMetadata } from '../../util/validators';
+import { validateApiKeys, validateMetadata, validatePinataOptions } from '../../util/validators';
 
 export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -12,12 +12,16 @@ export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, op
     }
 
     if (options) {
+        requestBody = {
+            pinataContent: body
+        };
         if (options.pinataMetadata) {
             validateMetadata(options.pinataMetadata);
-            requestBody = {
-                pinataContent: body,
-                pinataMetadata: options.pinataMetadata
-            };
+            requestBody.pinataMetadata = options.pinataMetadata;
+        }
+        if (options.pinataOptions) {
+            validatePinataOptions(options.pinataOptions);
+            requestBody.pinataOptions = options.pinataOptions;
         }
     }
 

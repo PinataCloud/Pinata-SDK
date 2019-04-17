@@ -46,3 +46,16 @@ export function validateMetadata(metadata) {
         });
     }
 }
+
+export function validatePinataOptions(options) {
+    if (typeof options !== 'object') {
+        throw new Error('options must be an object');
+    }
+
+    if (options.cidVersion) {
+        // eslint-disable-next-line eqeqeq
+        if (options.cidVersion != 0 && options.cidVersion != 1) {
+            throw new Error('unsupported or invalid cidVersion');
+        }
+    }
+}

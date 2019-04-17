@@ -2,7 +2,7 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import NodeFormData from 'form-data';
 import stream from 'stream';
-import {validateApiKeys, validateMetadata} from '../../util/validators';
+import {validateApiKeys, validateMetadata, validatePinataOptions} from '../../util/validators';
 
 export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -22,7 +22,11 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
         if (options) {
             if (options.pinataMetadata) {
                 validateMetadata(options.pinataMetadata);
-                data.append('pinataMetadata', options.pinataMetadata);
+                data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
+            }
+            if (options.pinataOptions) {
+                validatePinataOptions(options.pinataOptions);
+                data.append('pinataOptions', JSON.stringify(options.pinataOptions));
             }
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "@pinata/sdk",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Official SDK for the Pinata IPFS platform",
   "main": "lib/pinata-sdk.js",
   "scripts": {

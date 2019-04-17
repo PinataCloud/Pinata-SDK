@@ -1,4 +1,4 @@
-import { validateApiKeys, validateHostNodes, validateMetadata } from "../../src/util/validators";
+import { validateApiKeys, validateHostNodes, validateMetadata, validatePinataOptions } from "../../src/util/validators";
 
 describe('validateApiKeys function testing', () => {
     test('check to throw if either pinataApiKey or pinataSecretApiKey are not provided', () => {
@@ -118,3 +118,20 @@ describe('validateMetadata function testing', () => {
     });
 });
 
+describe('validatePinataOptions function testing', () => {
+    test('options is not an object', () => {
+        expect(() => {
+            validatePinataOptions('test');
+        }).toThrow('options must be an object');
+    });
+    test('cidVersion is not a 0 or 1', () => {
+        const badVersion = {
+            test: 'testing'
+        };
+        expect(() => {
+            validatePinataOptions({
+                cidVersion: badVersion
+            });
+        }).toThrow('unsupported or invalid cidVersion');
+    });
+});
