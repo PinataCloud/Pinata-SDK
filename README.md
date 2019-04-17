@@ -99,7 +99,8 @@ Send a file to to Pinata for direct pinning to IPFS.
 ##### Params
 * `readableStream` - A [readableStream](https://nodejs.org/api/stream.html) of the file to be added 
 * `options` (optional): A JSON object that can contain the following keyvalues:
-  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the file being pinned
+  * `pinataOptions` (optional): A JSON object with additional [options](#metadata-anchor) for the file being pinned
 #### Response
 ```
 {
@@ -119,6 +120,9 @@ const options = {
             customKey: 'customValue',
             customKey2: 'customValue2'
         }
+    },
+    pinataOptions: {
+        cidVersion: 0
     }
 };
 pinata.pinFileToIPFS(readableStreamForFile, options).then((result) => {
@@ -241,6 +245,7 @@ Send JSON to to Pinata for direct pinning to IPFS.
 * `body` - Valid JSON you wish to pin to IPFS
 * `options` (optional): A JSON object that can contain the following keyvalues:
   * `metadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+  * `pinataOptions` (optional): A JSON object with additional [options](#metadata-anchor) for the JSON being pinned
 #### Response
 ```
 {
@@ -261,6 +266,9 @@ const options = {
             customKey: 'customValue',
             customKey2: 'customValue2'
         }
+    },
+    pinataOptions: {
+        cidVersion: 0
     }
 };
 pinata.pinJSONToIPFS(body, options).then((result) => {
@@ -518,6 +526,23 @@ The metadata object can consist of the following values:
         customKey: "customValue",
         customKey2: "customValue2"
     }
+}
+```
+<a name="pinataOptions-anchor"></a>
+
+## Pinata Options
+Some endpoints allow you to pass additional options for Pinata to take into account when adding content to IPFS.
+
+The options object can consist of the following values:
+* cidVerson (optional) - The [CID version](https://github.com/multiformats/cid#versions) IPFS will use when creating a hash for your content. Valid options are:
+  * `0` - CIDv0
+  * `1` - CIDv1
+
+  
+##### Example pinataOptions object
+```
+{
+    cidVersion: 1
 }
 ```
 
