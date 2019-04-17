@@ -29,12 +29,13 @@ export default function testAuthentication(pinataApiKey, pinataSecretApiKey) {
         }).catch(function (error) {
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
                 reject({
-                    error: `${error.response.data.error}`
+                    error: error.response.data.error
+                });
+            } else {
+                reject({
+                    error: error
                 });
             }
-            reject({
-                error: `${error}`
-            });
         });
     });
 };

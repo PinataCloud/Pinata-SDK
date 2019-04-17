@@ -39,12 +39,13 @@ export default function removePinFromIPFS(pinataApiKey, pinataSecretApiKey, ipfs
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
                 reject({
-                    error: `${error.response.data.error}`
+                    error: error.response.data.error
+                });
+            } else {
+                reject({
+                    error: error
                 });
             }
-            reject({
-                error: `${error}`
-            });
         });
     });
 }
