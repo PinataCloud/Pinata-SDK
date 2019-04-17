@@ -9,9 +9,7 @@ const validStream = fs.createReadStream('./pinata.png');
 
 
 test('non-readableStream is passed in', () => {
-    expect(pinFileToIPFS('test', 'test', nonStream)).rejects.toEqual({
-        error: 'readStream is not a readable stream'
-    });
+    expect(pinFileToIPFS('test', 'test', nonStream)).rejects.toEqual(Error('readStream is not a readable stream'));
 
     return undefined;
 });
@@ -32,17 +30,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.post.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS('test', 'test', validStream)).rejects.toEqual({
-        error: `unknown server response while pinning File to IPFS: ${badStatus}`
-    });
+    expect(pinFileToIPFS('test', 'test', validStream)).rejects.toEqual(Error(`unknown server response while pinning File to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.post.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinFileToIPFS('test', 'test', validStream)).rejects.toEqual({
-        error: 'test error'
-    });
+    expect(pinFileToIPFS('test', 'test', validStream)).rejects.toEqual('test error');
 });
 
 

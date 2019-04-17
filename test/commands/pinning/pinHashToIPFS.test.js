@@ -35,17 +35,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.post.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinHashToIPFS('test', 'test', goodHashToPin)).rejects.toEqual({
-        error: `unknown server response while pinning hash to IPFS: ${badStatus}`
-    });
+    expect(pinHashToIPFS('test', 'test', goodHashToPin)).rejects.toEqual(Error(`unknown server response while pinning hash to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.post.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinHashToIPFS('test', 'test', goodHashToPin)).rejects.toEqual({
-        error: 'test error'
-    });
+    expect(pinHashToIPFS('test', 'test', goodHashToPin)).rejects.toEqual('test error');
 });
 
 

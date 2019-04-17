@@ -9,9 +9,7 @@ test('Result other than 200 status is returned', () => {
     };
     axios.get.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(userPinList('test', 'test')).rejects.toEqual({
-        error: `unknown server response while attempting to retrieve user pin list: ${badStatus}`,
-    });
+    expect(userPinList('test', 'test')).rejects.toEqual(Error(`unknown server response while attempting to retrieve user pin list: ${badStatus}`));
 });
 
 test('200 status is returned', () => {
@@ -27,7 +25,5 @@ test('200 status is returned', () => {
 test('Rejection handled', () => {
     axios.get.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(userPinList('test', 'test')).rejects.toEqual({
-        error: 'test error'
-    });
+    expect(userPinList('test', 'test')).rejects.toEqual('test error');
 });

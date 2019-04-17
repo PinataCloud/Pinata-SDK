@@ -16,9 +16,7 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
         if (!(readStream instanceof stream.Readable)) {
-            reject({
-                error: 'readStream is not a readable stream'
-            });
+            reject(new Error('readStream is not a readable stream'));
         }
 
         if (options) {
@@ -40,21 +38,16 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
                 }
             }).then(function (result) {
             if (result.status !== 200) {
-                reject({
-                    error: `unknown server response while pinning File to IPFS: ${result}`
-                });
+                reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
             }
             resolve(result.data);
         }).catch(function (error) {
             //  handle error here
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject({
-                    error: `${error.response.data.error}`
-                });
+                reject(new Error(error.response.data.error));
+            } else {
+                reject(error);
             }
-            reject({
-                error: `${error}`
-            });
         });
     });
 }

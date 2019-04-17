@@ -19,22 +19,17 @@ export default function testAuthentication(pinataApiKey, pinataSecretApiKey) {
                 }
             }).then(function (result) {
             if (result.status !== 200) {
-                reject({
-                    error: `unknown server response while authenticating: ${result}`
-                });
+                reject(new Error(`unknown server response while authenticating: ${result}`));
             }
             resolve({
                 authenticated: true
             });
         }).catch(function (error) {
             if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject({
-                    error: `${error.response.data.error}`
-                });
+                reject(new Error(error.response.data.error));
+            } else {
+                reject(error);
             }
-            reject({
-                error: `${error}`
-            });
         });
     });
 };

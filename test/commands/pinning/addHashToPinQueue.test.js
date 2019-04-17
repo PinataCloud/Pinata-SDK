@@ -35,17 +35,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.post.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(addHashToPinQueue('test', 'test', goodHashToPin)).rejects.toEqual({
-        error: `unknown server response while adding to pin queue: ${badStatus}`,
-    });
+    expect(addHashToPinQueue('test', 'test', goodHashToPin)).rejects.toEqual(Error(`unknown server response while adding to pin queue: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.post.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(addHashToPinQueue('test', 'test', goodHashToPin)).rejects.toEqual({
-        error: 'test error'
-    });
+    expect(addHashToPinQueue('test', 'test', goodHashToPin)).rejects.toEqual('test error');
 });
 
 
