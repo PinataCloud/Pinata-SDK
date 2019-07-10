@@ -18,16 +18,7 @@ export default function queryBuilder(baseUrl, filters) {
     }
 
     //  preset filter values
-    let hashContains = '*';
-    let pinStart = '*';
-    let pinEnd = '*';
-    let unpinStart = '*';
-    let unpinEnd = '*';
-    let pinSizeMin = '*';
-    let pinSizeMax = '*';
-    let pinFilter = '*';
-    let pageLimit = 10;
-    let pageOffset = 0;
+    let filterQuery = '?';
     let metadataQuery = '';
 
     if (filters) {
@@ -36,50 +27,50 @@ export default function queryBuilder(baseUrl, filters) {
             if (typeof filters.hashContains !== 'string') {
                 throw new Error('hashContains value is not a string');
             }
-            hashContains = filters.hashContains;
+            filterQuery = filterQuery + `hashContains=${filters.hashContains}&`;
         }
         if (filters.pinStart) {
-            pinStart = validateAndReturnDate(filters.pinStart);
+            filterQuery = filterQuery + `pinStart=${validateAndReturnDate(filters.pinStart)}&`;
         }
         if (filters.pinEnd) {
-            pinEnd = validateAndReturnDate(filters.pinEnd);
+            filterQuery = filterQuery + `pinEnd=${validateAndReturnDate(filters.pinEnd)}&`;
         }
         if (filters.unpinStart) {
-            unpinStart = validateAndReturnDate(filters.unpinStart);
+            filterQuery = filterQuery + `unpinStart=${validateAndReturnDate(filters.unpinStart)}&`;
         }
         if (filters.unpinEnd) {
-            unpinEnd = validateAndReturnDate(filters.unpinEnd);
+            filterQuery = filterQuery + `unpinEnd=${validateAndReturnDate(filters.unpinEnd)}&`;
         }
         if (filters.pinSizeMin) {
             if (isNaN(filters.pinSizeMin) || filters.pinSizeMin < 0) {
                 throw new Error('Please make sure the pinSizeMin is a valid positive integer');
             }
-            pinSizeMin = filters.pinSizeMin;
+            filterQuery = filterQuery + `pinSizeMin=${filters.pinSizeMin}&`;
         }
         if (filters.pinSizeMax) {
             if (isNaN(filters.pinSizeMax) || filters.pinSizeMax < 0) {
                 throw new Error('Please make sure the pinSizeMax is a valid positive integer');
             }
-            pinSizeMax = filters.pinSizeMax;
+            filterQuery = filterQuery + `pinSizeMax=${filters.pinSizeMax}&`;
         }
-        if (filters.pinFilter) {
-            if (filters.pinFilter !== 'all' && filters.pinFilter !== 'pinned' && filters.pinFilter !== 'unpinned') {
-                throw new Error('pinFilter value must be either: all, pinned, or unpinned');
+        if (filters.status) {
+            if (filters.status !== 'all' && filters.status !== 'pinned' && filters.status !== 'unpinned') {
+                throw new Error('status value must be either: all, pinned, or unpinned');
             }
-            pinFilter = filters.pinFilter;
+            filterQuery = filterQuery + `status=${filters.status}&`;
         }
         if (filters.pageLimit) {
             if (isNaN(filters.pageLimit) || filters.pageLimit <= 0 || filters.pageLimit > 1000) {
                 throw new Error('Please make sure the pageLimit is a valid integer between 1-1000');
             }
-            pageLimit = parseInt(filters.pageLimit); // we want to make sure that decimals get rounded to integers
+            filterQuery = filterQuery + `pageLimit=${parseInt(filters.pageLimit)}&`; // we want to make sure that decimals get rounded to integers
         }
 
         if (filters.pageOffset) {
             if (isNaN(filters.pageOffset) || filters.pageOffset <= 0) {
                 throw new Error('Please make sure the pageOffset is a positive integer');
             }
-            pageOffset = parseInt(filters.pageOffset); // we want to make sure that decimals get rounded to integers
+            filterQuery = filterQuery + `pageOffset=${parseInt(filters.pageOffset)}&`; // we want to make sure that decimals get rounded to integers
         }
 
         if (filters.metadata) {
@@ -89,7 +80,7 @@ export default function queryBuilder(baseUrl, filters) {
             }
 
             if (filters.metadata.name) {
-                metadataQuery = `?metadata[name]=${filters.metadata.name}`;
+                metadataQuery = `metadata[name]=${filters.metadata.name}&`;
             }
 
             if (filters.metadata.keyvalues) {
@@ -231,11 +222,11 @@ export default function queryBuilder(baseUrl, filters) {
                             throw new Error(`keyValue op: ${value.op} is not a valid op code`);
                     }
 
-                    metadataQuery = `${metadataQuery}${filters.metadata.name ? '&' : '?'}metadata[keyvalues]=${JSON.stringify(prunedKeyValues)}`;
+                    metadataQuery = metadataQuery + `metadata[keyvalues]=${JSON.stringify(prunedKeyValues)}`;
                 });
             }
         }
     }
-    return `${baseUrl}/hashContains/${hashContains}/pinStart/${pinStart}/pinEnd/${pinEnd}/unpinStart/${unpinStart}/unpinEnd/${unpinEnd}/pinSizeMin/${pinSizeMin}/pinSizeMax/${pinSizeMax}/pinFilter/${pinFilter}/pageLimit/${pageLimit}/pageOffset/${pageOffset}${metadataQuery}`;
+    return `${baseUrl}${filterQuery}${metadataQuery}`;
 }
 
