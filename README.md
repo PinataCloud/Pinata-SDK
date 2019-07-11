@@ -46,7 +46,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 * Data
   * [testAuthentication](#testAuthentication-anchor)
   * [pinList](#pinList-anchor)
-  * [userPinList](#userPinList-anchor)
+  * [userPinList (DEPRECATED)](#userPinList-anchor)
   * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
 <br />
 
