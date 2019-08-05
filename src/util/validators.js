@@ -58,4 +58,10 @@ export function validatePinataOptions(options) {
             throw new Error('unsupported or invalid cidVersion');
         }
     }
+    if (options.wrapWithDirectory) {
+        // eslint-disable-next-line eqeqeq
+        if (options.wrapWithDirectory !== true && options.wrapWithDirectory !== false) {
+            throw new Error('wrapWithDirectory must be a boolean value of true or false');
+        }
+    }
 }

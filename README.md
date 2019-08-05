@@ -724,6 +724,9 @@ The options object can consist of the following values:
 * cidVerson (optional) - The [CID version](https://github.com/multiformats/cid#versions) IPFS will use when creating a hash for your content. Valid options are:
   * `0` - CIDv0
   * `1` - CIDv1
+* wrapWithDirectory (optional) - Tells IPFS to wrap your content in a directory to preserve the content's original name. See [this blog post](https://flyingzumwalt.gitbooks.io/decentralized-web-primer/content/files-on-ipfs/lessons/wrap-directories-around-content.html) for more details on what this does. Valid options are:
+  * `true`
+  * `false`
 
   
 ##### Example pinataOptions object

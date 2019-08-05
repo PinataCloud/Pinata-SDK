@@ -134,4 +134,11 @@ describe('validatePinataOptions function testing', () => {
             });
         }).toThrow('unsupported or invalid cidVersion');
     });
+    test('wrapWithDirectory is not true or false', () => {
+        expect(() => {
+            validatePinataOptions({
+                wrapWithDirectory: 'test'
+            });
+        }).toThrow('wrapWithDirectory must be a boolean value of true or false');
+    });
 });
