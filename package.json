@@ -5,6 +5,7 @@
   "main": "lib/pinata-sdk.js",
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
+    "coverage": "jest --coverage",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "jest",
     "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
