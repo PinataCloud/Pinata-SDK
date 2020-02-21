@@ -7,6 +7,7 @@
     "build": "webpack --env dev && webpack --env build && npm run test",
     "coverage": "jest --coverage",
     "dev": "webpack --progress --colors --watch --env dev",
+    "html": "open coverage/index.html",
     "test": "jest",
     "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
   },
@@ -62,5 +63,9 @@
     "form-data": "^2.3.3",
     "is-ipfs": "^0.6.0",
     "recursive-fs": "^1.1.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": ["html"]
   }
 }
