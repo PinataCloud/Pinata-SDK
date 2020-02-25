@@ -19,6 +19,7 @@ export default function queryBuilder(baseUrl, filters) {
 
     //  preset filter values
     let filterQuery = '?';
+
     let metadataQuery = '';
 
     if (filters) {
