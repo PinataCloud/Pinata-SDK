@@ -10,6 +10,7 @@ export default function queryBuilder(baseUrl, filters) {
     }
 
     let newUrl = baseUrl;
+
     let firstFilterApplied = false; // we want to make sure that the "?" character is only applied once
 
     function addFilter(newFilter) {

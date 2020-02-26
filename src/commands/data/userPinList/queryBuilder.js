@@ -19,15 +19,25 @@ export default function queryBuilder(baseUrl, filters) {
 
     //  preset filter values
     let hashContains = '*';
+
     let pinStart = '*';
+
     let pinEnd = '*';
+
     let unpinStart = '*';
+
     let unpinEnd = '*';
+
     let pinSizeMin = '*';
+
     let pinSizeMax = '*';
+
     let pinFilter = '*';
+
     let pageLimit = 10;
+
     let pageOffset = 0;
+
     let metadataQuery = '';
 
     if (filters) {

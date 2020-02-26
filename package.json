@@ -5,7 +5,11 @@
   "main": "lib/pinata-sdk.js",
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test",
+    "coverage": "jest --coverage",
     "dev": "webpack --progress --colors --watch --env dev",
+    "html": "open coverage/index.html",
+    "lint": "eslint src --quiet ",
+    "lint:fix": "eslint src --fix",
     "test": "jest",
     "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
   },
@@ -29,37 +33,38 @@
   },
   "homepage": "https://github.com/PinataCloud/Pinata-SDK",
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
-    "babel-eslint": "^8.0.3",
-    "babel-loader": "^8.0.5",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-istanbul": "^5.1.1",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
+    "acorn": "^7.1.0",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-add-module-exports": "^1.0.2",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^7.0.0-beta.3",
-    "babel-register": "^7.0.0-beta.3",
-    "cross-env": "^5.2.0",
-    "eslint": "^5.15.1",
-    "eslint-loader": "^2.1.2",
-    "jest": "^24.5.0",
-    "jsdom": "11.11.0",
-    "jsdom-global": "3.0.2",
-    "nyc": "^13.1.0",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3",
+    "eslint": "^6.8.0",
+    "eslint-loader": "^3.0.3",
+    "jest": "^25.1.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
     "yargs": "^10.0.3"
   },
-  "nyc": {
-    "sourceMap": false,
-    "instrument": false
-  },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "base-path-converter": "^1.0.1",
     "form-data": "^2.3.3",
     "is-ipfs": "^0.6.0",
     "recursive-fs": "^1.1.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ]
   }
 }
