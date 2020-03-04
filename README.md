@@ -35,7 +35,7 @@ pinata.testAuthentication().then((result) => {
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
 
 * Pinning
-  * [addHashToPinQueue](#addHashToPinQueue-anchor)
+  * [pinByHash](#addHashToPinQueue-anchor)
   * [pinFileToIPFS](#pinFileToIPFS-anchor)
   * [pinFromFS](#pinFromFS-anchor)
   * [pinHashToIPFS](#pinHashToIPFS-anchor)
@@ -50,11 +50,11 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
   * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
 <br />
 
-<a name="addHashToPinQueue-anchor"></a>
-### `addHashToPinQueue`
+<a name="pinByHash-anchor"></a>
+### `pinByHash`
 Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchronous version of this operation see: [pinHashToIPFS](#pinHashToIPFS-anchor)
 
-##### `pinata.addHashToPinQueue(hashToPin, options)`
+##### `pinata.pinByHash(hashToPin, options)`
 ##### Params
 * `hashToPin` - A string for a valid IPFS Hash (Also known as a CID)
 * `options` (optional): A JSON object that can contain following keyvalues:
@@ -84,7 +84,7 @@ const options = {
         }
     }
 };
-pinata.addHashToPinQueue('yourHashHere', options).then((result) => {
+pinata.pinByHash('yourHashHere', options).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {
@@ -181,7 +181,7 @@ pinata.pinFromFS(sourcePath, options).then((result) => {
 ```
 
 <a name="pinHashToIPFS-anchor"></a>
-Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS network. Pinata will then syncronously search for this content and pin it on Pinata once the content is found. For the asynchronous version of this operation see: [addHashToPinQueue](#addHashToPinQueue-anchor)
+Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS network. Pinata will then syncronously search for this content and pin it on Pinata once the content is found. For the asynchronous version of this operation see: [pinByHash](#addHashToPinQueue-anchor)
 
 ### `pinHashToIPFS`
 ##### `pinata.pinHashToIPFS(hashToPin, options)`
@@ -224,7 +224,7 @@ pinata.pinHashToIPFS('yourHashHere', options).then((result) => {
 
 <a name="pinJobs-anchor"></a>
 ### `pinJobs`
-This endpoint allows users to search for the status of all hashes that are currently in Pinata's pin queue. Records in the pin queue arrived there through either the [addHashToPinQueue](#addHashToPinQueue-anchor) operation or by failing during a [pinHashToIPFS](#pinHashToIPFS-anchor) operation.
+This endpoint allows users to search for the status of all hashes that are currently in Pinata's pin queue. Records in the pin queue arrived there through either the [pinByHash](#addHashToPinQueue-anchor) operation or by failing during a [pinHashToIPFS](#pinHashToIPFS-anchor) operation.
 
 ##### `pinata.pinJobs(filters)`
 ##### Params

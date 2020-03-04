@@ -1,27 +1,27 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateHostNodes, validateMetadata } from '../../util/validators';
+import { validateApiKeys, validateHostNodes, validateMetadata, validatePinPolicyStructure } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 
-export default function addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
+export default function pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 
     if (!hashToPin) {
-        throw new Error('hashToPin value is required for adding a hash to the pin queue');
+        throw new Error('hashToPin value is required for pinning by hash');
     }
     if (!isIPFS.cid(hashToPin)) {
         throw new Error('hashToPin value is an invalid IPFS CID');
     }
 
-    const endpoint = `${baseUrl}/pinning/addHashToPinQueue`;
+    const endpoint = `${baseUrl}/pinning/pinByHash`;
     const body = {
-        hashToPin: hashToPin
+        hashToPin: hashToPin,
+        pinataOptions: {}
     };
 
     if (options) {
-        if (options.host_nodes) {
-            validateHostNodes(options.host_nodes);
-            body.host_nodes = options.host_nodes;
+        if (options.pinataOptions) {
+            body.pinataOptions = options.pinataOptions;
         }
         if (options.pinataMetadata) {
             validateMetadata(options.pinataMetadata);

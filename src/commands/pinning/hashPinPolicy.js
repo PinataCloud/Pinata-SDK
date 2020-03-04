@@ -1,36 +1,33 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateHostNodes, validateMetadata } from '../../util/validators';
+import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 
-export default function pinHashToIPFS(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
+
+export default function hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
+    validatePinPolicyStructure(newPinPolicy);
 
-    if (!hashToPin) {
-        throw new Error('hashToPin value is required for adding a hash to the pin queue');
-    }
-    if (!isIPFS.cid(hashToPin)) {
-        throw new Error('hashToPin value is an invalid IPFS CID');
+    if (!ipfsPinHash) {
+        throw new Error('ipfsPinHash value is required for changing the pin policy of a pin');
     }
 
-    const endpoint = `${baseUrl}/pinning/pinHashToIPFS`;
+    if (!isIPFS.cid(ipfsPinHash)) {
+        throw new Error('ipfsPinHash value is an invalid IPFS CID');
+    }
+
+    if (!newPinPolicy) {
+        throw new Error('newPinPolicy is required for changing the pin policy of a pin');
+    }
+
+    const endpoint = `${baseUrl}/pinning/hashPinPolicy`;
     const body = {
-        hashToPin: hashToPin
+        ipfsPinHash: ipfsPinHash,
+        newPinPolicy: newPinPolicy
     };
 
-    if (options) {
-        if (options.host_nodes) {
-            validateHostNodes(options.host_nodes);
-            body.host_nodes = options.host_nodes;
-        }
-        if (options.pinataMetadata) {
-            validateMetadata(options.pinataMetadata);
-            body.pinataMetadata = options.pinataMetadata;
-        }
-    }
-
     return new Promise((resolve, reject) => {
-        axios.post(
+        axios.put(
             endpoint,
             body,
             {
@@ -41,7 +38,7 @@ export default function pinHashToIPFS(pinataApiKey, pinataSecretApiKey, hashToPi
                 }
             }).then(function (result) {
             if (result.status !== 200) {
-                reject(new Error(`unknown server response while pinning hash to IPFS: ${result}`));
+                reject(new Error(`unknown server response while changing pin policy for hash: ${result}`));
             }
             resolve(result.data);
         }).catch(function (error) {

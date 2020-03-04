@@ -1,4 +1,4 @@
-import { validateApiKeys, validateHostNodes, validateMetadata, validatePinataOptions } from "../../src/util/validators";
+import { validateApiKeys, validateHostNodes, validateMetadata, validatePinPolicyStructure, validatePinataOptions } from "../../src/util/validators";
 
 describe('validateApiKeys function testing', () => {
     test('check to throw if either pinataApiKey or pinataSecretApiKey are not provided', () => {
@@ -117,6 +117,54 @@ describe('validateMetadata function testing', () => {
         }).not.toThrow();
     });
 });
+
+describe('validatePinPolicyStructure function testing', () => {
+    test('No Policy Provided', () => {
+        expect(() => {
+            validatePinPolicyStructure();
+        }).toThrow("No pin policy provided");
+    });
+    test('No Regions Provided', () => {
+        expect(() => {
+            validatePinPolicyStructure({
+                test: 'test'
+            });
+        }).toThrow("No regions provided in pin policy");
+    });
+    test('region id is not a string', () => {
+        expect(() => {
+            validatePinPolicyStructure({
+                regions: [
+                    {
+                        id: 'goodRegionId',
+                        desiredReplicationCount: 1
+                    },
+                    {
+                        id: 0,
+                        desiredReplicationCount: 1
+                    }
+                ]
+            });
+        }).toThrow("region id must be a string");
+    });
+    test('desiredReplicationCount is not an integer', () => {
+        expect(() => {
+            validatePinPolicyStructure({
+                regions: [
+                    {
+                        id: 'goodRegionId',
+                        desiredReplicationCount: 1
+                    },
+                    {
+                        id: 'goodRegionId2',
+                        desiredReplicationCount: 'string that should fail'
+                    }
+                ]
+            });
+        }).toThrow("desiredReplicationCount must be an integer");
+    });
+});
+
 
 describe('validatePinataOptions function testing', () => {
     test('options is not an object', () => {

@@ -1,21 +1,24 @@
-import addHashToPinQueue from './commands/pinning/addHashToPinQueue';
+import pinByHash from './commands/pinning/pinByHash';
+import hashPinPolicy from './commands/pinning/hashPinPolicy';
 import pinFileToIPFS from './commands/pinning/pinFileToIPFS';
 import pinFromFS from './commands/pinning/pinFromFS';
 import pinJSONToIPFS from './commands/pinning/pinJSONToIPFS';
-import pinHashToIPFS from './commands/pinning/pinHashToIPFS';
 import pinJobs from './commands/pinning/pinJobs/pinJobs';
-import removePinFromIPFS from './commands/pinning/removePinFromIPFS';
+import unpin from './commands/pinning/unpin';
+import userPinPolicy from './commands/pinning/userPinPolicy';
 import testAuthentication from './commands/data/testAuthentication';
 import pinList from './commands/data/pinList/pinList';
-import userPinList from './commands/data/userPinList/userPinList';
 import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 
 export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     let client = {};
 
     //  setting up the actual calls you can make using this package
-    client.addHashToPinQueue = function (hashToPin, options) {
-        return addHashToPinQueue(pinataApiKey, pinataSecretApiKey, hashToPin, options);
+    client.pinByHash = function (hashToPin, options) {
+        return pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options);
+    };
+    client.hashPinPolicy = function (hashToPin, options, ipfsPinHash, newPinPolicy) {
+        return hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy);
     };
     client.pinFileToIPFS = function (readableStream, options) {
         return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readableStream, options);
@@ -26,23 +29,20 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     client.pinJSONToIPFS = function (body, options) {
         return pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options);
     };
-    client.pinHashToIPFS = function (hashToPin, options) {
-        return pinHashToIPFS(pinataApiKey, pinataSecretApiKey, hashToPin, options);
-    };
     client.pinJobs = function (filters) {
         return pinJobs(pinataApiKey, pinataSecretApiKey, filters);
     };
-    client.removePinFromIPFS = function (ipfsPinHash) {
-        return removePinFromIPFS(pinataApiKey, pinataSecretApiKey, ipfsPinHash);
+    client.unpin = function (hashToUnpin) {
+        return unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin);
+    };
+    client.userPinPolicy = function (newPinPolicy) {
+        return userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy);
     };
     client.testAuthentication = function () {
         return testAuthentication(pinataApiKey, pinataSecretApiKey);
     };
     client.pinList = function (filters) {
         return pinList(pinataApiKey, pinataSecretApiKey, filters);
-    };
-    client.userPinList = function (filters) {
-        return userPinList(pinataApiKey, pinataSecretApiKey, filters);
     };
     client.userPinnedDataTotal = function () {
         return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);

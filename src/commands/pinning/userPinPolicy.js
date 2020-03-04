@@ -1,25 +1,22 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys } from '../../util/validators';
-import isIPFS from 'is-ipfs';
+import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
 
-export default function removePinFromIPFS(pinataApiKey, pinataSecretApiKey, ipfsPinHash) {
+export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
+    validatePinPolicyStructure(newPinPolicy);
 
-    if (!ipfsPinHash) {
-        throw new Error('ipfsPinHash value is required for removing a pin from Pinata');
-    }
-    if (!isIPFS.cid(ipfsPinHash)) {
-        throw new Error(`${ipfsPinHash} is an invalid IPFS CID`);
+    if (!newPinPolicy) {
+        throw new Error('newPinPolicy is required for changing the pin policy of a pin');
     }
 
-    const endpoint = `${baseUrl}/pinning/removePinFromIPFS`;
+    const endpoint = `${baseUrl}/pinning/userPinPolicy`;
     const body = {
-        ipfs_pin_hash: ipfsPinHash
+        newPinPolicy: newPinPolicy
     };
 
     return new Promise((resolve, reject) => {
-        axios.post(
+        axios.put(
             endpoint,
             body,
             {
@@ -30,7 +27,7 @@ export default function removePinFromIPFS(pinataApiKey, pinataSecretApiKey, ipfs
                 }
             }).then(function (result) {
             if (result.status !== 200) {
-                reject(new Error(`unknown server response while removing pin from IPFS: ${result}`));
+                reject(new Error(`unknown server response while changing pin policy for user: ${result}`));
             }
             resolve(result.data);
         }).catch(function (error) {
