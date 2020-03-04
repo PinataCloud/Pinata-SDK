@@ -35,20 +35,59 @@ pinata.testAuthentication().then((result) => {
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
 
 * Pinning
-  * [pinByHash](#addHashToPinQueue-anchor)
+  * [hashPinPolicy](#hashPinPolicy-anchor)
+  * [pinByHash](#pinByHash-anchor)
   * [pinFileToIPFS](#pinFileToIPFS-anchor)
   * [pinFromFS](#pinFromFS-anchor)
-  * [pinHashToIPFS](#pinHashToIPFS-anchor)
   * [pinJobs](#pinJobs-anchor)
   * [pinJSONToIPFS](#pinJSONToIPFS-anchor)
-  * [removePinFromIPFS](#removePinFromIPFS-anchor)
+  * [unpin](#unpin-anchor)
+  * [userPinPolicy](#userPinPolicy-anchor)
 
 * Data
   * [testAuthentication](#testAuthentication-anchor)
   * [pinList](#pinList-anchor)
-  * [userPinList (DEPRECATED)](#userPinList-anchor)
   * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
 <br />
+
+<a name="hashPinPolicy-anchor"></a>
+### `hashPinPolicy`
+Allows the user to change the pin policy for an individual piece of content.
+Changes made via this endpoint only affect the content for the hash passed in. They do not affect a user's account level pin policy.
+
+To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
+
+##### `pinata.hashPinPolicy(ipfsPinHash, newPinPolicy)`
+##### Params
+* `ipfsPinHash` - A string for a valid IPFS Hash that you have pinned on Pinata.
+* `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
+
+#### Response
+If the operation is successful, you will receive back an "OK" REST 200 status.
+
+##### Example Code
+```javascript
+const newPinPolicy = {
+    regions: [
+            {
+                id: 'FRA1',
+                desiredReplicationCount: 2
+            },
+            {
+                id: 'NYC1',
+                desiredReplicationCount: 2
+            }
+        ]
+    }
+};
+pinata.hashPinPolicy('yourHashHere', newPinPolicy).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
 
 <a name="pinByHash-anchor"></a>
 ### `pinByHash`
@@ -58,13 +97,15 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchrono
 ##### Params
 * `hashToPin` - A string for a valid IPFS Hash (Also known as a CID)
 * `options` (optional): A JSON object that can contain following keyvalues:
-  * `host_nodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
   * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
+  * `pinataOptions`
+     * `hostNodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
+     * `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
 #### Response
 ```
 {
     id: This is Pinata's ID for the pin job,
-    IpfsHash: This is the IPFS multi-hash provided to Pinata to pin,
+    ipfsHash: This is the IPFS multi-hash provided to Pinata to pin,
     status: The current status of the pin job. If the request was successful the status should be 'searching'.
     name: The name of the pin (if provided initially)
 }
@@ -72,15 +113,29 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchrono
 ##### Example Code
 ```javascript
 const options = {
-    host_nodes: [
-        '/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id',
-        '/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id'
-    ],
     pinataMetadata: {
         name: MyCustomName,
         keyvalues: {
             customKey: 'customValue',
             customKey2: 'customValue2'
+        }
+    },
+    pinataOptions: {
+        hostNodes: [
+            '/ip4/hostNode1ExternalIP/tcp/4001/ipfs/hostNode1PeerId',
+            '/ip4/hostNode2ExternalIP/tcp/4001/ipfs/hostNode2PeerId'
+        ],
+        customPinPolicy: {
+            regions: [
+                {
+                    id: 'FRA1',
+                    desiredReplicationCount: 1
+                },
+                {
+                    id: 'NYC1',
+                    desiredReplicationCount: 2
+                }
+            ]
         }
     }
 };
@@ -180,48 +235,6 @@ pinata.pinFromFS(sourcePath, options).then((result) => {
 });
 ```
 
-<a name="pinHashToIPFS-anchor"></a>
-Provide Pinata's a hash for content that is already pinned elsewhere on the IPFS network. Pinata will then syncronously search for this content and pin it on Pinata once the content is found. For the asynchronous version of this operation see: [pinByHash](#addHashToPinQueue-anchor)
-
-### `pinHashToIPFS`
-##### `pinata.pinHashToIPFS(hashToPin, options)`
-##### Params
-* `hashToPin` - A string for a valid IPFS Hash (Also known as a CID)
-* `options` (optional): A JSON object that can contain following keyvalues:
-  * `host_nodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
-  * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
-#### Response
-```
-{
-    IpfsHash: This is the IPFS multi-hash provided back for your content,
-    PinSize: This is how large (in bytes) the content you just pinned is,
-    Timestamp: This is the timestamp for your content pinning (represented in ISO 8601 format)
-}
-```
-##### Example Code
-```javascript
-const options = {
-    host_nodes: [
-        '/ip4/host_node_1_external_IP/tcp/4001/ipfs/host_node_1_peer_id',
-        '/ip4/host_node_2_external_IP/tcp/4001/ipfs/host_node_2_peer_id'
-    ],
-    pinataMetadata: {
-        name: MyCustomName,
-        keyvalues: {
-            customKey: 'customValue',
-            customKey2: 'customValue2'
-        }
-    }
-};
-pinata.pinHashToIPFS('yourHashHere', options).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
-```
-
 <a name="pinJobs-anchor"></a>
 ### `pinJobs`
 This endpoint allows users to search for the status of all hashes that are currently in Pinata's pin queue. Records in the pin queue arrived there through either the [pinByHash](#addHashToPinQueue-anchor) operation or by failing during a [pinHashToIPFS](#pinHashToIPFS-anchor) operation.
@@ -233,7 +246,9 @@ This endpoint allows users to search for the status of all hashes that are curre
     * `'ASC'`
     * `'DESC'`
   * `status` (optional): What the current status of the record is in the pin queue. Valid statuses and their meanings are:
+    * `prechecking` - Pinata is running preliminary validations on your pin request.
     * `searching` - Pinata is actively searching for your content on the IPFS network. This may take some time if your content is isolated.
+    * `retrieving` - Pinata has located your content and is now in the process of retrieving it.
     * `expired` - Pinata wasn't able to find your content after a day of searching the IPFS network. Please make sure your content is hosted on the IPFS network before trying to pin again.
     * `over_free_limit` - Pinning this object would put you over the free tier limit. Please add a credit card to continue pinning content.
     * `over_max_size` - This object is too large of an item to pin. If you're seeing this, please contact us for a more custom solution.
@@ -326,18 +341,57 @@ pinata.pinJSONToIPFS(body, options).then((result) => {
 });
 ```
 
-<a name="removePinFromIPFS-anchor"></a>
-### `removePinFromIPFS`
+<a name="unpin-anchor"></a>
+### `unpin`
 Have Pinata unpin content that you've pinned through the service.
 
-##### `pinata.removePinFromIPFS(ipfsPinHash)`
+##### `pinata.unpin(hashToUnpin)`
 ##### Params
-* `ipfsPinHash` - Valid JSON you wish to pin to IPFS
+* `hashToUnpin` - the hash of the content you wish to unpin from Pinata
 #### Response
 If the operation is successful, you will simply receive "OK" as your result
 ##### Example Code
 ```javascript
-pinata.removePinFromIPFS(ipfsPinHash).then((result) => {
+pinata.unpin(hashToUnpin).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
+
+<a name="userPinPolicy-anchor"></a>
+### `userPinPolicy`
+This allows the sender to change the pin policy their account.
+
+Following a successful call of this endpoint, the new pin policy provided will be utilized for every new piece of content pinned to IPFS via Pinata.
+
+To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
+
+##### `pinata.userPinPolicy(newPinPolicy)`
+##### Params
+* `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
+
+#### Response
+If the operation is successful, you will receive back an "OK" REST 200 status.
+
+##### Example Code
+```javascript
+const newPinPolicy = {
+    regions: [
+            {
+                id: 'FRA1',
+                desiredReplicationCount: 2
+            },
+            {
+                id: 'NYC1',
+                desiredReplicationCount: 2
+            }
+        ]
+    }
+};
+pinata.userPinPolicy(newPinPolicy).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {
@@ -511,147 +565,6 @@ pinata.pinList(filters).then((result) => {
 });
 ```
 
-<a name="userPinList-anchor"></a>
-### `userPinList (DEPRECATED)`
-Retrieve pin records for your Pinata account
-
-This function is deprecated and is no longer supported. For new applications, please use the [pinList](#pinList-anchor) function to retrieve your pin list.
-
-##### `pinata.userPinList(filters)`
-##### Params
-* `filters` (optional): An object that can consist of the following optional query parameters:
-  * `hashContains` (optional): A string of alphanumeric characters that desires hashes must contain
-  * `pinStart` (optional): The earliest date the content is allowed to have been pinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
-  * `pinEnd` (optional): The earliest date the content is allowed to have been pinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
-  * `unpinStart` (optional): The earlist date the content is allowed to have been unpinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
-  * `unpinEnd` (optional): The latest date the content is allowed to have been unpinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
-  * `pinSizeMin` (optional): The minimum byte size that pin record you're looking for can have
-  * `pinSizeMax` (optional): The maximum byte size that pin record you're looking for can have
-  * `pinFilter` (optional): Filter pins using one of the following options
-    * `'all'` (Records for both pinned and unpinned content will be returned)
-    * `'pinned'` (Only records for pinned content will be returned)
-    * `'unpinned'` (Only records for unpinned content will be returned)
-  * `pageLimit` (optional): Limit the amount of results returned per page of results (default is 10, and max is 1000)
-  * `pageOffset` (optional): Provide the record offset for records being returned. This is how you retrieve records on additional pages (default is 0)
-   * `metadata` (optional): A JSON object that can be used to find records for content that had optional metadata included when it was added to Pinata. The metadata object is formatted as follows:
- 
-##### Metadata filter object formatting
-```
-{
-    name: 'exampleName',
-    keyvalues: {
-        testKeyValue: {
-            value: 'exampleFilterValue',
-            op: 'exampleFilterOperation'
-        },
-        testKeyValue2: {
-            value: 'exampleFilterValue2',
-            op: 'exampleFilterOperation2'
-        }
-    }
-}
-```
-Filter explanations:
-* `name` (optional): If provided, any records returned must have a name that contains the string provided for the 'name'.
-* `keyvalues` (optional): Each keyvalue provided in this object have both a `value` and `op`
-  * `value` (required): This is the value which will be filtered on
-  * `op` (required): This is the filter operation that will be applied to the `value` that was provided. Valid op values are:
-     * `'gt'` (greater than the value provided)
-     * `'gte'` (greater than or equal to the value provided)
-     * `'lt'` (less than the value provided)
-     * `'lte'` (less than or equal to the value provided)
-     * `'ne'` (not equal to the value provided)
-     * `'eq'` (equal to the value provided)
-     * `'between'` (between the two values provided) - NOTE - This also requires a `secondValue` be provided as seen in the example below
-     * `'notBetween'` (not between the two values provided) - NOTE - This also requires a `secondValue` be provided as seen in the example below
-     * `'like'` (like the value provided)
-     * `'notLike'` (not like the value provided)
-     * `'iLike'` (case insensitive version of `like`)
-     * `'notILike'` (case insensitive version of `notLike`)
-     * `'regexp'` (filter the value provided based on a provided regular expression)
-     * `'iRegexp'` (case insensitive version of regexp)
-  
-As an example, the following filter would only find records whose name contains the letters 'invoice', have the metadata key 'company' with a value of 'exampleCompany', and have a metadata key 'total' with values between 500 and 1000:
-```
-{
-    name: 'invoice',
-    keyvalues: {
-        company: {
-            value: 'exampleCompany,
-            op: 'eq'
-        },
-        total: {
-            value: 500,
-            secondValue: 1000,
-            op: 'between'
-        }
-    }
-}
-```
-
-
- 
-#### Response
-```
-{
-    count: (this is the total number of pin records that exist for the query filters you passed in),
-    rows: [
-        {
-            id: (the id of your pin instance record),
-            ipfs_pin_hash: (the IPFS multi-hash for the content you pinned),
-            size: (this is how large (in bytes) the content pinned is),
-            user_id: (this is your user id for Pinata),
-            date_pinned: (This is the timestamp for when this content was pinned - represented in ISO 8601 format),
-            date_unpinned: (This is the timestamp for when this content was unpinned (if null, then you still have the content pinned on Pinata),
-            metadata: {
-                name: (this will be the name of the file originally upuloaded, or the custom name you set),
-                keyvalues: {
-                    exampleCustomKey: "exampleCustomValue",
-                    exampleCustomKey2: "exampleCustomValue2",
-                    ...
-                }
-            }
-        },
-        {
-            same record format as above
-        }
-        .
-        .
-        .
-    ]
-}
-```
-##### Example Code
-```javascript
-const metadataFilter = {
-    name: 'exampleName',
-    keyvalues: {
-        testKeyValue: {
-            value: 'exampleFilterValue',
-            op: 'exampleFilterOperation'
-        },
-        testKeyValue2: {
-            value: 'exampleFilterValue2',
-            op: 'exampleFilterOperation2'
-        }
-    }
-};
-
-const filters = {
-    pinFilter : 'pinned',
-    pageLimit: 10,
-    pageOffset: 0,
-    metadata: metadataFilter
-};
-pinata.userPinList(filters).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
-```
-
 <a name="userPinnedDataTotal-anchor"></a>
 ### `userPinnedDataTotal`
 Returns the total combined size (in bytes) of all content you currently have pinned on Pinata.
@@ -693,8 +606,39 @@ Here's an example of what a full external ipv4 multiaddress would look like (you
 
 ⚠️ Please make sure every node provided is online. Pinata will attempt to connect to all nodes before pinning the content, and if any these nodes are offline, your request will eventually fail.
 
-<a name="metadata-anchor"></a>
 
+<a name="pinPolicies-anchor"></a>
+
+## Pin Policies
+A pin policy tells Pinata how many times content should be replicated, and where that content should be replicated at.
+
+To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
+
+Pin policies take the following form:
+
+  
+##### Example pin policy object
+```
+{
+    regions: [
+        {
+            id: 'FRA1',
+            desiredReplicationCount: 1
+        },
+        {
+            id: 'NYC1',
+            desiredReplicationCount: 2
+        }
+    ]
+}
+```
+The ids of currently available public regions are:
+
+• FRA1 - Frankfurt, Germany (max 2 replications)
+
+• NYC1 - New York City, USA (max 2 replications)
+
+<a name="metadata-anchor"></a>
 ## Pinata Metadata
 For endpoints that allow you to add content, Pinata lets you add optionally metadata for that content. This metadata can later be used for querying on what you've pinned with our [userPinList](#userPinList-anchor) endpoint. Providing metadata does not alter your content or how it is stored on IPFS in any way.
 
@@ -727,12 +671,26 @@ The options object can consist of the following values:
 * wrapWithDirectory (optional) - Tells IPFS to wrap your content in a directory to preserve the content's original name. See [this blog post](https://flyingzumwalt.gitbooks.io/decentralized-web-primer/content/files-on-ipfs/lessons/wrap-directories-around-content.html) for more details on what this does. Valid options are:
   * `true`
   * `false`
+* customPinPolicy (optional) - a custom [Pin Policy](#pinPolicies-anchor) for the piece of content being pinned. Providing a custom pin policy as part of a request means that the content being pinned will be replicated differently from the user's default pin policy found under the [Account](https://pinata.cloud/account) page.
 
   
 ##### Example pinataOptions object
 ```
 {
-    cidVersion: 1
+    cidVersion: 1,
+    wrapWithDirectory: true,
+    customPinPolicy: {
+        regions: [
+            {
+                id: 'FRA1',
+                desiredReplicationCount: 2
+            },
+            {
+                id: 'NYC1',
+                desiredReplicationCount: 2
+            }
+        ]
+    }
 }
 ```
 
