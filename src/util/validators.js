@@ -49,21 +49,21 @@ export function validateMetadata(metadata) {
 
 export function validatePinPolicyStructure(pinPolicy) {
     //this function takes in a pin policy and checks the JSON structure to make sure it's valid
-    if(!pinPolicy) {
-        throw new Error("No pin policy provided");
+    if (!pinPolicy) {
+        throw new Error('No pin policy provided');
     }
 
-    if(!pinPolicy.regions) {
-        throw new Error("No regions provided in pin policy");
+    if (!pinPolicy.regions) {
+        throw new Error('No regions provided in pin policy');
     }
-    if(pinPolicy.regions.length) {
+    if (pinPolicy.regions.length) {
         pinPolicy.regions.forEach((region) => {
-            if(!region.id || !(Object.prototype.toString.call(region.id) === "[object String]")) {
-                throw new Error("region id must be a string");
+            if (!region.id || !(Object.prototype.toString.call(region.id) === '[object String]')) {
+                throw new Error('region id must be a string');
             }
 
             if (!(region.desiredReplicationCount || region.desiredReplicationCount === 0) || !Number.isInteger(region.desiredReplicationCount)) {
-                throw new Error("desiredReplicationCount must be an integer");
+                throw new Error('desiredReplicationCount must be an integer');
             }
         });
     }
@@ -88,7 +88,7 @@ export function validatePinataOptions(options) {
     }
 
     if (options.hostNodes) {
-        validateHostNodes(options.hostNodes)
+        validateHostNodes(options.hostNodes);
     }
 
     if (options.customPinPolicy) {
