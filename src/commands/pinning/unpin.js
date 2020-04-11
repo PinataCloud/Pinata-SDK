@@ -13,15 +13,11 @@ export default function unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin) {
         throw new Error(`${hashToUnpin} is an invalid IPFS CID`);
     }
 
-    const endpoint = `${baseUrl}/pinning/unpin`;
-    const body = {
-        hashToUnpin: hashToUnpin
-    };
+    const endpoint = `${baseUrl}/pinning/unpin/${hashToUnpin}`;
 
     return new Promise((resolve, reject) => {
         axios.delete(
             endpoint,
-            body,
             {
                 withCredentials: true,
                 headers: {
