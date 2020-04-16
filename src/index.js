@@ -1,4 +1,5 @@
 import pinByHash from './commands/pinning/pinByHash';
+import hashMetadata from './commands/pinning/hashMetadata';
 import hashPinPolicy from './commands/pinning/hashPinPolicy';
 import pinFileToIPFS from './commands/pinning/pinFileToIPFS';
 import pinFromFS from './commands/pinning/pinFromFS';
@@ -16,6 +17,9 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     //  setting up the actual calls you can make using this package
     client.pinByHash = function (hashToPin, options) {
         return pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options);
+    };
+    client.hashMetadata = function (hashToPin, options, ipfsPinHash, metadata) {
+        return hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata);
     };
     client.hashPinPolicy = function (hashToPin, options, ipfsPinHash, newPinPolicy) {
         return hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy);
