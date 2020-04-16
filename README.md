@@ -35,6 +35,7 @@ pinata.testAuthentication().then((result) => {
 Once you've set up your instance, using the Pinata SDK is easy. Simply call your desired function and handle the results of the promise.
 
 * Pinning
+  * [hashMetadata](#hashMetadata-anchor)
   * [hashPinPolicy](#hashPinPolicy-anchor)
   * [pinByHash](#pinByHash-anchor)
   * [pinFileToIPFS](#pinFileToIPFS-anchor)
@@ -49,6 +50,58 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
   * [pinList](#pinList-anchor)
   * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
 <br />
+
+<a name="hashMetadata-anchor"></a>
+### `hashMetadata`
+Allows the user to change the name and keyvalues associated with content pinned to Pinata.
+Changes made via this endpoint only affect the metadata for the hash passed in. [Metadata](#metadata-anchor) is specific to Pinata and does not modify the actual content stored on IPFS in any way. It is simply a convenient way of keeping track of what content you have stored.
+
+##### `pinata.hashMetadata(ipfsPinHash, metadata)`
+##### Params
+* `ipfsPinHash` - A string for a valid IPFS Hash that you have pinned on Pinata.
+* `metadata` A JSON object containing the following:
+  * `name` (optional) - A new name that Pinata will associate with this particular hash. 
+  * `keyvalues` (optional) - A JSON object with the updated keyvalues you want associated with the hash provided (see more below)
+  
+###### Adding or modifying keyvalues
+To add or modify existing keyvalues, simply provide them in the following format for the keyvalues object:
+```
+keyvalues: {
+    newKey: 'newValue', //this adds a keyvalue pair
+    existingKey: 'newValue' //this modifies the value of an existing key if that key already exists
+}
+```
+
+###### Removing keyvalues
+To remove a keyvalue pair, simply provide null as the value for an existing key like so:
+```
+keyvalues: {
+    existingKeyToRemove: null //this removes a keyvalue pair
+}
+```
+
+#### Response
+If the operation is successful, you will receive back an "OK" REST 200 status.
+
+##### Example Code
+```javascript
+const metadata = {
+    name: 'new custom name',
+    keyvalues: {
+        newKey: 'newValue',
+        existingKey: 'newValue',
+        existingKeyToRemove: null
+    }
+};
+pinata.hashMetadata('yourHashHere', metadata).then((result) => {
+    //handle results here
+    console.log(result);
+}).catch((err) => {
+    //handle error here
+    console.log(err);
+});
+```
+
 
 <a name="hashPinPolicy-anchor"></a>
 ### `hashPinPolicy`
