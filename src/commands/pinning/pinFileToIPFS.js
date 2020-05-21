@@ -48,7 +48,7 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
             resolve(result.data);
         }).catch(function (error) {
             //  handle error here
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
+            if (error && error.response && error.response.data && error.response.data.error) {
                 reject(new Error(error.response.data.error));
             } else {
                 reject(error);
