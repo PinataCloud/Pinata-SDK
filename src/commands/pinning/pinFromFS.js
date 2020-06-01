@@ -12,55 +12,103 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
     return new Promise((resolve, reject) => {
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
-        recursive.readdirr(sourcePath, function (err, dirs, files) {
+        fs.lstat(sourcePath, (err, stats) => {
             if (err) {
-                reject(new Error(err));
+                reject(err);
             }
+            if (stats.isFile()) {
+                //we need to create a single read stream instead of reading the directory recursively
+                const data = new NodeFormData();
 
-            let data = new NodeFormData();
+                data.append('file', fs.createReadStream(sourcePath));
 
-            files.forEach((file) => {
-                //for each file stream, we need to include the correct relative file path
-                data.append('file', fs.createReadStream(file), {
-                    filepath: basePathConverter(sourcePath, file)
-                });
-            });
-
-            if (options) {
-                if (options.pinataMetadata) {
-                    validateMetadata(options.pinataMetadata);
-                    data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
-                }
-                if (options.pinataOptions) {
-                    validatePinataOptions(options.pinataOptions);
-                    data.append('pinataOptions', JSON.stringify(options.pinataOptions));
-                }
-            }
-
-            axios.post(
-                endpoint,
-                data,
-                {
-                    withCredentials: true,
-                    maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
-                    headers: {
-                        'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
-                        'pinata_api_key': pinataApiKey,
-                        'pinata_secret_api_key': pinataSecretApiKey
+                if (options) {
+                    if (options.pinataMetadata) {
+                        validateMetadata(options.pinataMetadata);
+                        data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
                     }
-                }).then(function (result) {
-                if (result.status !== 200) {
-                    reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
+                    if (options.pinataOptions) {
+                        validatePinataOptions(options.pinataOptions);
+                        data.append('pinataOptions', JSON.stringify(options.pinataOptions));
+                    }
                 }
-                resolve(result.data);
-            }).catch(function (error) {
-                //  handle error here
-                if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                    reject(new Error(error.response.data.error));
-                } else {
-                    reject(error);
-                }
-            });
+
+                axios.post(
+                    endpoint,
+                    data,
+                    {
+                        withCredentials: true,
+                        maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
+                        headers: {
+                            'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
+                            'pinata_api_key': pinataApiKey,
+                            'pinata_secret_api_key': pinataSecretApiKey
+                        }
+                    }).then(function (result) {
+                    if (result.status !== 200) {
+                        reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
+                    }
+                    resolve(result.data);
+                }).catch(function (error) {
+                    //  handle error here
+                    if (error && error.response && error.response && error.response.data && error.response.data.error) {
+                        reject(new Error(error.response.data.error));
+                    } else {
+                        reject(error);
+                    }
+                });
+            } else {
+                recursive.readdirr(sourcePath, function (err, dirs, files) {
+                    if (err) {
+                        reject(new Error(err));
+                    }
+
+                    let data = new NodeFormData();
+
+                    files.forEach((file) => {
+                        //for each file stream, we need to include the correct relative file path
+                        data.append('file', fs.createReadStream(file), {
+                            filepath: basePathConverter(sourcePath, file)
+                        });
+                    });
+
+                    if (options) {
+                        if (options.pinataMetadata) {
+                            validateMetadata(options.pinataMetadata);
+                            data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
+                        }
+                        if (options.pinataOptions) {
+                            validatePinataOptions(options.pinataOptions);
+                            data.append('pinataOptions', JSON.stringify(options.pinataOptions));
+                        }
+                    }
+
+                    axios.post(
+                        endpoint,
+                        data,
+                        {
+                            withCredentials: true,
+                            maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
+                            headers: {
+                                'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
+                                'pinata_api_key': pinataApiKey,
+                                'pinata_secret_api_key': pinataSecretApiKey
+                            }
+                        }).then(function (result) {
+                        if (result.status !== 200) {
+                            reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
+                        }
+                        resolve(result.data);
+                    }).catch(function (error) {
+                        //  handle error here
+                        if (error && error.response && error.response && error.response.data && error.response.data.error) {
+                            reject(new Error(error.response.data.error));
+                        } else {
+                            reject(error);
+                        }
+                    });
+                });
+            }
         });
     });
 }

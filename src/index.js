@@ -18,10 +18,10 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     client.pinByHash = function (hashToPin, options) {
         return pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options);
     };
-    client.hashMetadata = function (hashToPin, options, ipfsPinHash, metadata) {
+    client.hashMetadata = function (ipfsPinHash, metadata) {
         return hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata);
     };
-    client.hashPinPolicy = function (hashToPin, options, ipfsPinHash, newPinPolicy) {
+    client.hashPinPolicy = function (ipfsPinHash, newPinPolicy) {
         return hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy);
     };
     client.pinFileToIPFS = function (readableStream, options) {
