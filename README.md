@@ -620,7 +620,7 @@ pinata.pinList(filters).then((result) => {
 
 <a name="storageStats-anchor"></a>
 ### `storageStats`
-Returns the total combined size (in bytes) of all content you currently have pinned on Pinata.
+Returns the total combined size (in bytes) of all content you currently have pinned on Pinata as well as your total pins count, total Vault deals count, and a count of any failed Vault deals.
 
 ##### `pinata.storageStats()`
 ##### Params
