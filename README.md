@@ -627,8 +627,15 @@ Returns the total combined size (in bytes) of all content you currently have pin
 None
 
 #### Response
-The response for this call will the total combined size of everything you currently have pinned on pinata.
-This value will be expressed in bytes
+```
+{
+    "failed_vault_deals_count": 0,
+    "total_vault_deals_count": 5,
+    "pin_count": 7,
+    "pin_size_total": "66928",
+    "pin_size_with_replications_total": "66928"
+}
+```
 
 ##### Example Code
 ```javascript
