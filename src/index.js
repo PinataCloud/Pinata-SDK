@@ -9,7 +9,7 @@ import unpin from './commands/pinning/unpin';
 import userPinPolicy from './commands/pinning/userPinPolicy';
 import testAuthentication from './commands/data/testAuthentication';
 import pinList from './commands/data/pinList/pinList';
-import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
+import storageStats from './commands/data/storageStats';
 
 export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     let client = {};
@@ -48,8 +48,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     client.pinList = function (filters) {
         return pinList(pinataApiKey, pinataSecretApiKey, filters);
     };
-    client.userPinnedDataTotal = function () {
-        return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);
+    client.storageStats = function () {
+        return storageStats(pinataApiKey, pinataSecretApiKey);
     };
     return client;
 }

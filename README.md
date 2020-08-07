@@ -48,7 +48,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 * Data
   * [testAuthentication](#testAuthentication-anchor)
   * [pinList](#pinList-anchor)
-  * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
+  * [storageStats](#storageStats-anchor)
 <br />
 
 <a name="hashMetadata-anchor"></a>
@@ -618,11 +618,11 @@ pinata.pinList(filters).then((result) => {
 });
 ```
 
-<a name="userPinnedDataTotal-anchor"></a>
-### `userPinnedDataTotal`
+<a name="storageStats-anchor"></a>
+### `storageStats`
 Returns the total combined size (in bytes) of all content you currently have pinned on Pinata.
 
-##### `pinata.userPinnedDataTotal()`
+##### `pinata.storageStats()`
 ##### Params
 None
 
@@ -632,7 +632,7 @@ This value will be expressed in bytes
 
 ##### Example Code
 ```javascript
-pinata.userPinnedDataTotal().then((result) => {
+pinata.storageStats().then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {

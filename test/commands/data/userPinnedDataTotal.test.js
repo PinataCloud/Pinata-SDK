@@ -1,5 +1,5 @@
 import axios from 'axios';
-import userPinnedDataTotal from './../../../src/commands/data/userPinnedDataTotal';
+import storageStats from './../../../src/commands/data/storageStats';
 
 jest.mock('axios');
 
@@ -9,7 +9,7 @@ test('Result other than 200 status is returned', () => {
     };
     axios.get.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(userPinnedDataTotal('test', 'test')).rejects.toEqual(Error(`unknown server response while attempting to retrieve pinned data total: ${badStatus}`));
+    expect(storageStats('test', 'test')).rejects.toEqual(Error(`unknown server response while attempting to retrieve pinned data total: ${badStatus}`));
 });
 
 test('200 status is returned', () => {
@@ -19,11 +19,11 @@ test('200 status is returned', () => {
     };
     axios.get.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(userPinnedDataTotal('test', 'test')).resolves.toEqual(goodStatus.data);
+    expect(storageStats('test', 'test')).resolves.toEqual(goodStatus.data);
 });
 
 test('Rejection handled', () => {
     axios.get.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(userPinnedDataTotal('test', 'test')).rejects.toEqual('test error');
+    expect(storageStats('test', 'test')).rejects.toEqual('test error');
 });
