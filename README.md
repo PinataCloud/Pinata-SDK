@@ -48,7 +48,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 * Data
   * [testAuthentication](#testAuthentication-anchor)
   * [pinList](#pinList-anchor)
-  * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
+  * [storageStats](#storageStats-anchor)
 <br />
 
 <a name="hashMetadata-anchor"></a>
@@ -618,21 +618,28 @@ pinata.pinList(filters).then((result) => {
 });
 ```
 
-<a name="userPinnedDataTotal-anchor"></a>
-### `userPinnedDataTotal`
-Returns the total combined size (in bytes) of all content you currently have pinned on Pinata.
+<a name="storageStats-anchor"></a>
+### `storageStats`
+Returns the total combined size (in bytes) of all content you currently have pinned on Pinata as well as your total pins count, total Vault deals count, and a count of any failed Vault deals.
 
-##### `pinata.userPinnedDataTotal()`
+##### `pinata.storageStats()`
 ##### Params
 None
 
 #### Response
-The response for this call will the total combined size of everything you currently have pinned on pinata.
-This value will be expressed in bytes
+```
+{
+    "failed_vault_deals_count": 0,
+    "total_vault_deals_count": 5,
+    "pin_count": 7,
+    "pin_size_total": "66928",
+    "pin_size_with_replications_total": "66928"
+}
+```
 
 ##### Example Code
 ```javascript
-pinata.userPinnedDataTotal().then((result) => {
+pinata.storageStats().then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {

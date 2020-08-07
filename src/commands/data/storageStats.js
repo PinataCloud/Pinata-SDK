@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import { validateApiKeys } from '../../util/validators';
 
-export default function userPinnedDataTotal(pinataApiKey, pinataSecretApiKey) {
+export default function storageStats(pinataApiKey, pinataSecretApiKey) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 
-    let endpoint = `${baseUrl}/data/userPinnedDataTotal`;
+    let endpoint = `${baseUrl}/data/storageStats`;
 
     return new Promise((resolve, reject) => {
         axios.get(
