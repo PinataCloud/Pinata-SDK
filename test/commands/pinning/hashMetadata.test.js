@@ -13,6 +13,14 @@ const metadata = {
     }
 };
 
+const metadataTwo = {
+    name: 'testname',
+    keyvalues: {
+        newKey: 'newValue', 
+        secondKey: 'secondValue'
+    }
+}
+
 test('No ipfsPinHash value provided should error', () => {
     expect(() => {
         hashMetadata('test', 'test', null, metadata);
@@ -31,7 +39,7 @@ test('No metadata object provided should error', () => {
     }).toThrow();
 });
 
-test('200 status is returned', () => {
+test('One keyvalue pair is added', () => {
     const goodStatus = {
         status: 200,
         data: 'testData'
@@ -39,6 +47,16 @@ test('200 status is returned', () => {
     axios.put.mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(hashMetadata('test', 'test', goodHash, metadata)).resolves.toEqual(goodStatus.data);
+});
+
+test('Two keyvalue pairs is added', () => {
+    const goodStatus = {
+        status: 200,
+        data: 'testData'
+    };
+    axios.put.mockResolvedValue(goodStatus);
+    expect.assertions(1);
+    expect(hashMetadata('test', 'test', goodHash, metadataTwo)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
