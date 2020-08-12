@@ -85,6 +85,7 @@ export default function queryBuilder(baseUrl, filters) {
             }
 
             if (filters.metadata.keyvalues) {
+                metadataQuery = metadataQuery + 'metadata[keyvalues]=';
 
                 if (typeof filters.metadata.keyvalues !== 'object') {
                     throw new Error('metadata keyvalues must be an object');
@@ -222,9 +223,9 @@ export default function queryBuilder(baseUrl, filters) {
                         default:
                             throw new Error(`keyValue op: ${value.op} is not a valid op code`);
                     }
-
-                    metadataQuery = metadataQuery + `metadata[keyvalues]=${JSON.stringify(prunedKeyValues)}`;
                 });
+
+                metadataQuery = metadataQuery + `${JSON.stringify(prunedKeyValues)}`;
             }
         }
     }
