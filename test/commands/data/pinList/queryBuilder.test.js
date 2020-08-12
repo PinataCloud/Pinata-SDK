@@ -387,6 +387,24 @@ describe('metadata provided', () => {
         const query = JSON.stringify(filters.metadata.keyvalues);
         expect(queryBuilder(baseUrl, filters)).toEqual(`${baseUrl}?metadata[keyvalues]=${query}`);
     });
+    test('Pass in a valid keyvalue object with two parameters', () => {
+        const filters = {
+            metadata: {
+                keyvalues: {
+                    testKeyValue: {
+                        value: 'test',
+                        op: 'eq'
+                    }, 
+                    testKeyValue2: {
+                        value: 'test2',
+                        op: 'eq'
+                    }
+                }
+            }
+        };
+        const query = JSON.stringify(filters.metadata.keyvalues);
+        expect(queryBuilder(baseUrl, filters)).toEqual(`${baseUrl}?metadata[keyvalues]=${query}`);
+    });
     test('Pass in a valid keyvalue object with a secondValue', () => {
         const filters = {
             metadata: {
