@@ -39,6 +39,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                     {
                         withCredentials: true,
                         maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
+                        maxBodyLength: 'Infinity',
                         headers: {
                             'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
                             'pinata_api_key': pinataApiKey,
@@ -88,7 +89,8 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                         data,
                         {
                             withCredentials: true,
-                            maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
+                            maxContentLength: 'Infinity',
+                            maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
                             headers: {
                                 'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
                                 'pinata_api_key': pinataApiKey,
