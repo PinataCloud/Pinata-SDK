@@ -4,7 +4,7 @@
   "description": "Official SDK for the Pinata IPFS platform",
   "main": "lib/pinata-sdk.js",
   "scripts": {
-    "build": "webpack --env dev && webpack --env build && npm run test",
+    "build": "webpack --env dev && webpack --env build && npm run test && tsc",
     "coverage": "jest --coverage",
     "dev": "webpack --progress --colors --watch --env dev",
     "html": "open coverage/index.html",
@@ -45,6 +45,7 @@
     "eslint": "^6.8.0",
     "eslint-loader": "^3.0.3",
     "jest": "^25.1.0",
+    "typescript": "^4.2.3",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",

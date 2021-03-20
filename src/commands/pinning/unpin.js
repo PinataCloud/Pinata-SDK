@@ -3,6 +3,13 @@ import { baseUrl } from './../../constants';
 import { validateApiKeys } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 
+/**
+ * Unpin
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {string} hashToUnpin
+ * @returns {Promise<unknown>}
+ */
 export default function unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

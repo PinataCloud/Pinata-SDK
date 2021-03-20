@@ -2,6 +2,12 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import {validateApiKeys} from '../../util/validators';
 
+/**
+ * Test Authentication
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @returns {Promise<unknown>}
+ */
 export default function testAuthentication(pinataApiKey, pinataSecretApiKey) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

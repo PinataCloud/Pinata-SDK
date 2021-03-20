@@ -2,6 +2,14 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import { validateApiKeys, validateMetadata, validatePinataOptions } from '../../util/validators';
 
+/**
+ * Pin JSON to IPFS
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} body
+ * @param {*} options
+ * @returns {Promise<unknown>}
+ */
 export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

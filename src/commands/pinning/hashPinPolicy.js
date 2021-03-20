@@ -3,6 +3,14 @@ import { baseUrl } from './../../constants';
 import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 
+/**
+ * Hash Pin Policy
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} ipfsPinHash
+ * @param {*} newPinPolicy
+ * @returns {Promise<unknown>}
+ */
 export default function hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
     validatePinPolicyStructure(newPinPolicy);

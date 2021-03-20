@@ -1,3 +1,8 @@
+/**
+ * Validate and return data
+ * @param {*} dateToValidate
+ * @returns {*}
+ */
 function validateAndReturnDate(dateToValidate) {
     let dateParsed = new Date(Date.parse(dateToValidate));
 
@@ -12,6 +17,12 @@ function validateAndReturnDate(dateToValidate) {
     }
 }
 
+/**
+ * Query Builder
+ * @param {string} baseUrl
+ * @param {*} filters
+ * @returns {string}
+ */
 export default function queryBuilder(baseUrl, filters) {
     if (!baseUrl) {
         throw new Error('no baseUrl provided');

@@ -2,6 +2,13 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
 
+/**
+ * User Pin Policy
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} newPinPolicy
+ * @returns {Promise<unknown>}
+ */
 export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
     validatePinPolicyStructure(newPinPolicy);
