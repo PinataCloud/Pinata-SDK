@@ -12,7 +12,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
     return new Promise((resolve, reject) => {
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
-        fs.lstat(sourcePath, (err, stats) => {
+        fs.stat(sourcePath, (err, stats) => {
             if (err) {
                 reject(err);
             }
