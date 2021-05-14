@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
 import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
+import { handleError } from '../../util/errorResponse';
 
 export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -31,12 +32,8 @@ export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPo
             }
             resolve(result.data);
         }).catch(function (error) {
-            //  handle error here
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 }

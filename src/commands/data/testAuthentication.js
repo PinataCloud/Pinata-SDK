@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
 import {validateApiKeys} from '../../util/validators';
+import { handleError } from '../../util/errorResponse';
 
 export default function testAuthentication(pinataApiKey, pinataSecretApiKey) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -25,11 +26,8 @@ export default function testAuthentication(pinataApiKey, pinataSecretApiKey) {
                 authenticated: true
             });
         }).catch(function (error) {
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 };

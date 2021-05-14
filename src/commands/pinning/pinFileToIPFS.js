@@ -3,6 +3,7 @@ import { baseUrl } from './../../constants';
 import NodeFormData from 'form-data';
 import stream from 'stream';
 import {validateApiKeys, validateMetadata, validatePinataOptions} from '../../util/validators';
+import { handleError } from '../../util/errorResponse';
 
 export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -48,12 +49,8 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
             }
             resolve(result.data);
         }).catch(function (error) {
-            //  handle error here
-            if (error && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 }
