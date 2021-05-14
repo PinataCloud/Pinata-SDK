@@ -10,7 +10,7 @@
     "html": "open coverage/index.html",
     "lint": "eslint src --quiet ",
     "lint:fix": "eslint src --fix",
-    "test": "jest",
+    "test": "./node_modules/.bin/jest --env=node",
     "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
   },
   "repository": {
