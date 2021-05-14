@@ -3,6 +3,7 @@ import { baseUrl } from './../../constants';
 import NodeFormData from 'form-data';
 import {validateApiKeys, validateMetadata, validatePinataOptions} from '../../util/validators';
 import basePathConverter from 'base-path-converter';
+import { handleError } from '../../util/errorResponse';
 const fs = require('fs');
 const recursive = require('recursive-fs');
 
@@ -51,12 +52,8 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                     }
                     resolve(result.data);
                 }).catch(function (error) {
-                    //  handle error here
-                    if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                        reject(new Error(error.response.data.error));
-                    } else {
-                        reject(error);
-                    }
+                    const formattedError = handleError(error);
+                    reject(formattedError);
                 });
             } else {
                 recursive.readdirr(sourcePath, function (err, dirs, files) {
@@ -102,12 +99,8 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                         }
                         resolve(result.data);
                     }).catch(function (error) {
-                        //  handle error here
-                        if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                            reject(new Error(error.response.data.error));
-                        } else {
-                            reject(error);
-                        }
+                        const formattedError = handleError(error);
+                        reject(formattedError);
                     });
                 });
             }

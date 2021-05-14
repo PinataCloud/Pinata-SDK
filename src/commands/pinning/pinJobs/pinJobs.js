@@ -2,6 +2,7 @@ import axios from 'axios';
 import { baseUrl } from './../../../constants';
 import { validateApiKeys } from '../../../util/validators';
 import queryBuilder from './queryBuilder';
+import { handleError } from '../../../util/errorResponse';
 
 export default function pinJobs(pinataApiKey, pinataSecretApiKey, filters) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -27,12 +28,8 @@ export default function pinJobs(pinataApiKey, pinataSecretApiKey, filters) {
             }
             resolve(result.data);
         }).catch(function (error) {
-            //  handle error here
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 }

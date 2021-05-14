@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from './../../../constants';
 import { validateApiKeys } from '../../../util/validators';
+import { handleError } from '../../../util/errorResponse';
 import queryBuilder from './queryBuilder';
 
 export default function pinList(pinataApiKey, pinataSecretApiKey, filters) {
@@ -24,12 +25,8 @@ export default function pinList(pinataApiKey, pinataSecretApiKey, filters) {
             }
             resolve(result.data);
         }).catch(function (error) {
-            //  handle error here
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 }

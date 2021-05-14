@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
 import { validateApiKeys, validateMetadata, validatePinataOptions } from '../../util/validators';
+import { handleError } from '../../util/errorResponse';
 
 export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -43,12 +44,8 @@ export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, op
             }
             resolve(result.data);
         }).catch(function (error) {
-            //  handle error here
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 }

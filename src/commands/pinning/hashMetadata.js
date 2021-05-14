@@ -2,6 +2,7 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import { validateApiKeys, validateMetadata } from '../../util/validators';
 import isIPFS from 'is-ipfs';
+import { handleError } from '../../util/errorResponse';
 
 export default function hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
@@ -49,12 +50,8 @@ export default function hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHa
             }
             resolve(result.data);
         }).catch(function (error) {
-            //  handle error here
-            if (error && error.response && error.response && error.response.data && error.response.data.error) {
-                reject(new Error(error.response.data.error));
-            } else {
-                reject(error);
-            }
+            const formattedError = handleError(error);
+            reject(formattedError);
         });
     });
 }
