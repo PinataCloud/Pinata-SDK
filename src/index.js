@@ -13,13 +13,18 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 
 /**
  * Pinata Client
- *
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @returns {{}}
+ * @class PinataClient
  */
-export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
-    let client = {};
+export class PinataClient {
+    /**
+     * Constructor
+     * @param {string} pinataApiKey
+     * @param {string} pinataSecretApiKey
+     */
+    constructor(pinataApiKey, pinataSecretApiKey) {
+        this.pinataApiKey = pinataApiKey;
+        this.pinataSecretApiKey = pinataSecretApiKey;
+    }
 
     //  setting up the actual calls you can make using this package
     /**
@@ -28,8 +33,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
      * @param {*} options
      * @returns {Promise | Promise<unknown>}
      */
-    client.pinByHash = function (hashToPin, options) {
-        return pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options);
+    pinByHash(hashToPin, options) {
+        return pinByHash(this.pinataApiKey, this.pinataSecretApiKey, hashToPin, options);
     };
     /**
      * Hash meta data
@@ -37,8 +42,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
      * @param {*} metadata
      * @returns {Promise | Promise<unknown>}
      */
-    client.hashMetadata = function (ipfsPinHash, metadata) {
-        return hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata);
+    hashMetadata(ipfsPinHash, metadata) {
+        return hashMetadata(this.pinataApiKey, this.pinataSecretApiKey, ipfsPinHash, metadata);
     };
     /**
      * Hash pin policy
@@ -46,8 +51,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
      * @param {*} newPinPolicy
      * @returns {Promise | Promise<unknown>}
      */
-    client.hashPinPolicy = function (ipfsPinHash, newPinPolicy) {
-        return hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy);
+    hashPinPolicy(ipfsPinHash, newPinPolicy) {
+        return hashPinPolicy(this.pinataApiKey, this.pinataSecretApiKey, ipfsPinHash, newPinPolicy);
     };
     /**
      * Pin file to IPFS
@@ -55,8 +60,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
      * @param {*} options
      * @returns {Promise | Promise<unknown>}
      */
-    client.pinFileToIPFS = function (readableStream, options) {
-        return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readableStream, options);
+    pinFileToIPFS(readableStream, options) {
+        return pinFileToIPFS(this.pinataApiKey, this.pinataSecretApiKey, readableStream, options);
     };
     /**
      * Pin from FS
@@ -64,8 +69,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
      * @param {*} options
      * @returns {Promise | Promise<unknown>}
      */
-    client.pinFromFS = function (sourcePath, options) {
-        return pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, options);
+    pinFromFS(sourcePath, options) {
+        return pinFromFS(this.pinataApiKey, this.pinataSecretApiKey, sourcePath, options);
     };
     /**
      * Pin JSON to IPFS
@@ -73,54 +78,57 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
      * @param {*} options
      * @returns {Promise | Promise<unknown>}
      */
-    client.pinJSONToIPFS = function (body, options) {
-        return pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options);
+    pinJSONToIPFS(body, options) {
+        return pinJSONToIPFS(this.pinataApiKey, this.pinataSecretApiKey, body, options);
     };
     /**
      * Pin Jobs
      * @param {*} filters
      * @returns {Promise | Promise<unknown>}
      */
-    client.pinJobs = function (filters) {
-        return pinJobs(pinataApiKey, pinataSecretApiKey, filters);
+    pinJobs(filters) {
+        return pinJobs(this.pinataApiKey, this.pinataSecretApiKey, filters);
     };
     /**
      * Unpin
      * @param {*} hashToUnpin
      * @returns {Promise | Promise<unknown>}
      */
-    client.unpin = function (hashToUnpin) {
-        return unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin);
+    unpin(hashToUnpin) {
+        return unpin(this.pinataApiKey, this.pinataSecretApiKey, hashToUnpin);
     };
     /**
      * User Pin Policy
      * @param {*} newPinPolicy
      * @returns {Promise | Promise<unknown>}
      */
-    client.userPinPolicy = function (newPinPolicy) {
-        return userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy);
+    userPinPolicy(newPinPolicy) {
+        return userPinPolicy(this.pinataApiKey, this.pinataSecretApiKey, newPinPolicy);
     };
     /**
      * Test Authentication
      * @returns {Promise | Promise<unknown>}
      */
-    client.testAuthentication = function () {
-        return testAuthentication(pinataApiKey, pinataSecretApiKey);
+    testAuthentication() {
+        return testAuthentication(this.pinataApiKey, this.pinataSecretApiKey);
     };
     /**
      * Pin List
      * @param {*} filters
      * @returns {Promise | Promise<unknown>}
      */
-    client.pinList = function (filters) {
-        return pinList(pinataApiKey, pinataSecretApiKey, filters);
+    pinList(filters) {
+        return pinList(this.pinataApiKey, this.pinataSecretApiKey, filters);
     };
     /**
      * User Pinned Data Total
      * @returns {Promise | Promise<unknown>}
      */
-    client.userPinnedDataTotal = function () {
-        return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);
+    userPinnedDataTotal() {
+        return userPinnedDataTotal(this.pinataApiKey, this.pinataSecretApiKey);
     };
-    return client;
+}
+
+export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
+    return new PinataClient(pinataApiKey, pinataSecretApiKey);
 }
