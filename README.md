@@ -153,7 +153,7 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchrono
   * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
   * `pinataOptions`
      * `hostNodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
-     * `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
+     * `customPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
 #### Response
 ```
 {
