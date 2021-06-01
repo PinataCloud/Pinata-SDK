@@ -7,6 +7,14 @@ import { handleError } from '../../util/errorResponse';
 const fs = require('fs');
 const recursive = require('recursive-fs');
 
+/**
+ * PinFromFS
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {string} sourcePath
+ * @param {*} options
+ * @returns {Promise<unknown>}
+ */
 export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

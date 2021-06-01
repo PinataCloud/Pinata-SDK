@@ -4,6 +4,13 @@ import { validateApiKeys } from '../../../util/validators';
 import queryBuilder from './queryBuilder';
 import { handleError } from '../../../util/errorResponse';
 
+/**
+ * Pin Jobs
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} filters
+ * @returns {Promise<unknown>}
+ */
 export default function pinJobs(pinataApiKey, pinataSecretApiKey, filters) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

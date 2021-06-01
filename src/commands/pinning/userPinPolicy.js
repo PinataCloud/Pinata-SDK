@@ -3,6 +3,13 @@ import { baseUrl } from './../../constants';
 import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
+/**
+ * User Pin Policy
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} newPinPolicy
+ * @returns {Promise<unknown>}
+ */
 export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
     validatePinPolicyStructure(newPinPolicy);

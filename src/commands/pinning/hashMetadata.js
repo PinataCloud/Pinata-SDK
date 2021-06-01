@@ -4,6 +4,14 @@ import { validateApiKeys, validateMetadata } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
 
+/**
+ * Hash Meta Data
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} ipfsPinHash
+ * @param {*} metadata
+ * @returns {Promise<unknown>}
+ */
 export default function hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

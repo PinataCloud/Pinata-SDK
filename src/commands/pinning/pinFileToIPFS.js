@@ -5,6 +5,14 @@ import stream from 'stream';
 import {validateApiKeys, validateMetadata, validatePinataOptions} from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
+/**
+ * Pin File to IPFS
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} readStream
+ * @param {*} options
+ * @returns {Promise<unknown>}
+ */
 export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

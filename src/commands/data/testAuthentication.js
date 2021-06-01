@@ -3,6 +3,12 @@ import { baseUrl } from './../../constants';
 import {validateApiKeys} from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
+/**
+ * Test Authentication
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @returns {Promise<unknown>}
+ */
 export default function testAuthentication(pinataApiKey, pinataSecretApiKey) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 

@@ -11,6 +11,233 @@ import testAuthentication from './commands/data/testAuthentication';
 import pinList from './commands/data/pinList/pinList';
 import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 
+// OPTIONS
+
+/**
+ * @typedef {Record<string, string | number | null>} PinataMetadata
+ */
+
+/**
+ * @typedef PinataMetadataFilter
+ * @property {string} [name]
+ * @property {Record<string, {value: string, op: string}>} keyvalues
+ */
+
+/**
+ * @typedef {{id: string, desiredReplicationCount: number}} PinataPinPolicyItem
+ */
+
+/**
+ * @typedef PinataPinByHashOptions
+ * @property {string[]} [hostNodes]
+ * @property {{regions: PinataPinPolicyItem[]}} [customPinPolicy]
+ */
+
+/**
+ * @typedef PinataPinByHashPinOptions
+ * @property {PinataMetadata} [pinataMetadata]
+ * @property {PinataPinByHashOptions} [pinataOptions]
+ */
+
+/**
+ * @typedef PinataOptions
+ * @property {0 | 1} [cidVersion]
+ * @property {boolean} [wrapWithDirectory]
+ * @property {{regions: PinataPinPolicyItem[]}} [customPinPolicy]
+ */
+
+/**
+ * @typedef PinataPinOptions
+ * @property {PinataMetadata} [pinataMetadata]
+ * @property {PinataOptions} [pinataOptions]
+ */
+
+/**
+ * @typedef PinataPinJobsFilterOptions
+ * @property {'ASC' | 'DESC'} sort
+ * @property {string} [status]
+ * @property {string} [ipfs_pin_hash]
+ * @property {number} [limit]
+ * @property {number} [offset]
+ */
+
+/**
+ * @typedef PinataPinListFilterOptions
+ * @property {string} [hashContains]
+ * @property {string} [pinStart]
+ * @property {string} [pinEnd]
+ * @property {string} [unpinStart]
+ * @property {string} [unpinEnd]
+ * @property {number} [pinSizeMin]
+ * @property {number} [pinSizeMax]
+ * @property {string} [status]
+ * @property {number} [pageLimit]
+ * @property {number} [pageOffset]
+ * @property {PinataMetadataFilter} [metadata]
+ */
+
+// RESPONSES
+
+/**
+ * @typedef PinataPinByHashResponse
+ * @property {number | string} id
+ * @property {string} ipfsHash
+ * @property {string} status
+ * @property {string} name
+ */
+
+/**
+ * @typedef PinataPinResponse
+ * @property {string} IpfsHash
+ * @property {number} PinSize
+ * @property {string} Timestamp
+ */
+
+/**
+ * @typedef PinataPinJobsResponseRow
+ * @property {number | string} id
+ * @property {string} ipfs_pin_hash
+ * @property {string} date_queued
+ * @property {string | undefined | null} name
+ * @property {string} status
+ */
+
+/**
+ * @typedef PinataPinJobsResponse
+ * @property {number} count
+ * @property {PinataPinJobsResponseRow[]} rows
+ */
+
+/**
+ * @typedef PinataPinListResponseRow
+ * @property {number | string} id
+ * @property {string} ipfs_pin_hash
+ * @property {number} size
+ * @property {string | number} user_id
+ * @property {string} date_pinned
+ * @property {string} date_unpinned
+ * @property {PinataMetadata} metadata
+ */
+
+/**
+ * @typedef PinataPinListResponse
+ * @property {number} count
+ * @property {PinataPinListResponseRow[]} rows
+ */
+
+// METHODS
+
+/**
+ * Hash meta data
+ * @callback hashMetadata
+ * @param {string} ipfsPinHash
+ * @param {PinataMetadata} metadata
+ * @returns {Promise<any>}
+ */
+
+/**
+ * Hash pin policy
+ * @callback hashPinPolicy
+ * @param {string} ipfsPinHash
+ * @param {{regions: PinataPinPolicyItem[]}} newPinPolicy
+ * @returns {Promise<any>}
+ */
+
+/**
+ * Pin by hash
+ * @callback pinByHash
+ * @param {string} hashToPin
+ * @param {PinataPinByHashPinOptions} [options]
+ * @returns {Promise<PinataPinByHashResponse>}
+ */
+
+/**
+ * Pin file to IPFS
+ * @callback pinFileToIPFS
+ * @param {ReadStream} readableStream
+ * @param {PinataPinOptions} [options]
+ * @returns {Promise<PinataPinResponse>}
+ */
+
+/**
+ * Pin from FS
+ * @callback pinFromFS
+ * @param {string} sourcePath
+ * @param {PinataPinOptions} [options]
+ * @returns {Promise<PinataPinResponse>}
+ */
+
+/**
+ * Pin Jobs
+ * @callback pinJobs
+ * @param {PinataPinJobsFilterOptions} [filters]
+ * @returns {Promise<PinataPinJobsResponse>}
+ */
+
+/**
+ * Pin JSON to IPFS
+ * @callback pinJSONToIPFS
+ * @param {Object} body
+ * @param {PinataPinOptions} [options]
+ * @returns {Promise<PinataPinResponse>}
+ */
+
+/**
+ * Unpin
+ * @callback unpin
+ * @param {string} hashToUnpin
+ * @returns {Promise<any>}
+ */
+
+/**
+ * User Pin Policy
+ * @callback userPinPolicy
+ * @param {{regions: PinataPinPolicyItem[]}} newPinPolicy
+ * @returns {Promise<any>}
+ */
+
+/**
+ * Test Authentication
+ * @callback testAuthentication
+ * @returns {Promise<{authenticated: boolean}>}
+ */
+
+/**
+ * Pin List
+ * @callback pinList
+ * @param {PinataPinListFilterOptions} [filters]
+ * @returns {Promise<PinataPinListResponse>}
+ */
+
+/**
+ * User Pinned Data Total
+ * @callback userPinnedDataTotal
+ * @returns {Promise<number>}
+ */
+
+/**
+ * @typedef PinataClient
+ * @property {pinByHash} pinByHash
+ * @property {hashMetadata} hashMetadata
+ * @property {hashPinPolicy} hashPinPolicy
+ * @property {pinFileToIPFS} pinFileToIPFS
+ * @property {pinFromFS} pinFromFS
+ * @property {pinJSONToIPFS} pinJSONToIPFS
+ * @property {pinJobs} pinJobs
+ * @property {unpin} unpin
+ * @property {userPinPolicy} userPinPolicy
+ * @property {testAuthentication} testAuthentication
+ * @property {pinList} pinList
+ * @property {userPinnedDataTotal} userPinnedDataTotal
+ */
+
+/**
+ * Pinata Client
+ *
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @returns {PinataClient}
+ */
 export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     let client = {};
 
