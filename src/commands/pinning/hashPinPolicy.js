@@ -4,6 +4,14 @@ import { validateApiKeys, validatePinPolicyStructure } from '../../util/validato
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
 
+/**
+ * Hash Pin Policy
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ * @param {*} ipfsPinHash
+ * @param {*} newPinPolicy
+ * @returns {Promise<unknown>}
+ */
 export default function hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
     validatePinPolicyStructure(newPinPolicy);

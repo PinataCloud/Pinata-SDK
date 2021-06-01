@@ -1,5 +1,10 @@
 import isIPFS from 'is-ipfs';
 
+/**
+ * Validate API Keys
+ * @param {string} pinataApiKey
+ * @param {string} pinataSecretApiKey
+ */
 export function validateApiKeys(pinataApiKey, pinataSecretApiKey) {
     if (!pinataApiKey || pinataApiKey === '') {
         throw new Error('No pinataApiKey provided! Please provide your pinata api key as an argument when you start this script');
@@ -9,6 +14,10 @@ export function validateApiKeys(pinataApiKey, pinataSecretApiKey) {
     }
 }
 
+/**
+ * Validate host Nodes
+ * @param {*} hostNodes
+ */
 export function validateHostNodes(hostNodes) {
     if (!Array.isArray(hostNodes)) {
         throw new Error('host_nodes value must be an array');
@@ -20,6 +29,10 @@ export function validateHostNodes(hostNodes) {
     });
 }
 
+/**
+ * Validate MetaData
+ * @param {*} metadata
+ */
 export function validateMetadata(metadata) {
     if (metadata.name) {
         if (!(typeof metadata.name === 'string' || metadata.name instanceof String)) {
@@ -47,6 +60,10 @@ export function validateMetadata(metadata) {
     }
 }
 
+/**
+ * Validate Pin Policy Structure
+ * @param {*} pinPolicy
+ */
 export function validatePinPolicyStructure(pinPolicy) {
     //this function takes in a pin policy and checks the JSON structure to make sure it's valid
     if (!pinPolicy) {
@@ -69,6 +86,10 @@ export function validatePinPolicyStructure(pinPolicy) {
     }
 }
 
+/**
+ * Validate Pinata Options
+ * @param {*} options
+ */
 export function validatePinataOptions(options) {
     if (typeof options !== 'object') {
         throw new Error('options must be an object');
