@@ -3,7 +3,7 @@
   "version": "1.1.12",
   "description": "Official SDK for the Pinata IPFS platform",
   "main": "lib/pinata-sdk.js",
-  "types": "dist/index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "webpack --env dev && webpack --env build && npm run test && tsc",
     "coverage": "jest --coverage",
