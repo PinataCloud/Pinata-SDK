@@ -203,7 +203,7 @@ pinata.pinByHash('yourHashHere', options).then((result) => {
 
 <a name="pinFileToIPFS-anchor"></a>
 ### `pinFileToIPFS`
-Send a file to to Pinata for direct pinning to IPFS.
+Send a file to Pinata for direct pinning to IPFS.
 
 ##### `pinata.pinFileToIPFS(readableStream, options)`
 ##### Params
@@ -352,7 +352,7 @@ pinata.pinJobs('yourHashHere', filters).then((result) => {
 
 <a name="pinJSONToIPFS-anchor"></a>
 ### `pinJSONToIPFS`
-Send JSON to to Pinata for direct pinning to IPFS.
+Send JSON to Pinata for direct pinning to IPFS.
 
 ##### `pinata.pinJSONToIPFS(body, options)`
 ##### Params
