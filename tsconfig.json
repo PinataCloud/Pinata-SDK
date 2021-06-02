@@ -6,7 +6,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "allowJs": true,
-    "outDir": "dist",
+    "outDir": "types",
     "target": "es5",
     "module": "commonjs",
     "lib": ["es2017", "es7", "es6", "dom"],
