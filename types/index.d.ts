@@ -211,7 +211,7 @@ export type PinataPinByHashOptions = {
     } | undefined;
 };
 export type PinataPinByHashPinOptions = {
-    pinataMetadata?: PinataMetadata | undefined;
+    pinataMetadata?: Record<string, string | number | null> | undefined;
     pinataOptions?: PinataPinByHashOptions | undefined;
 };
 export type PinataOptions = {
@@ -222,7 +222,7 @@ export type PinataOptions = {
     } | undefined;
 };
 export type PinataPinOptions = {
-    pinataMetadata?: PinataMetadata | undefined;
+    pinataMetadata?: Record<string, string | number | null> | undefined;
     pinataOptions?: PinataOptions | undefined;
 };
 export type PinataPinJobsFilterOptions = {
