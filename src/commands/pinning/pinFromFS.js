@@ -23,7 +23,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
 
         fs.stat(sourcePath, (err, stats) => {
             if (err) {
-                reject(err);
+                return reject(err);
             }
             if (stats.isFile()) {
                 //we need to create a single read stream instead of reading the directory recursively
