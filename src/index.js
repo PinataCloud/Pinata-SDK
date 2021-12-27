@@ -14,7 +14,7 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 // OPTIONS
 
 /**
- * @typedef {Record<string, string | number | null>} PinataMetadata
+ * @typedef {{ name?: string, keyvalues?: Record<string, string | number | null> }} PinataMetadata
  */
 
 /**
