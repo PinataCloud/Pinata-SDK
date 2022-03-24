@@ -25,7 +25,7 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
         if (!(readStream instanceof stream.Readable || readStream instanceof NodeFormData)) {
-            reject(new Error('readStream is not a readable stream'));
+            reject(new Error('readStream is not a readable stream or form data'));
         }
 
         if (options) {
