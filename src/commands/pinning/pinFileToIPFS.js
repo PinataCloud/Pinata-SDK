@@ -24,8 +24,8 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
 
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
-        if (!(readStream instanceof stream.Readable)) {
-            reject(new Error('readStream is not a readable stream'));
+        if (!(readStream instanceof stream.Readable || readStream instanceof NodeFormData)) {
+            reject(new Error('readStream is not a readable stream or form data'));
         }
 
         if (options) {
@@ -41,7 +41,7 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
 
         axios.post(
             endpoint,
-            data,
+            readStream instanceof NodeFormData ? readStream : data,
             {
                 withCredentials: true,
                 maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
