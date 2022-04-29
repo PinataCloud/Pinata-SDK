@@ -250,7 +250,7 @@ Read from a location on your local file system and recursively pin the contents 
 
 Both individual files, as well as directories can be read from.
 
-##### `pinata.pinFromFs(sourcePath, options)`
+##### `pinata.pinFromFS(sourcePath, options)`
 ##### Params
 * `sourcePath` - The location on your local filesystem that should be read from. 
 * `options` (optional): A JSON object that can contain the following keyvalues:
