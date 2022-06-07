@@ -36,7 +36,6 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 
 * Pinning
   * [hashMetadata](#hashMetadata-anchor)
-  * [hashPinPolicy](#hashPinPolicy-anchor)
   * [pinByHash](#pinByHash-anchor)
   * [pinFileToIPFS](#pinFileToIPFS-anchor)
   * [pinFromFS](#pinFromFS-anchor)
@@ -94,46 +93,6 @@ const metadata = {
     }
 };
 pinata.hashMetadata('yourHashHere', metadata).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
-```
-
-
-<a name="hashPinPolicy-anchor"></a>
-### `hashPinPolicy`
-Allows the user to change the pin policy for an individual piece of content.
-Changes made via this endpoint only affect the content for the hash passed in. They do not affect a user's account level pin policy.
-
-To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
-
-##### `pinata.hashPinPolicy(ipfsPinHash, newPinPolicy)`
-##### Params
-* `ipfsPinHash` - A string for a valid IPFS Hash that you have pinned on Pinata.
-* `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
-
-#### Response
-If the operation is successful, you will receive back an "OK" REST 200 status.
-
-##### Example Code
-```javascript
-const newPinPolicy = {
-    regions: [
-            {
-                id: 'FRA1',
-                desiredReplicationCount: 2
-            },
-            {
-                id: 'NYC1',
-                desiredReplicationCount: 2
-            }
-        ]
-    }
-};
-pinata.hashPinPolicy('yourHashHere', newPinPolicy).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {
@@ -406,45 +365,6 @@ If the operation is successful, you will simply receive "OK" as your result
 ##### Example Code
 ```javascript
 pinata.unpin(hashToUnpin).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
-```
-
-<a name="userPinPolicy-anchor"></a>
-### `userPinPolicy`
-This allows the sender to change the pin policy their account.
-
-Following a successful call of this endpoint, the new pin policy provided will be utilized for every new piece of content pinned to IPFS via Pinata.
-
-To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
-
-##### `pinata.userPinPolicy(newPinPolicy)`
-##### Params
-* `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
-
-#### Response
-If the operation is successful, you will receive back an "OK" REST 200 status.
-
-##### Example Code
-```javascript
-const newPinPolicy = {
-    regions: [
-            {
-                id: 'FRA1',
-                desiredReplicationCount: 2
-            },
-            {
-                id: 'NYC1',
-                desiredReplicationCount: 2
-            }
-        ]
-    }
-};
-pinata.userPinPolicy(newPinPolicy).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {

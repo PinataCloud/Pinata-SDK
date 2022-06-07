@@ -1,12 +1,10 @@
 import pinByHash from './commands/pinning/pinByHash';
 import hashMetadata from './commands/pinning/hashMetadata';
-import hashPinPolicy from './commands/pinning/hashPinPolicy';
 import pinFileToIPFS from './commands/pinning/pinFileToIPFS';
 import pinFromFS from './commands/pinning/pinFromFS';
 import pinJSONToIPFS from './commands/pinning/pinJSONToIPFS';
 import pinJobs from './commands/pinning/pinJobs/pinJobs';
 import unpin from './commands/pinning/unpin';
-import userPinPolicy from './commands/pinning/userPinPolicy';
 import testAuthentication from './commands/data/testAuthentication';
 import pinList from './commands/data/pinList/pinList';
 import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
@@ -136,14 +134,6 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
  */
 
 /**
- * Hash pin policy
- * @callback hashPinPolicy
- * @param {string} ipfsPinHash
- * @param {{regions: PinataPinPolicyItem[]}} newPinPolicy
- * @returns {Promise<any>}
- */
-
-/**
  * Pin by hash
  * @callback pinByHash
  * @param {string} hashToPin
@@ -190,13 +180,6 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
  */
 
 /**
- * User Pin Policy
- * @callback userPinPolicy
- * @param {{regions: PinataPinPolicyItem[]}} newPinPolicy
- * @returns {Promise<any>}
- */
-
-/**
  * Test Authentication
  * @callback testAuthentication
  * @returns {Promise<{authenticated: boolean}>}
@@ -219,13 +202,11 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
  * @typedef PinataClient
  * @property {pinByHash} pinByHash
  * @property {hashMetadata} hashMetadata
- * @property {hashPinPolicy} hashPinPolicy
  * @property {pinFileToIPFS} pinFileToIPFS
  * @property {pinFromFS} pinFromFS
  * @property {pinJSONToIPFS} pinJSONToIPFS
  * @property {pinJobs} pinJobs
  * @property {unpin} unpin
- * @property {userPinPolicy} userPinPolicy
  * @property {testAuthentication} testAuthentication
  * @property {pinList} pinList
  * @property {userPinnedDataTotal} userPinnedDataTotal
@@ -248,9 +229,6 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     client.hashMetadata = function (ipfsPinHash, metadata) {
         return hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata);
     };
-    client.hashPinPolicy = function (ipfsPinHash, newPinPolicy) {
-        return hashPinPolicy(pinataApiKey, pinataSecretApiKey, ipfsPinHash, newPinPolicy);
-    };
     client.pinFileToIPFS = function (readableStream, options) {
         return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readableStream, options);
     };
@@ -265,9 +243,6 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     };
     client.unpin = function (hashToUnpin) {
         return unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin);
-    };
-    client.userPinPolicy = function (newPinPolicy) {
-        return userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy);
     };
     client.testAuthentication = function () {
         return testAuthentication(pinataApiKey, pinataSecretApiKey);
