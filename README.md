@@ -36,7 +36,6 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 
 * Pinning
   * [hashMetadata](#hashMetadata-anchor)
-  * [hashPinPolicy](#hashPinPolicy-anchor)
   * [pinByHash](#pinByHash-anchor)
   * [pinFileToIPFS](#pinFileToIPFS-anchor)
   * [pinFromFS](#pinFromFS-anchor)
@@ -102,46 +101,6 @@ pinata.hashMetadata('yourHashHere', metadata).then((result) => {
 });
 ```
 
-
-<a name="hashPinPolicy-anchor"></a>
-### `hashPinPolicy`
-Allows the user to change the pin policy for an individual piece of content.
-Changes made via this endpoint only affect the content for the hash passed in. They do not affect a user's account level pin policy.
-
-To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
-
-##### `pinata.hashPinPolicy(ipfsPinHash, newPinPolicy)`
-##### Params
-* `ipfsPinHash` - A string for a valid IPFS Hash that you have pinned on Pinata.
-* `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
-
-#### Response
-If the operation is successful, you will receive back an "OK" REST 200 status.
-
-##### Example Code
-```javascript
-const newPinPolicy = {
-    regions: [
-            {
-                id: 'FRA1',
-                desiredReplicationCount: 2
-            },
-            {
-                id: 'NYC1',
-                desiredReplicationCount: 2
-            }
-        ]
-    }
-};
-pinata.hashPinPolicy('yourHashHere', newPinPolicy).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
-```
-
 <a name="pinByHash-anchor"></a>
 ### `pinByHash`
 Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchronous version of this operation see: [pinHashToIPFS](#pinHashToIPFS-anchor)
@@ -153,7 +112,6 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchrono
   * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
   * `pinataOptions`
      * `hostNodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
-     * `customPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
 #### Response
 ```
 {
@@ -177,19 +135,7 @@ const options = {
         hostNodes: [
             '/ip4/hostNode1ExternalIP/tcp/4001/ipfs/hostNode1PeerId',
             '/ip4/hostNode2ExternalIP/tcp/4001/ipfs/hostNode2PeerId'
-        ],
-        customPinPolicy: {
-            regions: [
-                {
-                    id: 'FRA1',
-                    desiredReplicationCount: 1
-                },
-                {
-                    id: 'NYC1',
-                    desiredReplicationCount: 2
-                }
-            ]
-        }
+        ]
     }
 };
 pinata.pinByHash('yourHashHere', options).then((result) => {
@@ -406,45 +352,6 @@ If the operation is successful, you will simply receive "OK" as your result
 ##### Example Code
 ```javascript
 pinata.unpin(hashToUnpin).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
-```
-
-<a name="userPinPolicy-anchor"></a>
-### `userPinPolicy`
-This allows the sender to change the pin policy their account.
-
-Following a successful call of this endpoint, the new pin policy provided will be utilized for every new piece of content pinned to IPFS via Pinata.
-
-To read more about pin policies, please check out the [Regions and Replications Documentation](https://pinata.cloud/documentation#RegionsAndReplications).
-
-##### `pinata.userPinPolicy(newPinPolicy)`
-##### Params
-* `newPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
-
-#### Response
-If the operation is successful, you will receive back an "OK" REST 200 status.
-
-##### Example Code
-```javascript
-const newPinPolicy = {
-    regions: [
-            {
-                id: 'FRA1',
-                desiredReplicationCount: 2
-            },
-            {
-                id: 'NYC1',
-                desiredReplicationCount: 2
-            }
-        ]
-    }
-};
-pinata.userPinPolicy(newPinPolicy).then((result) => {
     //handle results here
     console.log(result);
 }).catch((err) => {
@@ -724,26 +631,13 @@ The options object can consist of the following values:
 * wrapWithDirectory (optional) - Tells IPFS to wrap your content in a directory to preserve the content's original name. See [this blog post](https://flyingzumwalt.gitbooks.io/decentralized-web-primer/content/files-on-ipfs/lessons/wrap-directories-around-content.html) for more details on what this does. Valid options are:
   * `true`
   * `false`
-* customPinPolicy (optional) - a custom [Pin Policy](#pinPolicies-anchor) for the piece of content being pinned. Providing a custom pin policy as part of a request means that the content being pinned will be replicated differently from the user's default pin policy found under the [Account](https://pinata.cloud/account) page.
 
   
 ##### Example pinataOptions object
 ```
 {
     cidVersion: 1,
-    wrapWithDirectory: true,
-    customPinPolicy: {
-        regions: [
-            {
-                id: 'FRA1',
-                desiredReplicationCount: 2
-            },
-            {
-                id: 'NYC1',
-                desiredReplicationCount: 2
-            }
-        ]
-    }
+    wrapWithDirectory: true
 }
 ```
 

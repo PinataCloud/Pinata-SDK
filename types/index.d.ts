@@ -101,13 +101,6 @@
  * @returns {Promise<any>}
  */
 /**
- * Hash pin policy
- * @callback hashPinPolicy
- * @param {string} ipfsPinHash
- * @param {{regions: PinataPinPolicyItem[]}} newPinPolicy
- * @returns {Promise<any>}
- */
-/**
  * Pin by hash
  * @callback pinByHash
  * @param {string} hashToPin
@@ -148,12 +141,6 @@
  * @returns {Promise<any>}
  */
 /**
- * User Pin Policy
- * @callback userPinPolicy
- * @param {{regions: PinataPinPolicyItem[]}} newPinPolicy
- * @returns {Promise<any>}
- */
-/**
  * Test Authentication
  * @callback testAuthentication
  * @returns {Promise<{authenticated: boolean}>}
@@ -173,13 +160,11 @@
  * @typedef PinataClient
  * @property {pinByHash} pinByHash
  * @property {hashMetadata} hashMetadata
- * @property {hashPinPolicy} hashPinPolicy
  * @property {pinFileToIPFS} pinFileToIPFS
  * @property {pinFromFS} pinFromFS
  * @property {pinJSONToIPFS} pinJSONToIPFS
  * @property {pinJobs} pinJobs
  * @property {unpin} unpin
- * @property {userPinPolicy} userPinPolicy
  * @property {testAuthentication} testAuthentication
  * @property {pinList} pinList
  * @property {userPinnedDataTotal} userPinnedDataTotal
@@ -285,12 +270,6 @@ export type PinataPinListResponse = {
  */
 export type hashMetadata = (ipfsPinHash: string, metadata: PinataMetadata) => Promise<any>;
 /**
- * Hash pin policy
- */
-export type hashPinPolicy = (ipfsPinHash: string, newPinPolicy: {
-    regions: PinataPinPolicyItem[];
-}) => Promise<any>;
-/**
  * Pin by hash
  */
 export type pinByHash = (hashToPin: string, options?: PinataPinByHashPinOptions | undefined) => Promise<PinataPinByHashResponse>;
@@ -315,12 +294,6 @@ export type pinJSONToIPFS = (body: Object, options?: PinataPinOptions | undefine
  */
 export type unpin = (hashToUnpin: string) => Promise<any>;
 /**
- * User Pin Policy
- */
-export type userPinPolicy = (newPinPolicy: {
-    regions: PinataPinPolicyItem[];
-}) => Promise<any>;
-/**
  * Test Authentication
  */
 export type testAuthentication = () => Promise<{
@@ -337,26 +310,22 @@ export type userPinnedDataTotal = () => Promise<number>;
 export type PinataClient = {
     pinByHash: pinByHash;
     hashMetadata: hashMetadata;
-    hashPinPolicy: hashPinPolicy;
     pinFileToIPFS: pinFileToIPFS;
     pinFromFS: pinFromFS;
     pinJSONToIPFS: pinJSONToIPFS;
     pinJobs: pinJobs;
     unpin: unpin;
-    userPinPolicy: userPinPolicy;
     testAuthentication: testAuthentication;
     pinList: pinList;
     userPinnedDataTotal: userPinnedDataTotal;
 };
 import pinByHash from "./commands/pinning/pinByHash";
 import hashMetadata from "./commands/pinning/hashMetadata";
-import hashPinPolicy from "./commands/pinning/hashPinPolicy";
 import pinFileToIPFS from "./commands/pinning/pinFileToIPFS";
 import pinFromFS from "./commands/pinning/pinFromFS";
 import pinJSONToIPFS from "./commands/pinning/pinJSONToIPFS";
 import pinJobs from "./commands/pinning/pinJobs/pinJobs";
 import unpin from "./commands/pinning/unpin";
-import userPinPolicy from "./commands/pinning/userPinPolicy";
 import testAuthentication from "./commands/data/testAuthentication";
 import pinList from "./commands/data/pinList/pinList";
 import userPinnedDataTotal from "./commands/data/userPinnedDataTotal";
