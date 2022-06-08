@@ -112,7 +112,6 @@ Adds a hash to Pinata's pin queue to be pinned asynchronously. For the synchrono
   * `pinataMetadata` (optional): A JSON object with [optional metadata](#metadata-anchor) for the hash being pinned
   * `pinataOptions`
      * `hostNodes` (optional): An array of [multiaddresses for nodes](#hostNode-anchor) that are currently hosting the content to be pinned
-     * `customPinPolicy` A JSON object with a new [Pin Policy](#pinPolicies-anchor) for the hash.
 #### Response
 ```
 {
@@ -136,19 +135,7 @@ const options = {
         hostNodes: [
             '/ip4/hostNode1ExternalIP/tcp/4001/ipfs/hostNode1PeerId',
             '/ip4/hostNode2ExternalIP/tcp/4001/ipfs/hostNode2PeerId'
-        ],
-        customPinPolicy: {
-            regions: [
-                {
-                    id: 'FRA1',
-                    desiredReplicationCount: 1
-                },
-                {
-                    id: 'NYC1',
-                    desiredReplicationCount: 2
-                }
-            ]
-        }
+        ]
     }
 };
 pinata.pinByHash('yourHashHere', options).then((result) => {
@@ -644,26 +631,13 @@ The options object can consist of the following values:
 * wrapWithDirectory (optional) - Tells IPFS to wrap your content in a directory to preserve the content's original name. See [this blog post](https://flyingzumwalt.gitbooks.io/decentralized-web-primer/content/files-on-ipfs/lessons/wrap-directories-around-content.html) for more details on what this does. Valid options are:
   * `true`
   * `false`
-* customPinPolicy (optional) - a custom [Pin Policy](#pinPolicies-anchor) for the piece of content being pinned. Providing a custom pin policy as part of a request means that the content being pinned will be replicated differently from the user's default pin policy found under the [Account](https://pinata.cloud/account) page.
 
   
 ##### Example pinataOptions object
 ```
 {
     cidVersion: 1,
-    wrapWithDirectory: true,
-    customPinPolicy: {
-        regions: [
-            {
-                id: 'FRA1',
-                desiredReplicationCount: 2
-            },
-            {
-                id: 'NYC1',
-                desiredReplicationCount: 2
-            }
-        ]
-    }
+    wrapWithDirectory: true
 }
 ```
 
