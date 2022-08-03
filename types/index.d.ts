@@ -240,6 +240,7 @@ export type PinataPinResponse = {
     IpfsHash: string;
     PinSize: number;
     Timestamp: string;
+    isDuplicate?: boolean;
 };
 export type PinataPinJobsResponseRow = {
     id: number | string;
