@@ -177,11 +177,16 @@
  * @returns {PinataClient}
  */
 export default function pinataClient(pinataApiKey: string, pinataSecretApiKey: string): PinataClient;
-export type PinataMetadata = Record<string, string | number | null>;
+type PinataMetadataValue = string | number | null;
+type PinataMetadataName = string | undefined;
+export type PinataMetadata = {
+    name?: PinataMetadataName;
+    keyvalue: Record<string, PinataMetadataValue>
+};
 export type PinataMetadataFilter = {
-    name?: string | undefined;
+    name?: PinataMetadataName;
     keyvalues: Record<string, {
-        value: string;
+        value: PinataMetadataValue;
         op: string;
     }>;
 };
