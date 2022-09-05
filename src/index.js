@@ -12,13 +12,21 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 // OPTIONS
 
 /**
- * @typedef {Record<string, string | number | null>} PinataMetadata
+ * @typedef {string | number | null} PinataMetadataValue
+ */
+
+/**
+ * @typedef {string | undefined} PinataMetadataName
+ */
+
+/**
+ * @typedef {{name?: PinataMetadataName, keyvalues?: Record<string, PinataMetadataValue>}} PinataMetadata
  */
 
 /**
  * @typedef PinataMetadataFilter
- * @property {string} [name]
- * @property {Record<string, {value: string, op: string}>} keyvalues
+ * @property {PinataMetadataName} [name]
+ * @property {Record<string, {value: PinataMetadataValue, op: string}>} keyvalues
  */
 
 /**

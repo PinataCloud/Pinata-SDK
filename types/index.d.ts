@@ -1,10 +1,16 @@
 /**
- * @typedef {Record<string, string | number | null>} PinataMetadata
+ * @typedef {string | number | null} PinataMetadataValue
+ */
+/**
+ * @typedef {string | undefined} PinataMetadataName
+ */
+/**
+ * @typedef {{name?: PinataMetadataName, keyvalues?: Record<string, PinataMetadataValue>}} PinataMetadata
  */
 /**
  * @typedef PinataMetadataFilter
- * @property {string} [name]
- * @property {Record<string, {value: string, op: string}>} keyvalues
+ * @property {PinataMetadataName} [name]
+ * @property {Record<string, {value: PinataMetadataValue, op: string}>} keyvalues
  */
 /**
  * @typedef {{id: string, desiredReplicationCount: number}} PinataPinPolicyItem
@@ -177,11 +183,11 @@
  * @returns {PinataClient}
  */
 export default function pinataClient(pinataApiKey: string, pinataSecretApiKey: string): PinataClient;
-type PinataMetadataValue = string | number | null;
-type PinataMetadataName = string | undefined;
+export type PinataMetadataValue = string | number | null;
+export type PinataMetadataName = string | undefined;
 export type PinataMetadata = {
     name?: PinataMetadataName;
-    keyvalue: Record<string, PinataMetadataValue>
+    keyvalues?: Record<string, PinataMetadataValue>;
 };
 export type PinataMetadataFilter = {
     name?: PinataMetadataName;
@@ -201,7 +207,7 @@ export type PinataPinByHashOptions = {
     } | undefined;
 };
 export type PinataPinByHashPinOptions = {
-    pinataMetadata?: Record<string, string | number | null> | undefined;
+    pinataMetadata?: PinataMetadata | undefined;
     pinataOptions?: PinataPinByHashOptions | undefined;
 };
 export type PinataOptions = {
@@ -212,7 +218,7 @@ export type PinataOptions = {
     } | undefined;
 };
 export type PinataPinOptions = {
-    pinataMetadata?: Record<string, string | number | null> | undefined;
+    pinataMetadata?: PinataMetadata | undefined;
     pinataOptions?: PinataOptions | undefined;
 };
 export type PinataPinJobsFilterOptions = {
@@ -281,7 +287,7 @@ export type pinByHash = (hashToPin: string, options?: PinataPinByHashPinOptions 
 /**
  * Pin file to IPFS
  */
-export type pinFileToIPFS = (readableStream: any, options?: PinataPinOptions | undefined) => Promise<PinataPinResponse>;
+export type pinFileToIPFS = (readableStream: ReadStream, options?: PinataPinOptions | undefined) => Promise<PinataPinResponse>;
 /**
  * Pin from FS
  */
