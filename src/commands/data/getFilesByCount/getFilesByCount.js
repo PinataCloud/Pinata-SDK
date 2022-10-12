@@ -1,5 +1,5 @@
-import { validateApiKeys } from "../../../util/validators";
-import pinList from "../pinList/pinList";
+import { validateApiKeys } from '../../../util/validators';
+import pinList from '../pinList/pinList';
 
 export default function getFilesByCount(
     pinataApiKey,
@@ -9,7 +9,7 @@ export default function getFilesByCount(
 ) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
     if (!maxCount) {
-        throw Error("Max count needs to be defined ");
+        throw Error('Max count needs to be defined ');
     }
 
     const asyncIterable = {
@@ -18,44 +18,41 @@ export default function getFilesByCount(
             const pageLimit = 10;
             let pageOffset = 0;
             let cache = [];
-            let count = 0;
-            
+            let keepLooping = false;
+
             return {
                 next() {
                     return new Promise((resolve, reject) => {
-                        if (i === 0 || (i % pageLimit === 0 && i < count)) {
+                        if (i === 0 || (i % pageLimit === 0 && keepLooping)) {
                             resolve(
                                 pinList(pinataApiKey, pinataSecretApiKey, {
                                     filters,
-                                    ...{ pageOffset, pageLimit },
+                                    ...{ pageOffset, pageLimit }
                                 }).then((resp) => {
                                     cache = resp.rows;
-                                    count =
-                                        maxCount < resp.count
-                                            ? maxCount
-                                            : resp.count;
                                     pageOffset = pageOffset + cache.length;
+                                    keepLooping = cache.length !== 0 && i < maxCount ;
                                 })
                             );
                         }
                         resolve();
                     }).then(() => {
                         const valueToReturn = cache[i % pageLimit];
-                        const done = !(i < count);
+                        const done = !(i < maxCount && keepLooping);
 
                         i++;
                         return Promise.resolve({
                             value: valueToReturn,
-                            done,
+                            done
                         });
                     });
                 },
                 return() {
                     // This will be reached if the consumer called 'break' or 'return' early in the loop.
                     return Promise.resolve({ value: i, done: true });
-                },
+                }
             };
-        },
+        }
     };
 
     return asyncIterable;

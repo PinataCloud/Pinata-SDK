@@ -14,6 +14,8 @@ import queryBuilder from './queryBuilder';
 export default function pinList(pinataApiKey, pinataSecretApiKey, filters) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
 
+    filters = {...filters, ...{includeCount: 'false' }};
+
     const baseEndpoint = `${baseUrl}/data/pinList`;
     const endpoint = queryBuilder(baseEndpoint, filters);
 
