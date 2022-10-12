@@ -1,4 +1,5 @@
 {
-  "presets": [["@babel/env", { "modules": "commonjs" }]],
-  "plugins": ["add-module-exports"]
+  "presets": [["@babel/env", { "modules": "commonjs" , "useBuiltIns": "usage"}]  ],
+  "plugins": ["add-module-exports", "@babel/plugin-transform-runtime"]
 }
+
