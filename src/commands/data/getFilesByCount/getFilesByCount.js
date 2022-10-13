@@ -4,12 +4,13 @@ import pinList from '../pinList/pinList';
 export default function getFilesByCount(
     pinataApiKey,
     pinataSecretApiKey,
-    maxCount,
-    filters
+
+    filters = {},
+    maxCount = -1
 ) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
-    if (!maxCount) {
-        throw Error('Max count needs to be defined ');
+    if (maxCount === 0) {
+        throw Error("Max count can't be 0");
     }
 
     const asyncIterable = {
@@ -31,14 +32,24 @@ export default function getFilesByCount(
                                 }).then((resp) => {
                                     cache = resp.rows;
                                     pageOffset = pageOffset + cache.length;
-                                    keepLooping = cache.length !== 0 && i < maxCount ;
+
+                                    // If the user requested all pins we have to keep looping if the limit page was not fulfill
+                                    keepLooping =
+                                        cache.length !== 0 &&
+                                        (maxCount === -1 ?
+                                            cache.length === pageLimit :
+                                            i < maxCount);
                                 })
                             );
                         }
                         resolve();
                     }).then(() => {
                         const valueToReturn = cache[i % pageLimit];
-                        const done = !(i < maxCount && keepLooping);
+
+                        const done = !(
+                            (maxCount === -1 ? i < pageOffset : i < maxCount) &&
+                            keepLooping
+                        );
 
                         i++;
                         return Promise.resolve({

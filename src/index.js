@@ -252,8 +252,8 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
         return pinList(pinataApiKey, pinataSecretApiKey, filters);
     };
 
-    client.getFilesByCount = function (maxCount, filters) {
-        return getFilesByCount(pinataApiKey, pinataSecretApiKey, maxCount, filters);
+    client.getFilesByCount = function (filters, maxCount,) {
+        return getFilesByCount(pinataApiKey, pinataSecretApiKey, filters, maxCount);
     };
     client.userPinnedDataTotal = function () {
         return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);
