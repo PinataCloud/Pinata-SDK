@@ -47,6 +47,7 @@ Once you've set up your instance, using the Pinata SDK is easy. Simply call your
 * Data
   * [testAuthentication](#testAuthentication-anchor)
   * [pinList](#pinList-anchor)
+  * [getFilesByCount](#getFilesByCount-anchor)
   * [userPinnedDataTotal](#userPinnedDataTotal-anchor)
 <br />
 
@@ -388,7 +389,7 @@ pinata.testAuthentication().then((result) => {
 
 <a name="pinList-anchor"></a>
 ### `pinList`
-Retrieve pin records for your Pinata account
+Retrieve pin records for your Pinata account. In order to get the next page you have to manipulate `pageLimit` and `pageOffset` filter to get the next page. This method no longer return the total count of pins. We highly encourage you to use the auto-pagination method [getFilesByCount](#getFilesByCount-anchor).
 
 ##### `pinata.pinList(filters)`
 ##### Params
@@ -462,14 +463,73 @@ As an example, the following filter would only find records whose name contains 
 }
 ```
 
+Our libraries support auto-pagination. This feature easily handles fetching large lists of resources without having to manually paginate results and perform subsequent requests.
 
- 
-#### Response
+To use the auto-pagination feature in Node 10+, simply iterate over a "list" call with the parameters you need in a for await loop.
+
+<a name="getFilesByCount-anchor"></a>
+### `getFilesByCount-anchor`
+This method support auto-pagination. This feature easily handles fetching large lists of pin records for your Pinata account without having to manually paginate results and perform subsequent requests. To use the auto-pagination feature in Node 10+.
+
+##### `pinata.getFilesByCount(filters, count)`
+##### Params
+* `filters` (optional): An object that can consist of the following optional query parameters:
+  * `hashContains` (optional): A string of alphanumeric characters that desires hashes must contain
+  * `pinStart` (optional): The earliest date the content is allowed to have been pinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `pinEnd` (optional): The earliest date the content is allowed to have been pinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `unpinStart` (optional): The earlist date the content is allowed to have been unpinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `unpinEnd` (optional): The latest date the content is allowed to have been unpinned. Must be a valid [ISO_8601](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) date. 
+  * `pinSizeMin` (optional): The minimum byte size that pin record you're looking for can have
+  * `pinSizeMax` (optional): The maximum byte size that pin record you're looking for can have
+  * `status` (optional): Filter pins using one of the following options
+    * `'all'` (Records for both pinned and unpinned content will be returned)
+    * `'pinned'` (Only records for pinned content will be returned)
+    * `'unpinned'` (Only records for unpinned content will be returned)  
+  * `metadata` (optional): A JSON object that can be used to find records for content that had optional metadata included when it was added to Pinata. The metadata object is formatted as follows:
+* `count` (optional): A Number that specifies how many pins you want. if no number is provided then it will pull all the pins based on your filter
+
+##### Metadata filter object formatting
 ```
 {
-    count: (this is the total number of pin records that exist for the query filters you passed in),
-    rows: [
-        {
+    name: 'exampleName',
+    keyvalues: {
+        testKeyValue: {
+            value: 'exampleFilterValue',
+            op: 'exampleFilterOperation'
+        },
+        testKeyValue2: {
+            value: 'exampleFilterValue2',
+            op: 'exampleFilterOperation2'
+        }
+    }
+}
+```
+Filter explanations:
+* `name` (optional): If provided, any records returned must have a name that contains the string provided for the 'name'.
+* `keyvalues` (optional): Each keyvalue provided in this object have both a `value` and `op`
+  * `value` (required): This is the value which will be filtered on
+  * `op` (required): This is the filter operation that will be applied to the `value` that was provided. Valid op values are:
+     * `'gt'` (greater than the value provided)
+     * `'gte'` (greater than or equal to the value provided)
+     * `'lt'` (less than the value provided)
+     * `'lte'` (less than or equal to the value provided)
+     * `'ne'` (not equal to the value provided)
+     * `'eq'` (equal to the value provided)
+     * `'between'` (between the two values provided) - NOTE - This also requires a `secondValue` be provided as seen in the example below
+     * `'notBetween'` (not between the two values provided) - NOTE - This also requires a `secondValue` be provided as seen in the example below
+     * `'like'` (like the value provided)
+     * `'notLike'` (not like the value provided)
+     * `'iLike'` (case insensitive version of `like`)
+     * `'notILike'` (case insensitive version of `notLike`)
+     * `'regexp'` (filter the value provided based on a provided regular expression)
+     * `'iRegexp'` (case insensitive version of regexp)
+  
+```
+
+#### Response
+```
+[
+    {
             id: (the id of your pin instance record),
             ipfs_pin_hash: (the IPFS multi-hash for the content you pinned),
             size: (this is how large (in bytes) the content pinned is),
@@ -491,11 +551,15 @@ As an example, the following filter would only find records whose name contains 
         .
         .
         .
-    ]
-}
+]
+
 ```
 ##### Example Code
+
 ```javascript
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataSDK('yourPinataApiKey', 'yourPinataSecretApiKey');
+
 const metadataFilter = {
     name: 'exampleName',
     keyvalues: {
@@ -516,13 +580,17 @@ const filters = {
     pageOffset: 0,
     metadata: metadataFilter
 };
-pinata.pinList(filters).then((result) => {
-    //handle results here
-    console.log(result);
-}).catch((err) => {
-    //handle error here
-    console.log(err);
-});
+
+ // more reference at [for await ...](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of)
+ for await (const item of pinata.getFilesByCount(filters, 35)) {
+    // ...(item) perform any task with the current item in the array of 35
+ }
+
+
+for await (const item of pinata.getFilesByCount(filters)) {
+    // ...(item) perform any task with the current item the array is determined by all your pins
+ }
+
 ```
 
 <a name="userPinnedDataTotal-anchor"></a>
