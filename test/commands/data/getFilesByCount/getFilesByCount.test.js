@@ -1,7 +1,6 @@
 import getFilesByCount from "../../../../src/commands/data/getFilesByCount/getFilesByCount";
 import axios from "axios";
-import pinListSampleAPI from "./pinlist-sample-api.json";
-import { baseUrl } from "../../../../src/constants";
+import { APIData, pinListAxiosMockPages, fakeHeaders } from "../pinlist-sample-api";
 
 jest.mock("axios");
 
@@ -19,7 +18,7 @@ const callIterableObject = async (
         pinataKey,
         pinataSecret,
         filterToApply,
-        pinsCount,
+        pinsCount
     )) {
         pins.push(metadataName(item));
     }
@@ -28,16 +27,6 @@ const callIterableObject = async (
 };
 
 describe("Get Files By Count", () => {
-    const fakeHeaders = {
-        headers: {
-            pinata_api_key: "anykey",
-            pinata_secret_api_key: "anysecret",
-        },
-        withCredentials: true,
-    };
-    const statusOk = {
-        status: 200,
-    };
     const filterToApply = {
         status: "pinned",
     };
@@ -45,50 +34,6 @@ describe("Get Files By Count", () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
-
-    const pinListAxiosMockPages = {
-        firstPage: {
-            url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&`,
-            headers: fakeHeaders,
-            response: {
-                ...statusOk,
-                data: {
-                    rows: pinListSampleAPI.rows.slice(0, 10),
-                },
-            },
-        },
-        secondPage: {
-            url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&pageOffset=10&`,
-            headers: fakeHeaders,
-            response: {
-                ...statusOk,
-                data: {
-                    rows: pinListSampleAPI.rows.slice(10, 20),
-                },
-            },
-        },
-        thirdPageEmpty: {
-            url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&pageOffset=20&`,
-            headers: fakeHeaders,
-            response: {
-                ...statusOk,
-                data: {
-                    rows: [],
-                },
-            },
-        },
-        firstPageEmpty: {
-            url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&`,
-            headers: fakeHeaders,
-
-            response: {
-                ...statusOk,
-                data: {
-                    rows: [],
-                },
-            },
-        },
-    };
 
     test("Request 17 pins, pins available", async () => {
         const pinsToRequest = 17;
@@ -105,7 +50,7 @@ describe("Get Files By Count", () => {
         );
 
         expect(pins).toEqual(
-            pinListSampleAPI.rows.slice(0, pinsToRequest).map(metadataName)
+            APIData.rows.slice(0, pinsToRequest).map(metadataName)
         );
         expect(pins).toHaveLength(pinsToRequest);
         expect(axios.get).toHaveBeenNthCalledWith(
@@ -135,7 +80,7 @@ describe("Get Files By Count", () => {
             pinsToRequest
         );
         expect(pins).toEqual(
-            pinListSampleAPI.rows.slice(0, pinsToRequest).map(metadataName)
+            APIData.rows.slice(0, pinsToRequest).map(metadataName)
         );
 
         expect(pins).toHaveLength(pinsToRequest);
@@ -164,7 +109,7 @@ describe("Get Files By Count", () => {
         );
 
         expect(pins).toEqual(
-            pinListSampleAPI.rows.slice(0, pinsToRequest).map(metadataName)
+            APIData.rows.slice(0, pinsToRequest).map(metadataName)
         );
 
         expect(pins).toHaveLength(20);
@@ -214,21 +159,19 @@ describe("Get Files By Count", () => {
 
     test("Request all pins, pins available", async () => {
         axios.get
-        .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
-        .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response)
-        .mockResolvedValueOnce(
-            pinListAxiosMockPages.thirdPageEmpty.response
-        );
+            .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
+            .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response)
+            .mockResolvedValueOnce(
+                pinListAxiosMockPages.thirdPageEmpty.response
+            );
         const pins = await callIterableObject(
             fakeHeaders.headers.pinata_api_key,
             fakeHeaders.headers.pinata_secret_api_key,
             filterToApply
         );
-        expect(pins).toEqual(
-            pinListSampleAPI.rows.map(metadataName)
-        );
+        expect(pins).toEqual(APIData.rows.map(metadataName));
 
-        expect(pins).toHaveLength(pinListSampleAPI.rows.length);
+        expect(pins).toHaveLength(APIData.rows.length);
         expect(axios.get).toHaveBeenNthCalledWith(
             1,
             pinListAxiosMockPages.firstPage.url,
