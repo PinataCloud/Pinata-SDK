@@ -35,6 +35,10 @@ export default function queryBuilder(baseUrl, filters) {
 
     if (filters) {
         //  now we need to construct the actual URL based on the given filters provided
+        if (filters.includeCount) {
+            filterQuery = filterQuery + `includeCount=${filters.includeCount}&`;
+        }
+
         if (filters.hashContains) {
             if (typeof filters.hashContains !== 'string') {
                 throw new Error('hashContains value is not a string');

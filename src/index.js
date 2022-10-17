@@ -7,6 +7,7 @@ import pinJobs from './commands/pinning/pinJobs/pinJobs';
 import unpin from './commands/pinning/unpin';
 import testAuthentication from './commands/data/testAuthentication';
 import pinList from './commands/data/pinList/pinList';
+import getFilesByCount from './commands/data/getFilesByCount/getFilesByCount';
 import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
 
 // OPTIONS
@@ -249,6 +250,10 @@ export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
     };
     client.pinList = function (filters) {
         return pinList(pinataApiKey, pinataSecretApiKey, filters);
+    };
+
+    client.getFilesByCount = function (filters, maxCount,) {
+        return getFilesByCount(pinataApiKey, pinataSecretApiKey, filters, maxCount);
     };
     client.userPinnedDataTotal = function () {
         return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);

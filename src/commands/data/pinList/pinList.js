@@ -8,11 +8,13 @@ import queryBuilder from './queryBuilder';
  * Pin List
  * @param {string} pinataApiKey
  * @param {string} pinataSecretApiKey
- * @param {string} filters
+ * @param {any} filters
  * @returns {Promise<unknown>}
  */
-export default function pinList(pinataApiKey, pinataSecretApiKey, filters) {
+export default function pinList(pinataApiKey, pinataSecretApiKey, filters = {}) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
+
+    filters = {...filters, ...{includeCount: 'false' }};
 
     const baseEndpoint = `${baseUrl}/data/pinList`;
     const endpoint = queryBuilder(baseEndpoint, filters);
