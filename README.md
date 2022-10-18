@@ -207,7 +207,7 @@ pinata.pinFileToIPFS(readableStreamForFile, options).then((result) => {
 });
 ```
 
-<a name="pinFromFs-anchor"></a>
+<a name="pinFromFS-anchor"></a>
 ### `pinFromFS`
 Read from a location on your local file system and recursively pin the contents to IPFS (node.js only).
 
@@ -484,7 +484,7 @@ Our libraries support auto-pagination. This feature easily handles fetching larg
 To use the auto-pagination feature in Node 10+, simply iterate over a "list" call with the parameters you need in a for await loop.
 
 <a name="getFilesByCount-anchor"></a>
-### `getFilesByCount-anchor`
+### `getFilesByCount`
 This method support auto-pagination. This feature easily handles fetching large lists of pin records for your Pinata account without having to manually paginate results and perform subsequent requests. To use the auto-pagination feature in Node 10+.
 
 ##### `pinata.getFilesByCount(filters, count)`
