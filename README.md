@@ -553,7 +553,7 @@ Filter explanations:
             date_pinned: (This is the timestamp for when this content was pinned - represented in ISO 8601 format),
             date_unpinned: (This is the timestamp for when this content was unpinned (if null, then you still have the content pinned on Pinata),
             metadata: {
-                name: (this will be the name of the file originally upuloaded, or the custom name you set),
+                name: (this will be the name of the file originally uploaded, or the custom name you set),
                 keyvalues: {
                     exampleCustomKey: "exampleCustomValue",
                     exampleCustomKey2: "exampleCustomValue2",
