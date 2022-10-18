@@ -46,8 +46,8 @@ export function createConfigForAxiosHeaders(config) {
 export function createConfigForAxiosHeadersWithFormData(config, boundaryValue) {
     const requestOptions = {
         ...createConfigForAxiosHeaders(config),
-        maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
-        maxBodyLength: 'Infinity'
+        maxContentLength: Infinity, //this is needed to prevent axios from erroring out with large files
+        maxBodyLength: Infinity
     };
 
     requestOptions.headers[

@@ -20,8 +20,8 @@ export function createConfigForAxiosHeaders(config: any): {
     withCredentials?: undefined;
 };
 export function createConfigForAxiosHeadersWithFormData(config: any, boundaryValue: any): {
-    maxContentLength: string;
-    maxBodyLength: string;
+    maxContentLength: number;
+    maxBodyLength: number;
     withCredentials: boolean;
     headers: {
         pinata_api_key: any;
@@ -29,8 +29,8 @@ export function createConfigForAxiosHeadersWithFormData(config: any, boundaryVal
         Authorization?: undefined;
     };
 } | {
-    maxContentLength: string;
-    maxBodyLength: string;
+    maxContentLength: number;
+    maxBodyLength: number;
     headers: {
         Authorization: string;
         pinata_api_key?: undefined;
