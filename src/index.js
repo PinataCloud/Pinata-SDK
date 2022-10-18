@@ -204,8 +204,6 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
  * @property {string} [pinataApiKey]
  * @property {string} [pinataSecretApiKey]
  * @property {string} [pinataJWTKey]
- * @callback userPinnedDataTotal
- * @returns {Promise<number>}
  */
 
 /**

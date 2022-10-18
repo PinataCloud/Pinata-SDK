@@ -14,10 +14,26 @@ npm install --save @pinata/sdk
 ```
 
 ## Setup
-To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
+To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys or your JWT key. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
+In the example below we provided with 3 ways to call the pinata SDK.
+
 ```javascript
+// Use the api keys by providing the strings directly 
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK('yourPinataApiKey', 'yourPinataSecretApiKey');
+```
+
+```javascript
+// Use the api keys by specifying your api key and api secret
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataSDK({ pinataApiKey: 'yourPinataApiKey', pinataSecretApiKey: 'yourPinataSecretApiKey' });
+
+```
+
+```javascript
+// Use the JWT key
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataSDK({ pinataJWTKey: 'yourPinataJWTKey'});
 ```
 
 Quickly test that you can connect to the API with the following call:
