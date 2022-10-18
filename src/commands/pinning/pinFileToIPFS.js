@@ -2,7 +2,7 @@ import axios from 'axios';
 import { baseUrl } from './../../constants';
 import NodeFormData from 'form-data';
 import stream from 'stream';
-import {validateApiKeys, validateMetadata, validatePinataOptions} from '../../util/validators';
+import {createConfigForAxiosHeadersWithFormData, validateMetadata, validatePinataOptions} from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
 /**
@@ -13,9 +13,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
-
+export default function pinFileToIPFS(config, readStream, options) {
     return new Promise((resolve, reject) => {
 
         const data = new NodeFormData();
@@ -38,20 +36,11 @@ export default function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStre
                 data.append('pinataOptions', JSON.stringify(options.pinataOptions));
             }
         }
-
-        axios.post(
+           axios.post(
             endpoint,
             readStream instanceof NodeFormData ? readStream : data,
-            {
-                withCredentials: true,
-                maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
-                maxBodyLength: 'Infinity',
-                headers: {
-                    'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            createConfigForAxiosHeadersWithFormData(config, data._boundary)
+        ).then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
             }

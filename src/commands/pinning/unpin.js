@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys } from '../../util/validators';
+import { createConfigForAxiosHeaders } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
 
@@ -11,9 +11,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {string} hashToUnpin
  * @returns {Promise<unknown>}
  */
-export default function unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
-
+export default function unpin(config, hashToUnpin) {
     if (!hashToUnpin) {
         throw new Error('hashToUnpin value is required for removing a pin from Pinata');
     }
@@ -26,13 +24,8 @@ export default function unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin) {
     return new Promise((resolve, reject) => {
         axios.delete(
             endpoint,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+        .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while removing pin from IPFS: ${result}`));
             }

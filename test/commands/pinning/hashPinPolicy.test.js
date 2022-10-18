@@ -21,19 +21,19 @@ const newPinPolicy = {
 
 test('No ipfsPinHash value provided should error', () => {
     expect(() => {
-        hashPinPolicy('test', 'test', null, newPinPolicy);
+        hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, null, newPinPolicy);
     }).toThrow();
 });
 
 test('Invalid ipfsPinHash value is provided', () => {
     expect(() => {
-        hashPinPolicy('test', 'test', badHash, newPinPolicy);
+        hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, badHash, newPinPolicy);
     }).toThrow();
 });
 
 test('No newPinPolicy value provided should error', () => {
     expect(() => {
-        hashPinPolicy('test', 'test', goodHash);
+        hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash);
     }).toThrow();
 });
 
@@ -44,7 +44,7 @@ test('200 status is returned', () => {
     };
     axios.put.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(hashPinPolicy('test', 'test', goodHash, newPinPolicy)).resolves.toEqual(goodStatus.data);
+    expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -53,13 +53,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.put.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(hashPinPolicy('test', 'test', goodHash, newPinPolicy)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
+    expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.put.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(hashPinPolicy('test', 'test', goodHash, newPinPolicy)).rejects.toEqual('test error');
+    expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).rejects.toEqual('test error');
 });
 
 

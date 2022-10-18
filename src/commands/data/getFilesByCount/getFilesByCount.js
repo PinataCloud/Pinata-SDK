@@ -1,14 +1,11 @@
-import { validateApiKeys } from '../../../util/validators';
 import pinList from '../pinList/pinList';
 
 export default function getFilesByCount(
-    pinataApiKey,
-    pinataSecretApiKey,
+    config,
 
     filters = {},
     maxCount = -1
 ) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
     if (maxCount === 0) {
         throw Error("Max count can't be 0");
     }
@@ -26,7 +23,7 @@ export default function getFilesByCount(
                     return new Promise((resolve, reject) => {
                         if (i === 0 || (i % pageLimit === 0 && keepLooping)) {
                             resolve(
-                                pinList(pinataApiKey, pinataSecretApiKey, {
+                                pinList(config, {
                                     filters,
                                     ...{ pageOffset, pageLimit }
                                 }).then((resp) => {

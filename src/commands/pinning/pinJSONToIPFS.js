@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateMetadata, validatePinataOptions } from '../../util/validators';
+import { createConfigForAxiosHeaders, validateMetadata, validatePinataOptions } from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
 /**
@@ -11,8 +11,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
+export default function pinJSONToIPFS(config, body, options) {
 
     let requestBody = body;
 
@@ -40,13 +39,8 @@ export default function pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, op
         axios.post(
             endpoint,
             requestBody,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+        .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while pinning JSON to IPFS: ${result}`));
             }

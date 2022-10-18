@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
 import NodeFormData from 'form-data';
-import {validateApiKeys, validateMetadata, validatePinataOptions} from '../../util/validators';
+import {createConfigForAxiosHeadersWithFormData, validateMetadata, validatePinataOptions} from '../../util/validators';
 import basePathConverter from 'base-path-converter';
 import { handleError } from '../../util/errorResponse';
 const fs = require('fs');
@@ -15,8 +15,7 @@ const recursive = require('recursive-fs');
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, options) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
+export default function pinFromFS(config, sourcePath, options) {
 
     return new Promise((resolve, reject) => {
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
@@ -45,16 +44,8 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                 axios.post(
                     endpoint,
                     data,
-                    {
-                        withCredentials: true,
-                        maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
-                        maxBodyLength: 'Infinity',
-                        headers: {
-                            'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
-                            'pinata_api_key': pinataApiKey,
-                            'pinata_secret_api_key': pinataSecretApiKey
-                        }
-                    }).then(function (result) {
+                    createConfigForAxiosHeadersWithFormData(config, data._boundary))
+                .then(function (result) {
                     if (result.status !== 200) {
                         reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
                     }
@@ -92,16 +83,8 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                     axios.post(
                         endpoint,
                         data,
-                        {
-                            withCredentials: true,
-                            maxContentLength: 'Infinity',
-                            maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large directories
-                            headers: {
-                                'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
-                                'pinata_api_key': pinataApiKey,
-                                'pinata_secret_api_key': pinataSecretApiKey
-                            }
-                        }).then(function (result) {
+                        createConfigForAxiosHeadersWithFormData(config, data._boundary))
+                    .then(function (result) {
                         if (result.status !== 200) {
                             reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
                         }

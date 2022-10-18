@@ -5,4 +5,4 @@
  * @param {*} filters
  * @returns {Promise<unknown>}
  */
-export default function pinJobs(pinataApiKey: string, pinataSecretApiKey: string, filters: any): Promise<unknown>;
+export default function pinJobs(config: any, filters: any): Promise<unknown>;

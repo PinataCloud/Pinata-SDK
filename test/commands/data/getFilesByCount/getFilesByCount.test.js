@@ -1,22 +1,20 @@
 import getFilesByCount from "../../../../src/commands/data/getFilesByCount/getFilesByCount";
 import axios from "axios";
-import { APIData, pinListAxiosMockPages, fakeHeaders } from "../pinlist-sample-api";
+import {
+    APIData,
+    pinListAxiosMockPages,
+    fakeHeaders,
+} from "../pinlist-sample-api";
 
 jest.mock("axios");
 
 const metadataName = (item) => {
     return item.metadata.name;
 };
-const callIterableObject = async (
-    pinataKey,
-    pinataSecret,
-    filterToApply,
-    pinsCount
-) => {
+const callIterableObject = async (config, filterToApply, pinsCount) => {
     const pins = [];
     for await (const item of getFilesByCount(
-        pinataKey,
-        pinataSecret,
+        config,
         filterToApply,
         pinsCount
     )) {
@@ -27,6 +25,10 @@ const callIterableObject = async (
 };
 
 describe("Get Files By Count", () => {
+    const pinataConfig = {
+        pinataApiKey: fakeHeaders.headers.pinata_api_key,
+        pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key,
+    };
     const filterToApply = {
         status: "pinned",
     };
@@ -43,8 +45,7 @@ describe("Get Files By Count", () => {
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response);
 
         const pins = await callIterableObject(
-            fakeHeaders.headers.pinata_api_key,
-            fakeHeaders.headers.pinata_secret_api_key,
+            pinataConfig,
             filterToApply,
             pinsToRequest
         );
@@ -74,8 +75,7 @@ describe("Get Files By Count", () => {
             pinListAxiosMockPages.firstPage.response
         );
         const pins = await callIterableObject(
-            fakeHeaders.headers.pinata_api_key,
-            fakeHeaders.headers.pinata_secret_api_key,
+            pinataConfig,
             filterToApply,
             pinsToRequest
         );
@@ -102,8 +102,7 @@ describe("Get Files By Count", () => {
                 pinListAxiosMockPages.thirdPageEmpty.response
             );
         const pins = await callIterableObject(
-            fakeHeaders.headers.pinata_api_key,
-            fakeHeaders.headers.pinata_secret_api_key,
+            pinataConfig,
             filterToApply,
             pinsToRequest
         );
@@ -139,8 +138,7 @@ describe("Get Files By Count", () => {
             pinListAxiosMockPages.firstPageEmpty.response
         );
         const pins = await callIterableObject(
-            fakeHeaders.headers.pinata_api_key,
-            fakeHeaders.headers.pinata_secret_api_key,
+            pinataConfig,
             filterToApply,
             pinsToRequest
         );
@@ -165,8 +163,7 @@ describe("Get Files By Count", () => {
                 pinListAxiosMockPages.thirdPageEmpty.response
             );
         const pins = await callIterableObject(
-            fakeHeaders.headers.pinata_api_key,
-            fakeHeaders.headers.pinata_secret_api_key,
+            pinataConfig,
             filterToApply
         );
         expect(pins).toEqual(APIData.rows.map(metadataName));
@@ -196,8 +193,7 @@ describe("Get Files By Count", () => {
             pinListAxiosMockPages.firstPageEmpty.response
         );
         const pins = await callIterableObject(
-            fakeHeaders.headers.pinata_api_key,
-            fakeHeaders.headers.pinata_secret_api_key,
+            pinataConfig,
             filterToApply
         );
 

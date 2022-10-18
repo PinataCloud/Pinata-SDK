@@ -5,4 +5,4 @@
  * @param {*} newPinPolicy
  * @returns {Promise<unknown>}
  */
-export default function userPinPolicy(pinataApiKey: string, pinataSecretApiKey: string, newPinPolicy: any): Promise<unknown>;
+export default function userPinPolicy(config: any, newPinPolicy: any): Promise<unknown>;

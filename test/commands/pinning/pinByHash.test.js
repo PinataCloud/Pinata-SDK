@@ -15,7 +15,7 @@ test('No hashToPin value is provided should error', () => {
 
 test('Invalid HashToPin value is provided', () => {
     expect(() => {
-        pinByHash('test', 'test', badHashToPin);
+        pinByHash({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, badHashToPin);
     }).toThrow();
 });
 
@@ -26,7 +26,7 @@ test('200 status is returned', () => {
     };
     axios.post.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinByHash('test', 'test', goodHashToPin)).resolves.toEqual(goodStatus.data);
+    expect(pinByHash({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToPin)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -35,13 +35,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.post.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinByHash('test', 'test', goodHashToPin)).rejects.toEqual(Error(`unknown server response while adding to pin queue: ${badStatus}`));
+    expect(pinByHash({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToPin)).rejects.toEqual(Error(`unknown server response while adding to pin queue: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.post.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinByHash('test', 'test', goodHashToPin)).rejects.toEqual('test error');
+    expect(pinByHash({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToPin)).rejects.toEqual('test error');
 });
 
 

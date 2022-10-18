@@ -9,7 +9,7 @@ test('Result other than 200 status is returned', () => {
     };
     axios.get.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinJobs('test', 'test')).rejects.toEqual(Error(`unknown server response while attempting to retrieve pin jobs: ${badStatus}`));
+    expect(pinJobs({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).rejects.toEqual(Error(`unknown server response while attempting to retrieve pin jobs: ${badStatus}`));
 });
 
 test('200 status is returned', () => {
@@ -19,11 +19,11 @@ test('200 status is returned', () => {
     };
     axios.get.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinJobs('test', 'test')).resolves.toEqual(goodStatus.data);
+    expect(pinJobs({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).resolves.toEqual(goodStatus.data);
 });
 
 test('Rejection handled', () => {
     axios.get.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinJobs('test', 'test')).rejects.toEqual('test error');
+    expect(pinJobs({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).rejects.toEqual('test error');
 });

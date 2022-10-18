@@ -4,6 +4,40 @@
  * @param {string} pinataSecretApiKey
  */
 export function validateApiKeys(pinataApiKey: string, pinataSecretApiKey: string): void;
+export function createConfigForAxiosHeaders(config: any): {
+    withCredentials: boolean;
+    headers: {
+        pinata_api_key: any;
+        pinata_secret_api_key: any;
+        Authorization?: undefined;
+    };
+} | {
+    headers: {
+        Authorization: string;
+        pinata_api_key?: undefined;
+        pinata_secret_api_key?: undefined;
+    };
+    withCredentials?: undefined;
+};
+export function createConfigForAxiosHeadersWithFormData(config: any, boundaryValue: any): {
+    maxContentLength: string;
+    maxBodyLength: string;
+    withCredentials: boolean;
+    headers: {
+        pinata_api_key: any;
+        pinata_secret_api_key: any;
+        Authorization?: undefined;
+    };
+} | {
+    maxContentLength: string;
+    maxBodyLength: string;
+    headers: {
+        Authorization: string;
+        pinata_api_key?: undefined;
+        pinata_secret_api_key?: undefined;
+    };
+    withCredentials?: undefined;
+};
 /**
  * Validate host Nodes
  * @param {*} hostNodes

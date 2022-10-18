@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateMetadata } from '../../util/validators';
+import { createConfigForAxiosHeaders, validateMetadata } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
 
@@ -12,9 +12,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
-
+export default function pinByHash(config, hashToPin, options) {
     if (!hashToPin) {
         throw new Error('hashToPin value is required for pinning by hash');
     }
@@ -42,13 +40,8 @@ export default function pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, o
         axios.post(
             endpoint,
             body,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+        .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while adding to pin queue: ${result}`));
             }

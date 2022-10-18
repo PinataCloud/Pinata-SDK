@@ -6,4 +6,4 @@
  * @param {*} metadata
  * @returns {Promise<unknown>}
  */
-export default function hashMetadata(pinataApiKey: string, pinataSecretApiKey: string, ipfsPinHash: any, metadata: any): Promise<unknown>;
+export default function hashMetadata(config: any, ipfsPinHash: any, metadata: any): Promise<unknown>;

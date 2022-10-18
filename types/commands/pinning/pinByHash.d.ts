@@ -6,4 +6,4 @@
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinByHash(pinataApiKey: string, pinataSecretApiKey: string, hashToPin: any, options: any): Promise<unknown>;
+export default function pinByHash(config: any, hashToPin: any, options: any): Promise<unknown>;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../../constants';
-import { validateApiKeys } from '../../../util/validators';
+import { createConfigForAxiosHeaders } from '../../../util/validators';
 import queryBuilder from './queryBuilder';
 import { handleError } from '../../../util/errorResponse';
 
@@ -11,8 +11,7 @@ import { handleError } from '../../../util/errorResponse';
  * @param {*} filters
  * @returns {Promise<unknown>}
  */
-export default function pinJobs(pinataApiKey, pinataSecretApiKey, filters) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
+export default function pinJobs(config, filters) {
 
     let endpoint = `${baseUrl}/pinning/pinJobs`;
 
@@ -23,13 +22,8 @@ export default function pinJobs(pinataApiKey, pinataSecretApiKey, filters) {
     return new Promise((resolve, reject) => {
         axios.get(
             endpoint,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+        .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while attempting to retrieve pin jobs: ${result}`));
             }

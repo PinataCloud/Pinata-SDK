@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validatePinPolicyStructure } from '../../util/validators';
+import { createConfigForAxiosHeaders, validatePinPolicyStructure } from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
 /**
@@ -10,8 +10,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {*} newPinPolicy
  * @returns {Promise<unknown>}
  */
-export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPolicy) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
+export default function userPinPolicy(config, newPinPolicy) {
     validatePinPolicyStructure(newPinPolicy);
 
     if (!newPinPolicy) {
@@ -27,13 +26,8 @@ export default function userPinPolicy(pinataApiKey, pinataSecretApiKey, newPinPo
         axios.put(
             endpoint,
             body,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+            .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while changing pin policy for user: ${result}`));
             }

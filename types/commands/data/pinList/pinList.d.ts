@@ -5,4 +5,4 @@
  * @param {any} filters
  * @returns {Promise<unknown>}
  */
-export default function pinList(pinataApiKey: string, pinataSecretApiKey: string, filters?: any): Promise<unknown>;
+export default function pinList(config: any, filters?: any): Promise<unknown>;

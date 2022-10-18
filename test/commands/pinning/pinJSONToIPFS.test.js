@@ -11,7 +11,7 @@ const goodJSON = {
 
 test('non-object is passed in', () => {
     expect(() => {
-        pinJSONToIPFS('test', 'test', badJSON);
+        pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, badJSON);
     }).toThrow('body must be a valid JSON object');
 });
 
@@ -22,7 +22,7 @@ test('200 status is returned', () => {
     };
     axios.post.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinJSONToIPFS('test', 'test', goodJSON)).resolves.toEqual(goodStatus.data);
+    expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -31,13 +31,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.post.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinJSONToIPFS('test', 'test', goodJSON)).rejects.toEqual(Error(`unknown server response while pinning JSON to IPFS: ${badStatus}`));
+    expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).rejects.toEqual(Error(`unknown server response while pinning JSON to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.post.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinJSONToIPFS('test', 'test', goodJSON)).rejects.toEqual('test error');
+    expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).rejects.toEqual('test error');
 });
 
 
