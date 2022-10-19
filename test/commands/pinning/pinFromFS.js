@@ -1,9 +1,9 @@
 import axios from 'axios';
-import pinFromFS from'../../../src/commands/pinning/pinFromFS';
+import pinFromFS from '../../../src/commands/pinning/pinFromFS';
 jest.mock('axios');
 
 //common values
-const testSource = './testing/testing'
+const testSource = './testing/testing';
 
 test('200 status is returned', () => {
     const goodStatus = {
@@ -29,5 +29,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(pinFromFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, testSource)).rejects.toEqual('test error');
 });
-
 

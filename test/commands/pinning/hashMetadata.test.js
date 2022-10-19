@@ -1,5 +1,5 @@
 import axios from 'axios';
-import hashMetadata from'../../../src/commands/pinning/hashMetadata';
+import hashMetadata from '../../../src/commands/pinning/hashMetadata';
 
 jest.mock('axios');
 
@@ -16,10 +16,10 @@ const metadata = {
 const metadataTwo = {
     name: 'testname',
     keyvalues: {
-        newKey: 'newValue', 
+        newKey: 'newValue',
         secondKey: 'secondValue'
     }
-}
+};
 
 test('No ipfsPinHash value provided should error', () => {
     expect(() => {
@@ -73,5 +73,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual('test error');
 });
-
 

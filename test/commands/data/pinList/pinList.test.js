@@ -1,19 +1,18 @@
-import axios from "axios";
-import pinList from "./../../../../src/commands/data/pinList/pinList";
+import axios from 'axios';
+import pinList from './../../../../src/commands/data/pinList/pinList';
 import {
-    APIData,
     pinListAxiosMockPages,
-    fakeHeaders,
-} from "../pinlist-sample-api";
+    fakeHeaders
+} from '../pinlist-sample-api';
 
-jest.mock("axios");
+jest.mock('axios');
 
-describe("Get Files By Count", () => {
+describe('Get Files By Count', () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
 
-    test("Call two pages in a row", async () => {
+    test('Call two pages in a row', async () => {
         axios.get
             .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response);
@@ -21,14 +20,14 @@ describe("Get Files By Count", () => {
         const resp = await pinList(
             {
                 pinataApiKey: fakeHeaders.headers.pinata_api_key,
-                pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key,
+                pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
             },
             { pageLimit: 10, pageOffset: 0 }
         );
         const resp2 = await pinList(
             {
                 pinataApiKey: fakeHeaders.headers.pinata_api_key,
-                pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key,
+                pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
             },
             { pageLimit: 10, pageOffset: 10 }
         );
@@ -49,7 +48,7 @@ describe("Get Files By Count", () => {
         expect(axios.get).toHaveBeenCalledTimes(2);
     });
 
-    test("Call empty page", async () => {
+    test('Call empty page', async () => {
         axios.get.mockResolvedValueOnce(
             pinListAxiosMockPages.firstPageEmpty.response
         );
@@ -57,7 +56,7 @@ describe("Get Files By Count", () => {
         const resp = await pinList(
             {
                 pinataApiKey: fakeHeaders.headers.pinata_api_key,
-                pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key,
+                pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
             },
             { pageLimit: 10, pageOffset: 0 }
         );
@@ -72,9 +71,9 @@ describe("Get Files By Count", () => {
 
         expect(axios.get).toHaveBeenCalledTimes(1);
     });
-    test("Result other than 200 status is returned", () => {
+    test('Result other than 200 status is returned', () => {
         const badStatus = {
-            status: 700,
+            status: 700
         };
         axios.get.mockResolvedValue(badStatus);
         expect.assertions(1);
@@ -85,19 +84,19 @@ describe("Get Files By Count", () => {
         );
     });
 
-    test("200 status is returned", () => {
+    test('200 status is returned', () => {
         const goodStatus = {
             status: 200,
-            data: "testData",
+            data: 'testData'
         };
         axios.get.mockResolvedValue(goodStatus);
         expect.assertions(1);
         expect(pinList({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).resolves.toEqual(goodStatus.data);
     });
 
-    test("Rejection handled", () => {
-        axios.get.mockRejectedValue("test error");
+    test('Rejection handled', () => {
+        axios.get.mockRejectedValue('test error');
         expect.assertions(1);
-        expect(pinList({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).rejects.toEqual("test error");
+        expect(pinList({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).rejects.toEqual('test error');
     });
 });

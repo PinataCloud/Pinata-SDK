@@ -1,5 +1,5 @@
 import axios from 'axios';
-import unpin from'../../../src/commands/pinning/unpin';
+import unpin from '../../../src/commands/pinning/unpin';
 
 jest.mock('axios');
 
@@ -43,5 +43,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).rejects.toEqual('test error');
 });
-
 

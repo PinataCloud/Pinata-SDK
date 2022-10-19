@@ -1,5 +1,5 @@
 import axios from 'axios';
-import pinFileToIPFS from'../../../src/commands/pinning/pinFileToIPFS';
+import pinFileToIPFS from '../../../src/commands/pinning/pinFileToIPFS';
 import fs from 'fs';
 import NodeFormData from 'form-data';
 jest.mock('axios');
@@ -9,7 +9,6 @@ const nonStream = 'test';
 const validStream = fs.createReadStream('./pinata.png');
 const validFormData = new NodeFormData();
 validFormData.append('file', validStream, {filepath: 'test/filepath'});
-
 
 test('non-readableStream and non-formData is passed in', () => {
     expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, nonStream)).rejects.toEqual(Error('readStream is not a readable stream or form data'));
@@ -51,5 +50,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).rejects.toEqual('test error');
 });
-
 

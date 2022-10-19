@@ -1,5 +1,5 @@
 import axios from 'axios';
-import pinByHash from'../../../src/commands/pinning/pinByHash';
+import pinByHash from '../../../src/commands/pinning/pinByHash';
 
 jest.mock('axios');
 
@@ -43,5 +43,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(pinByHash({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToPin)).rejects.toEqual('test error');
 });
-
 

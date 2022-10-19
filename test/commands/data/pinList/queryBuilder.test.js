@@ -1,7 +1,6 @@
 import queryBuilder from './../../../../src/commands/data/pinList/queryBuilder';
 
 const baseUrl = 'testing.com/test';
-const badFilterValue = 'badFilterValue';
 const noFiltersUrl = `${baseUrl}?`;
 const validISODate = '2019-03-12T20:42:26.743Z';
 const validInteger = 5;
@@ -163,7 +162,7 @@ describe('queryBuilder filter: pageLimit', () => {
         };
         expect(() => {
             queryBuilder(baseUrl, filters);
-        }).toThrow(`Please make sure the pageLimit is a valid integer between 1-1000`);
+        }).toThrow('Please make sure the pageLimit is a valid integer between 1-1000');
     });
     test('non valid pageLimit is passed in', () => {
         const filters = {
@@ -171,7 +170,7 @@ describe('queryBuilder filter: pageLimit', () => {
         };
         expect(() => {
             queryBuilder(baseUrl, filters);
-        }).toThrow(`Please make sure the pageLimit is a valid integer between 1-1000`);
+        }).toThrow('Please make sure the pageLimit is a valid integer between 1-1000');
     });
     test('Decimal is passed in - expect to round down', () => {
         const filters = {
@@ -320,7 +319,7 @@ describe('metadata provided', () => {
         };
         expect(() => {
             queryBuilder(baseUrl, filters);
-        }).toThrow(`Because between op code was passed in, keyValue: testKeyValue must have both also include a secondValue`);
+        }).toThrow('Because between op code was passed in, keyValue: testKeyValue must have both also include a secondValue');
     });
     test('between op code passed in, but object passed in as secondValue', () => {
         const filters = {
@@ -353,7 +352,7 @@ describe('metadata provided', () => {
         };
         expect(() => {
             queryBuilder(baseUrl, filters);
-        }).toThrow(`Because notBetween op code was passed in, keyValue: testKeyValue must have both also include a secondValue`);
+        }).toThrow('Because notBetween op code was passed in, keyValue: testKeyValue must have both also include a secondValue');
     });
     test('notBetween op code passed in, but object passed in as secondValue', () => {
         const filters = {
@@ -394,7 +393,7 @@ describe('metadata provided', () => {
                     testKeyValue: {
                         value: 'test',
                         op: 'eq'
-                    }, 
+                    },
                     testKeyValue2: {
                         value: 'test2',
                         op: 'eq'
