@@ -22,7 +22,7 @@ export default function pinFromFS(config, sourcePath, options) {
 
         fs.stat(sourcePath, (err, stats) => {
             if (err) {
-                reject(err);
+                return reject(err);
             }
             if (stats.isFile()) {
                 //we need to create a single read stream instead of reading the directory recursively
