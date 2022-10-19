@@ -23,19 +23,19 @@ const metadataTwo = {
 
 test('No ipfsPinHash value provided should error', () => {
     expect(() => {
-        hashMetadata('test', 'test', null, metadata);
+        hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, null, metadata);
     }).toThrow();
 });
 
 test('Invalid ipfsPinHash value is provided', () => {
     expect(() => {
-        hashMetadata('test', 'test', badHash, metadata);
+        hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, badHash, metadata);
     }).toThrow();
 });
 
 test('No metadata object provided should error', () => {
     expect(() => {
-        hashMetadata('test', 'test', goodHash);
+        hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash);
     }).toThrow();
 });
 
@@ -46,7 +46,7 @@ test('One keyvalue pair is added', () => {
     };
     axios.put.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(hashMetadata('test', 'test', goodHash, metadata)).resolves.toEqual(goodStatus.data);
+    expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).resolves.toEqual(goodStatus.data);
 });
 
 test('Two keyvalue pairs is added', () => {
@@ -56,7 +56,7 @@ test('Two keyvalue pairs is added', () => {
     };
     axios.put.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(hashMetadata('test', 'test', goodHash, metadataTwo)).resolves.toEqual(goodStatus.data);
+    expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadataTwo)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -65,13 +65,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.put.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(hashMetadata('test', 'test', goodHash, metadata)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
+    expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.put.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(hashMetadata('test', 'test', goodHash, metadata)).rejects.toEqual('test error');
+    expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual('test error');
 });
 
 

@@ -9,13 +9,13 @@ const goodHashToUnpin = 'Qma6e8dovfLyiG2UUfdkSHNPAySzrWLX9qVXb44v1muqcp';
 
 test('No hashToUnpin value is provided should error', () => {
     expect(() => {
-        unpin('test', 'test');
+        unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' });
     }).toThrow('hashToUnpin value is required for removing a pin from Pinata');
 });
 
 test('Invalid hashToUnpin value is provided', () => {
     expect(() => {
-        unpin('test', 'test', badHashToUnpin);
+        unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, badHashToUnpin);
     }).toThrow(`${badHashToUnpin} is an invalid IPFS CID`);
 });
 
@@ -26,7 +26,7 @@ test('200 status is returned', () => {
     };
     axios.delete.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(unpin('test', 'test', goodHashToUnpin)).resolves.toEqual(goodStatus.data);
+    expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -35,13 +35,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.delete.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(unpin('test', 'test', goodHashToUnpin)).rejects.toEqual(Error(`unknown server response while removing pin from IPFS: ${badStatus}`));
+    expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).rejects.toEqual(Error(`unknown server response while removing pin from IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.delete.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(unpin('test', 'test', goodHashToUnpin)).rejects.toEqual('test error');
+    expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).rejects.toEqual('test error');
 });
 
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys, validateMetadata } from '../../util/validators';
+import { createConfigForAxiosHeaders, validateMetadata } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
 
@@ -12,9 +12,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {*} metadata
  * @returns {Promise<unknown>}
  */
-export default function hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
-
+export default function hashMetadata(config, ipfsPinHash, metadata) {
     if (!ipfsPinHash) {
         throw new Error('ipfsPinHash value is required for changing the pin policy of a pin');
     }
@@ -46,13 +44,8 @@ export default function hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHa
         axios.put(
             endpoint,
             body,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+            .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while changing metadata for hash: ${result}`));
             }

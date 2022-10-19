@@ -1,4 +1,4 @@
-export default function getFilesByCount(pinataApiKey: any, pinataSecretApiKey: any, filters?: {}, maxCount?: number): {
+export default function getFilesByCount(config: any, filters?: {}, maxCount?: number): {
     [Symbol.asyncIterator]: () => {
         next(): Promise<{
             value: any;

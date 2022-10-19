@@ -6,4 +6,4 @@
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinJSONToIPFS(pinataApiKey: string, pinataSecretApiKey: string, body: any, options: any): Promise<unknown>;
+export default function pinJSONToIPFS(config: any, body: any, options: any): Promise<unknown>;

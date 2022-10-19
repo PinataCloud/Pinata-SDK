@@ -14,10 +14,26 @@ npm install --save @pinata/sdk
 ```
 
 ## Setup
-To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
+To start, simply require the Pinata SDK and set up an instance with your Pinata API Keys or your JWT key. Don't know what your keys are? Check out your [Account Page](https://pinata.cloud/account).
+In the example below we provided with 3 ways to call the pinata SDK.
+
 ```javascript
+// Use the api keys by providing the strings directly 
 const pinataSDK = require('@pinata/sdk');
 const pinata = pinataSDK('yourPinataApiKey', 'yourPinataSecretApiKey');
+```
+
+```javascript
+// Use the api keys by specifying your api key and api secret
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataSDK({ pinataApiKey: 'yourPinataApiKey', pinataSecretApiKey: 'yourPinataSecretApiKey' });
+
+```
+
+```javascript
+// Use the JWT key
+const pinataSDK = require('@pinata/sdk');
+const pinata = pinataSDK({ pinataJWTKey: 'yourPinataJWTKey'});
 ```
 
 Quickly test that you can connect to the API with the following call:
@@ -191,13 +207,13 @@ pinata.pinFileToIPFS(readableStreamForFile, options).then((result) => {
 });
 ```
 
-<a name="pinFromFs-anchor"></a>
+<a name="pinFromFS-anchor"></a>
 ### `pinFromFS`
 Read from a location on your local file system and recursively pin the contents to IPFS (node.js only).
 
 Both individual files, as well as directories can be read from.
 
-##### `pinata.pinFromFs(sourcePath, options)`
+##### `pinata.pinFromFS(sourcePath, options)`
 ##### Params
 * `sourcePath` - The location on your local filesystem that should be read from. 
 * `options` (optional): A JSON object that can contain the following keyvalues:
@@ -468,7 +484,7 @@ Our libraries support auto-pagination. This feature easily handles fetching larg
 To use the auto-pagination feature in Node 10+, simply iterate over a "list" call with the parameters you need in a for await loop.
 
 <a name="getFilesByCount-anchor"></a>
-### `getFilesByCount-anchor`
+### `getFilesByCount`
 This method support auto-pagination. This feature easily handles fetching large lists of pin records for your Pinata account without having to manually paginate results and perform subsequent requests. To use the auto-pagination feature in Node 10+.
 
 ##### `pinata.getFilesByCount(filters, count)`
@@ -537,7 +553,7 @@ Filter explanations:
             date_pinned: (This is the timestamp for when this content was pinned - represented in ISO 8601 format),
             date_unpinned: (This is the timestamp for when this content was unpinned (if null, then you still have the content pinned on Pinata),
             metadata: {
-                name: (this will be the name of the file originally upuloaded, or the custom name you set),
+                name: (this will be the name of the file originally uploaded, or the custom name you set),
                 keyvalues: {
                     exampleCustomKey: "exampleCustomValue",
                     exampleCustomKey2: "exampleCustomValue2",

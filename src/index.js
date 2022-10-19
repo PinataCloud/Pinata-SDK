@@ -200,7 +200,15 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
  */
 
 /**
+ * @typedef {Object} PinataConfig
+ * @property {string} [pinataApiKey]
+ * @property {string} [pinataSecretApiKey]
+ * @property {string} [pinataJWTKey]
+ */
+
+/**
  * @typedef PinataClient
+ * @property {PinataConfig} config
  * @property {pinByHash} pinByHash
  * @property {hashMetadata} hashMetadata
  * @property {pinFileToIPFS} pinFileToIPFS
@@ -213,50 +221,87 @@ import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
  * @property {userPinnedDataTotal} userPinnedDataTotal
  */
 
+function refactorConfig(pinataConfigParam) {
+    const config = {};
+    if (pinataConfigParam.pinataApiKey) {
+        config.pinataApiKey = pinataConfigParam.pinataApiKey;
+    }
+
+    if (pinataConfigParam.pinataSecretApiKey) {
+        config.pinataSecretApiKey = pinataConfigParam.pinataSecretApiKey;
+    }
+
+    if (pinataConfigParam.pinataJWTKey) {
+        config.pinataJWTKey = pinataConfigParam.pinataJWTKey;
+    }
+
+    return config;
+}
+function sanitizeConfig(pinataApiKey, pinataSecretApiKey) {
+    let config = {};
+
+    if (
+        typeof pinataApiKey === 'string' &&
+        typeof pinataSecretApiKey === 'string'
+    ) {
+        config.pinataApiKey = pinataApiKey;
+        config.pinataSecretApiKey = pinataSecretApiKey;
+    }
+
+    const isPinataConfigParam = typeof pinataApiKey === 'object';
+    if (isPinataConfigParam) {
+        config = refactorConfig(pinataApiKey);
+    }
+
+    return config;
+}
+
 /**
  * Pinata Client
  *
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
+ * @param {string | PinataConfig} [pinataApiKey]
+ * @param {string} [pinataSecretApiKey]
  * @returns {PinataClient}
  */
 export default function pinataClient(pinataApiKey, pinataSecretApiKey) {
-    let client = {};
+    const client = {
+        config: sanitizeConfig(pinataApiKey, pinataSecretApiKey)
+    };
 
     //  setting up the actual calls you can make using this package
     client.pinByHash = function (hashToPin, options) {
-        return pinByHash(pinataApiKey, pinataSecretApiKey, hashToPin, options);
+        return pinByHash(client.config, hashToPin, options);
     };
     client.hashMetadata = function (ipfsPinHash, metadata) {
-        return hashMetadata(pinataApiKey, pinataSecretApiKey, ipfsPinHash, metadata);
+        return hashMetadata(client.config, ipfsPinHash, metadata);
     };
     client.pinFileToIPFS = function (readableStream, options) {
-        return pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readableStream, options);
+        return pinFileToIPFS(client.config, readableStream, options);
     };
     client.pinFromFS = function (sourcePath, options) {
-        return pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, options);
+        return pinFromFS(client.config, sourcePath, options);
     };
     client.pinJSONToIPFS = function (body, options) {
-        return pinJSONToIPFS(pinataApiKey, pinataSecretApiKey, body, options);
+        return pinJSONToIPFS(client.config, body, options);
     };
     client.pinJobs = function (filters) {
-        return pinJobs(pinataApiKey, pinataSecretApiKey, filters);
+        return pinJobs(client.config, filters);
     };
     client.unpin = function (hashToUnpin) {
-        return unpin(pinataApiKey, pinataSecretApiKey, hashToUnpin);
+        return unpin(client.config, hashToUnpin);
     };
     client.testAuthentication = function () {
-        return testAuthentication(pinataApiKey, pinataSecretApiKey);
+        return testAuthentication(client.config);
     };
     client.pinList = function (filters) {
-        return pinList(pinataApiKey, pinataSecretApiKey, filters);
+        return pinList(client.config, filters);
     };
 
-    client.getFilesByCount = function (filters, maxCount,) {
-        return getFilesByCount(pinataApiKey, pinataSecretApiKey, filters, maxCount);
+    client.getFilesByCount = function (filters, maxCount) {
+        return getFilesByCount(client.config, filters, maxCount);
     };
     client.userPinnedDataTotal = function () {
-        return userPinnedDataTotal(pinataApiKey, pinataSecretApiKey);
+        return userPinnedDataTotal(client.config);
     };
     return client;
 }

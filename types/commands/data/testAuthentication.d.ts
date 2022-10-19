@@ -4,4 +4,4 @@
  * @param {string} pinataSecretApiKey
  * @returns {Promise<unknown>}
  */
-export default function testAuthentication(pinataApiKey: string, pinataSecretApiKey: string): Promise<unknown>;
+export default function testAuthentication(config: any): Promise<unknown>;

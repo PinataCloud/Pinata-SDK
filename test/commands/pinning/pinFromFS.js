@@ -12,7 +12,7 @@ test('200 status is returned', () => {
     };
     axios.post.mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinFromFS('test', 'test', testSource)).resolves.toEqual(goodStatus.data);
+    expect(pinFromFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, testSource)).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -21,13 +21,13 @@ test('Result other than 200 status is returned', () => {
     };
     axios.post.mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinFromFS('test', 'test', testSource)).rejects.toEqual(Error(`unknown server response while pinning to IPFS: ${badStatus}`));
+    expect(pinFromFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, testSource)).rejects.toEqual(Error(`unknown server response while pinning to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     axios.post.mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinFromFS('test', 'test', testSource)).rejects.toEqual('test error');
+    expect(pinFromFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, testSource)).rejects.toEqual('test error');
 });
 
 

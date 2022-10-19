@@ -6,4 +6,4 @@
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinFileToIPFS(pinataApiKey: string, pinataSecretApiKey: string, readStream: any, options: any): Promise<unknown>;
+export default function pinFileToIPFS(config: any, readStream: any, options: any): Promise<unknown>;

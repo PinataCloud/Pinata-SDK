@@ -6,4 +6,4 @@
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinFromFS(pinataApiKey: string, pinataSecretApiKey: string, sourcePath: string, options: any): Promise<unknown>;
+export default function pinFromFS(config: any, sourcePath: string, options: any): Promise<unknown>;

@@ -1,61 +1,98 @@
-import { validateApiKeys, validateHostNodes, validateMetadata, validatePinPolicyStructure, validatePinataOptions } from "../../src/util/validators";
+import {
+    validateApiKeys,
+    createConfigForAxiosHeaders,
+    validateHostNodes,
+    validateMetadata,
+    validatePinPolicyStructure,
+    validatePinataOptions,
+} from "../../src/util/validators";
+import { ERROR_NO_CREDENTIALS_PROVIDED } from "../../src/constants";
 
-describe('validateApiKeys function testing', () => {
-    test('check to throw if either pinataApiKey or pinataSecretApiKey are not provided', () => {
+describe("validateApiKeys function testing", () => {
+    test("check to throw if either pinataApiKey or pinataSecretApiKey are not provided", () => {
         expect(() => {
-            validateApiKeys('', 'test');
-        }).toThrow('No pinataApiKey provided! Please provide your pinata api key as an argument when you start this script');
+            validateApiKeys("", "test");
+        }).toThrow(
+            "No pinataApiKey provided! Please provide your pinata api key as an argument when you start this script"
+        );
         expect(() => {
-            validateApiKeys('test', '');
-        }).toThrow('No pinataSecretApiKey provided! Please provide your pinata secret api key as an argument when you start this script');
+            validateApiKeys("test", "");
+        }).toThrow(
+            "No pinataSecretApiKey provided! Please provide your pinata secret api key as an argument when you start this script"
+        );
     });
 });
 
-describe('validateHostNodes function testing', () => {
-    test('host_nodes is not an array', () => {
+describe("createConfigForAxiosHeaders function testing", () => {
+    expect(() => {
+        createConfigForAxiosHeaders({});
+    }).toThrow(ERROR_NO_CREDENTIALS_PROVIDED);
+
+    expect(() => {
+        createConfigForAxiosHeaders({ pinataApiKey: "some api key" });
+    }).toThrow(ERROR_NO_CREDENTIALS_PROVIDED);
+
+    expect(() => {
+        createConfigForAxiosHeaders({ pinataSecretApiKey: "some api secret" });
+    }).toThrow(ERROR_NO_CREDENTIALS_PROVIDED);
+
+    expect(
+        createConfigForAxiosHeaders({
+            pinataApiKey: "some api key",
+            pinataSecretApiKey: "some api secret",
+        })
+    ).toEqual({
+        withCredentials: true,
+        headers: {
+            pinata_api_key: "some api key",
+            pinata_secret_api_key: "some api secret",
+        },
+    });
+});
+describe("validateHostNodes function testing", () => {
+    test("host_nodes is not an array", () => {
         const hostNodes = {
-            test: 'test'
+            test: "test",
         };
         expect(() => {
             validateHostNodes(hostNodes);
-        }).toThrow('host_nodes value must be an array');
+        }).toThrow("host_nodes value must be an array");
     });
 
-    test('invalid host_node entry', () => {
-        const validHost = '/ip4/127.0.0.1/tcp/1234/ws/ipfs/QmUjNmr8TgJCn1Ao7DvMy4cjoZU15b9bwSCBLE3vwXiwgj';
-        const invalidHost = 'invalid host';
-        const hostNodes = [
-            validHost,
-            invalidHost
-        ];
+    test("invalid host_node entry", () => {
+        const validHost =
+            "/ip4/127.0.0.1/tcp/1234/ws/ipfs/QmUjNmr8TgJCn1Ao7DvMy4cjoZU15b9bwSCBLE3vwXiwgj";
+        const invalidHost = "invalid host";
+        const hostNodes = [validHost, invalidHost];
         expect(() => {
             validateHostNodes(hostNodes);
-        }).toThrow(`host_node array entry: ${invalidHost} is not a valid peer multiaddr`);
+        }).toThrow(
+            `host_node array entry: ${invalidHost} is not a valid peer multiaddr`
+        );
     });
 });
 
-
-describe('validateMetadata function testing', () => {
-    test('name is not a string', () => {
+describe("validateMetadata function testing", () => {
+    test("name is not a string", () => {
         const badName = {
-            test: 'testing'
+            test: "testing",
         };
         expect(() => {
             validateMetadata({
-                name: badName
+                name: badName,
             });
-        }).toThrow('metadata name must be of type string');
+        }).toThrow("metadata name must be of type string");
     });
-    test('keyvalues is not an object', () => {
-        const badKeyValues = 'testing';
+    test("keyvalues is not an object", () => {
+        const badKeyValues = "testing";
         expect(() => {
             validateMetadata({
-                keyvalues: badKeyValues
+                keyvalues: badKeyValues,
             });
-        }).toThrow('metatadata keyvalues must be an object');
+        }).toThrow("metatadata keyvalues must be an object");
     });
 
-    test('more than 10 keyvalues was provided', () => {
+    test("more than 10 keyvalues was provided", () => {
         const tooManyKeyValues = {
             one: 1,
             two: 2,
@@ -67,19 +104,21 @@ describe('validateMetadata function testing', () => {
             eight: 8,
             nine: 9,
             ten: 10,
-            eleven: 11
+            eleven: 11,
         };
         expect(() => {
             validateMetadata({
-                keyvalues: tooManyKeyValues
+                keyvalues: tooManyKeyValues,
             });
-        }).toThrow('No more than 10 keyvalues can be provided for metadata entries');
+        }).toThrow(
+            "No more than 10 keyvalues can be provided for metadata entries"
+        );
     });
-    test('Throws error on an object being passed in as a value for a keyvalue', () => {
+    test("Throws error on an object being passed in as a value for a keyvalue", () => {
         const invalidValue = {
             one: 1,
             two: {
-                test: 'test'
+                test: "test",
             },
             three: 3,
             four: 4,
@@ -89,15 +128,17 @@ describe('validateMetadata function testing', () => {
             eight: 8,
             nine: 9,
             ten: 10,
-            eleven: 11
+            eleven: 11,
         };
         expect(() => {
             validateMetadata({
-                keyvalues: invalidValue
+                keyvalues: invalidValue,
             });
-        }).toThrow('Metadata keyvalue values must be strings, booleans, or numbers');
+        }).toThrow(
+            "Metadata keyvalue values must be strings, booleans, or numbers"
+        );
     });
-    test('Does not throw an error if metadata is valid', () => {
+    test("Does not throw an error if metadata is valid", () => {
         const invalidValue = {
             one: 1,
             two: 2,
@@ -108,85 +149,86 @@ describe('validateMetadata function testing', () => {
             seven: 7,
             eight: 8,
             nine: 9,
-            ten: 10
+            ten: 10,
         };
         expect(() => {
             validateMetadata({
-                keyvalues: invalidValue
+                keyvalues: invalidValue,
             });
         }).not.toThrow();
     });
 });
 
-describe('validatePinPolicyStructure function testing', () => {
-    test('No Policy Provided', () => {
+describe("validatePinPolicyStructure function testing", () => {
+    test("No Policy Provided", () => {
         expect(() => {
             validatePinPolicyStructure();
         }).toThrow("No pin policy provided");
     });
-    test('No Regions Provided', () => {
+    test("No Regions Provided", () => {
         expect(() => {
             validatePinPolicyStructure({
-                test: 'test'
+                test: "test",
             });
         }).toThrow("No regions provided in pin policy");
     });
-    test('region id is not a string', () => {
+    test("region id is not a string", () => {
         expect(() => {
             validatePinPolicyStructure({
                 regions: [
                     {
-                        id: 'goodRegionId',
-                        desiredReplicationCount: 1
+                        id: "goodRegionId",
+                        desiredReplicationCount: 1,
                     },
                     {
                         id: 0,
-                        desiredReplicationCount: 1
-                    }
-                ]
+                        desiredReplicationCount: 1,
+                    },
+                ],
             });
         }).toThrow("region id must be a string");
     });
-    test('desiredReplicationCount is not an integer', () => {
+    test("desiredReplicationCount is not an integer", () => {
         expect(() => {
             validatePinPolicyStructure({
                 regions: [
                     {
-                        id: 'goodRegionId',
-                        desiredReplicationCount: 1
+                        id: "goodRegionId",
+                        desiredReplicationCount: 1,
                     },
                     {
-                        id: 'goodRegionId2',
-                        desiredReplicationCount: 'string that should fail'
-                    }
-                ]
+                        id: "goodRegionId2",
+                        desiredReplicationCount: "string that should fail",
+                    },
+                ],
             });
         }).toThrow("desiredReplicationCount must be an integer");
     });
 });
 
-
-describe('validatePinataOptions function testing', () => {
-    test('options is not an object', () => {
+describe("validatePinataOptions function testing", () => {
+    test("options is not an object", () => {
         expect(() => {
-            validatePinataOptions('test');
-        }).toThrow('options must be an object');
+            validatePinataOptions("test");
+        }).toThrow("options must be an object");
     });
-    test('cidVersion is not a 0 or 1', () => {
+    test("cidVersion is not a 0 or 1", () => {
         const badVersion = {
-            test: 'testing'
+            test: "testing",
         };
         expect(() => {
             validatePinataOptions({
-                cidVersion: badVersion
+                cidVersion: badVersion,
             });
-        }).toThrow('unsupported or invalid cidVersion');
+        }).toThrow("unsupported or invalid cidVersion");
     });
-    test('wrapWithDirectory is not true or false', () => {
+    test("wrapWithDirectory is not true or false", () => {
         expect(() => {
             validatePinataOptions({
-                wrapWithDirectory: 'test'
+                wrapWithDirectory: "test",
             });
-        }).toThrow('wrapWithDirectory must be a boolean value of true or false');
+        }).toThrow(
+            "wrapWithDirectory must be a boolean value of true or false"
+        );
     });
 });

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from './../../constants';
-import { validateApiKeys } from '../../util/validators';
+import { createConfigForAxiosHeaders } from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
 
 /**
@@ -9,21 +9,14 @@ import { handleError } from '../../util/errorResponse';
  * @param {string} pinataSecretApiKey
  * @returns {Promise<unknown>}
  */
-export default function userPinnedDataTotal(pinataApiKey, pinataSecretApiKey) {
-    validateApiKeys(pinataApiKey, pinataSecretApiKey);
-
+export default function userPinnedDataTotal(config) {
     let endpoint = `${baseUrl}/data/userPinnedDataTotal`;
 
     return new Promise((resolve, reject) => {
         axios.get(
             endpoint,
-            {
-                withCredentials: true,
-                headers: {
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
+            {...createConfigForAxiosHeaders(config)})
+        .then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while attempting to retrieve pinned data total: ${result}`));
             }
