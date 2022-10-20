@@ -1,5 +1,5 @@
 import axios from 'axios';
-import pinJSONToIPFS from'../../../src/commands/pinning/pinJSONToIPFS';
+import pinJSONToIPFS from '../../../src/commands/pinning/pinJSONToIPFS';
 
 jest.mock('axios');
 
@@ -39,5 +39,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).rejects.toEqual('test error');
 });
-
 

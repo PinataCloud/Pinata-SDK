@@ -1,12 +1,12 @@
-import getFilesByCount from "../../../../src/commands/data/getFilesByCount/getFilesByCount";
-import axios from "axios";
+import getFilesByCount from '../../../../src/commands/data/getFilesByCount/getFilesByCount';
+import axios from 'axios';
 import {
     APIData,
     pinListAxiosMockPages,
-    fakeHeaders,
-} from "../pinlist-sample-api";
+    fakeHeaders
+} from '../pinlist-sample-api';
 
-jest.mock("axios");
+jest.mock('axios');
 
 const metadataName = (item) => {
     return item.metadata.name;
@@ -24,20 +24,20 @@ const callIterableObject = async (config, filterToApply, pinsCount) => {
     return pins;
 };
 
-describe("Get Files By Count", () => {
+describe('Get Files By Count', () => {
     const pinataConfig = {
         pinataApiKey: fakeHeaders.headers.pinata_api_key,
-        pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key,
+        pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
     };
     const filterToApply = {
-        status: "pinned",
+        status: 'pinned'
     };
 
     afterEach(() => {
         jest.resetAllMocks();
     });
 
-    test("Request 17 pins, pins available", async () => {
+    test('Request 17 pins, pins available', async () => {
         const pinsToRequest = 17;
 
         axios.get
@@ -68,7 +68,7 @@ describe("Get Files By Count", () => {
         expect(axios.get).toHaveBeenCalledTimes(2);
     });
 
-    test("Request 6 pins, pins available", async () => {
+    test('Request 6 pins, pins available', async () => {
         const pinsToRequest = 6;
 
         axios.get.mockResolvedValueOnce(
@@ -92,7 +92,7 @@ describe("Get Files By Count", () => {
         expect(axios.get).toHaveBeenCalledTimes(1);
     });
 
-    test("Request 25 pins, pins not available", async () => {
+    test('Request 25 pins, pins not available', async () => {
         const pinsToRequest = 25;
 
         axios.get
@@ -131,7 +131,7 @@ describe("Get Files By Count", () => {
         expect(axios.get).toHaveBeenCalledTimes(3);
     });
 
-    test("Request 3 pins, pins not available", async () => {
+    test('Request 3 pins, pins not available', async () => {
         const pinsToRequest = 3;
 
         axios.get.mockResolvedValueOnce(
@@ -155,7 +155,7 @@ describe("Get Files By Count", () => {
         expect(axios.get).toHaveBeenCalledTimes(1);
     });
 
-    test("Request all pins, pins available", async () => {
+    test('Request all pins, pins available', async () => {
         axios.get
             .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response)
@@ -188,7 +188,7 @@ describe("Get Files By Count", () => {
         expect(axios.get).toHaveBeenCalledTimes(3);
     });
 
-    test("Request all pins, pins not available", async () => {
+    test('Request all pins, pins not available', async () => {
         axios.get.mockResolvedValueOnce(
             pinListAxiosMockPages.firstPageEmpty.response
         );

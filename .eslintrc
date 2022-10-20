@@ -3,7 +3,8 @@
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
 
   "globals": {
@@ -16,7 +17,7 @@
     "before": true,
     "it": true,
     "expect": true,
-    "sinon": true
+    "sinon": true    
   },
 
   "parser": "babel-eslint",

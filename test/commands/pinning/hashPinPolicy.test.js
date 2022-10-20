@@ -1,5 +1,5 @@
 import axios from 'axios';
-import hashPinPolicy from'../../../src/commands/pinning/hashPinPolicy';
+import hashPinPolicy from '../../../src/commands/pinning/hashPinPolicy';
 
 jest.mock('axios');
 
@@ -61,5 +61,4 @@ test('Rejection handled', () => {
     expect.assertions(1);
     expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).rejects.toEqual('test error');
 });
-
 
