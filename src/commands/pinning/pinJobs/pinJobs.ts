@@ -1,17 +1,31 @@
 import axios from 'axios';
-import { baseUrl } from './../../../constants';
+import { baseUrl } from '../../../constants';
 import { createConfigForAxiosHeaders } from '../../../util/validators';
 import queryBuilder from './queryBuilder';
 import { handleError } from '../../../util/errorResponse';
+import { PinataConfig } from '../../..';
 
-/**
- * Pin Jobs
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} filters
- * @returns {Promise<unknown>}
- */
-export default function pinJobs(config, filters) {
+export interface PinataPinJobsResponseRow {
+    id: number | string;
+    ipfs_pin_hash: string;
+    date_queued: string;
+    name: string | undefined | null;
+    status: string;
+}
+export interface PinataPinJobsResponse {
+    count: number;
+    rows: PinataPinJobsResponseRow[];
+}
+
+export interface PinataPinJobsFilterOptions {
+    sort: 'ASC' | 'DESC';
+    status?: string | undefined;
+    ipfs_pin_hash?: string | undefined;
+    limit?: number | undefined;
+    offset?: number | undefined;
+}
+
+export default function pinJobs(config: PinataConfig, filters? : PinataPinJobsFilterOptions): Promise<PinataPinJobsResponse> {
 
     let endpoint = `${baseUrl}/pinning/pinJobs`;
 

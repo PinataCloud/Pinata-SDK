@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import { createConfigForAxiosHeaders, validatePinPolicyStructure } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';

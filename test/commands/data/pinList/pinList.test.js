@@ -7,7 +7,7 @@ import {
 
 jest.mock('axios');
 
-describe('Get Files By Count', () => {
+describe('Pin List by page', () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
@@ -22,14 +22,14 @@ describe('Get Files By Count', () => {
                 pinataApiKey: fakeHeaders.headers.pinata_api_key,
                 pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
             },
-            { pageLimit: 10, pageOffset: 0 }
+            { pageLimit: 10, pageOffset: 0, status: 'pinned' }
         );
         const resp2 = await pinList(
             {
                 pinataApiKey: fakeHeaders.headers.pinata_api_key,
                 pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
             },
-            { pageLimit: 10, pageOffset: 10 }
+            { pageLimit: 10, pageOffset: 10, status: 'pinned' }
         );
         expect(resp).toEqual(pinListAxiosMockPages.firstPage.response.data);
         expect(resp2).toEqual(pinListAxiosMockPages.secondPage.response.data);
@@ -58,7 +58,7 @@ describe('Get Files By Count', () => {
                 pinataApiKey: fakeHeaders.headers.pinata_api_key,
                 pinataSecretApiKey: fakeHeaders.headers.pinata_secret_api_key
             },
-            { pageLimit: 10, pageOffset: 0 }
+            { pageLimit: 10, pageOffset: 0, status: 'pinned' }
         );
 
         expect(resp).toEqual({ rows: [] });

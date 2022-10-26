@@ -1,15 +1,14 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import {createConfigForAxiosHeaders} from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
+import { PinataConfig } from '../..';
 
-/**
- * Test Authentication
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @returns {Promise<unknown>}
- */
-export default function testAuthentication(config) {
+export interface PinataTestAuthenticationResponse {
+    authenticated: boolean;
+}
+
+export default function testAuthentication(config: PinataConfig): Promise<PinataTestAuthenticationResponse> {
     //  test authentication to make sure that the user's provided keys are legit
     const endpoint = `${baseUrl}/data/testAuthentication`;
 
@@ -29,4 +28,4 @@ export default function testAuthentication(config) {
             reject(formattedError);
         });
     });
-};
+}

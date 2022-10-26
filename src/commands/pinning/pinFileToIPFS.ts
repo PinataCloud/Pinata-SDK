@@ -1,10 +1,33 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import NodeFormData from 'form-data';
 import stream from 'stream';
 import {createConfigForAxiosHeadersWithFormData, validateMetadata, validatePinataOptions} from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
+import { PinataConfig } from '../..';
 
+export interface PinataPinPolicyItem {
+    id: string;
+    desiredReplicationCount: number;
+}
+export interface PinataOptions {
+    hostNodes?: string[] | undefined;
+    cidVersion?: 0 | 1 ;
+    wrapWithDirectory?: boolean;
+    customPinPolicy?: {
+        regions: PinataPinPolicyItem[];
+    };
+}
+
+export interface PinataPinResponse {
+    IpfsHash: string;
+    PinSize: number;
+    Timestamp: string;
+}
+export interface PinataPinOptions {
+    pinataMetadata?: { [key: string]: string | number | null },
+    pinataOptions?: PinataOptions | undefined;
+}
 /**
  * Pin File to IPFS
  * @param {string} pinataApiKey
@@ -13,7 +36,7 @@ import { handleError } from '../../util/errorResponse';
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export default function pinFileToIPFS(config, readStream, options) {
+export default function pinFileToIPFS(config: PinataConfig, readStream: any, options?: PinataPinOptions):Promise<PinataPinResponse> {
     return new Promise((resolve, reject) => {
 
         const data = new NodeFormData();
@@ -39,7 +62,7 @@ export default function pinFileToIPFS(config, readStream, options) {
            axios.post(
             endpoint,
             readStream instanceof NodeFormData ? readStream : data,
-            createConfigForAxiosHeadersWithFormData(config, data._boundary)
+            createConfigForAxiosHeadersWithFormData(config, data.getBoundary())
         ).then(function (result) {
             if (result.status !== 200) {
                 reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));

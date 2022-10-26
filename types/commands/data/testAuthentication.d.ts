@@ -1,7 +1,5 @@
-/**
- * Test Authentication
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @returns {Promise<unknown>}
- */
-export default function testAuthentication(config: any): Promise<unknown>;
+import { PinataConfig } from '../..';
+export interface PinataTestAuthenticationResponse {
+    authenticated: boolean;
+}
+export default function testAuthentication(config: PinataConfig): Promise<PinataTestAuthenticationResponse>;

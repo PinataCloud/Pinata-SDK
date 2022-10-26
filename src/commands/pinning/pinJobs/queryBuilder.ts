@@ -1,12 +1,6 @@
 import isIPFS from 'is-ipfs';
 
-/**
- * Query Buidler
- * @param {string} baseUrl
- * @param {*} filters
- * @returns {*}
- */
-export default function queryBuilder(baseUrl, filters) {
+export default function queryBuilder(baseUrl: string, filters: any): string {
     if (!baseUrl) {
         throw new Error('no baseUrl provided');
     }
@@ -19,7 +13,7 @@ export default function queryBuilder(baseUrl, filters) {
 
     let firstFilterApplied = false; // we want to make sure that the "?" character is only applied once
 
-    function addFilter(newFilter) {
+    function addFilter(newFilter: string) {
         if (firstFilterApplied) {
             newUrl = `${newUrl}&${newFilter}`;
         } else {

@@ -1,11 +1,8 @@
 import isIPFS from 'is-ipfs';
+import { PinataConfig } from '..';
 import { ERROR_NO_CREDENTIALS_PROVIDED} from '../constants';
-/**
- * Validate API Keys
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- */
-export function validateApiKeys(pinataApiKey, pinataSecretApiKey) {
+
+export function validateApiKeys(pinataApiKey?: string, pinataSecretApiKey?: string) {
     if (!pinataApiKey || pinataApiKey === '') {
         throw new Error(
             'No pinataApiKey provided! Please provide your pinata api key as an argument when you start this script'
@@ -18,7 +15,7 @@ export function validateApiKeys(pinataApiKey, pinataSecretApiKey) {
     }
 }
 
-export function createConfigForAxiosHeaders(config) {
+export function createConfigForAxiosHeaders(config: PinataConfig) {
     if (
         config.pinataApiKey && config.pinataApiKey.length > 0 &&
         config.pinataSecretApiKey && config.pinataSecretApiKey.length > 0
@@ -43,24 +40,20 @@ export function createConfigForAxiosHeaders(config) {
     throw new Error(ERROR_NO_CREDENTIALS_PROVIDED);
 }
 
-export function createConfigForAxiosHeadersWithFormData(config, boundaryValue) {
+export function createConfigForAxiosHeadersWithFormData(config: PinataConfig, boundaryValue: string) {
     const requestOptions = {
         ...createConfigForAxiosHeaders(config),
         maxContentLength: Infinity, //this is needed to prevent axios from erroring out with large files
-        maxBodyLength: Infinity
+        maxBodyLength: Infinity,
+        headers: {
+            'Content-type': `multipart/form-data; boundary= ${boundaryValue}`
+        }
     };
 
-    requestOptions.headers[
-        'Content-type'
-    ] = `multipart/form-data; boundary= ${boundaryValue}`;
     return requestOptions;
 }
 
-/**
- * Validate host Nodes
- * @param {*} hostNodes
- */
-export function validateHostNodes(hostNodes) {
+export function validateHostNodes(hostNodes: any) {
     if (!Array.isArray(hostNodes)) {
         throw new Error('host_nodes value must be an array');
     }
@@ -73,11 +66,7 @@ export function validateHostNodes(hostNodes) {
     });
 }
 
-/**
- * Validate MetaData
- * @param {*} metadata
- */
-export function validateMetadata(metadata) {
+export function validateMetadata(metadata: any) {
     if (metadata.name) {
         if (
             !(
@@ -96,7 +85,7 @@ export function validateMetadata(metadata) {
 
         let i = 0;
 
-        Object.entries(metadata.keyvalues).forEach(function (keyValue) {
+        Object.entries(metadata.keyvalues).forEach(function (keyValue: any) {
             if (i > 9) {
                 throw new Error(
                     'No more than 10 keyvalues can be provided for metadata entries'
@@ -119,11 +108,7 @@ export function validateMetadata(metadata) {
     }
 }
 
-/**
- * Validate Pin Policy Structure
- * @param {*} pinPolicy
- */
-export function validatePinPolicyStructure(pinPolicy) {
+export function validatePinPolicyStructure(pinPolicy: { regions: any[]; }) {
     //this function takes in a pin policy and checks the JSON structure to make sure it's valid
     if (!pinPolicy) {
         throw new Error('No pin policy provided');
@@ -157,11 +142,7 @@ export function validatePinPolicyStructure(pinPolicy) {
     }
 }
 
-/**
- * Validate Pinata Options
- * @param {*} options
- */
-export function validatePinataOptions(options) {
+export function validatePinataOptions(options: { cidVersion?: number; wrapWithDirectory?: boolean; hostNodes?: any; customPinPolicy?: any; }) {
     if (typeof options !== 'object') {
         throw new Error('options must be an object');
     }

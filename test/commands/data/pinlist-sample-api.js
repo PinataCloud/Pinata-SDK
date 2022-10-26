@@ -497,7 +497,7 @@ export const APIData = {
 
 export const pinListAxiosMockPages = {
     firstPage: {
-        url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&`,
+        url: `${baseUrl}/data/pinList?includeCount=false&status=pinned&pageLimit=10&`,
         headers: fakeHeaders,
         response: {
             ...statusOk,
@@ -507,7 +507,7 @@ export const pinListAxiosMockPages = {
         }
     },
     secondPage: {
-        url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&pageOffset=10&`,
+        url: `${baseUrl}/data/pinList?includeCount=false&status=pinned&pageLimit=10&pageOffset=10&`,
         headers: fakeHeaders,
         response: {
             ...statusOk,
@@ -517,7 +517,7 @@ export const pinListAxiosMockPages = {
         }
     },
     thirdPageEmpty: {
-        url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&pageOffset=20&`,
+        url: `${baseUrl}/data/pinList?includeCount=false&status=pinned&pageLimit=10&pageOffset=20&`,
         headers: fakeHeaders,
         response: {
             ...statusOk,
@@ -527,7 +527,7 @@ export const pinListAxiosMockPages = {
         }
     },
     firstPageEmpty: {
-        url: `${baseUrl}/data/pinList?includeCount=false&pageLimit=10&`,
+        url: `${baseUrl}/data/pinList?includeCount=false&status=pinned&pageLimit=10&`,
         headers: fakeHeaders,
 
         response: {

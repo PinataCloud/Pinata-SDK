@@ -1,9 +1,14 @@
-/**
- * Pin By Hash
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} hashToPin
- * @param {*} options
- * @returns {Promise<unknown>}
- */
-export default function pinByHash(config: any, hashToPin: any, options: any): Promise<unknown>;
+import { PinataConfig } from '../..';
+import { PinataOptions } from './pinFileToIPFS';
+import { PinataMetadata } from '../data/pinList/pinList';
+export interface PinataPinByHashPinOptions {
+    pinataMetadata?: PinataMetadata;
+    pinataOptions?: PinataOptions;
+}
+export interface PinataPinByHashResponse {
+    id: number | string;
+    ipfsHash: string;
+    status: string;
+    name: string;
+}
+export default function pinByHash(config: PinataConfig, hashToPin: string, options: any): Promise<any>;

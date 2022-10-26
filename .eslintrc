@@ -1,5 +1,8 @@
 {
-
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "root": true,
   "env": {
     "browser": true,
     "es6": true,
@@ -20,11 +23,7 @@
     "sinon": true    
   },
 
-  "parser": "babel-eslint",
 
-  "plugins": [
-    
-  ],
 
   "rules": {
     "block-scoped-var": 2,

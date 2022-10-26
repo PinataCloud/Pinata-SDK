@@ -1,19 +1,13 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import { createConfigForAxiosHeaders, validateMetadata, validatePinataOptions } from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
+import { PinataConfig } from '../..';
+import { PinataPinOptions, PinataPinResponse } from './pinFileToIPFS';
 
-/**
- * Pin JSON to IPFS
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} body
- * @param {*} options
- * @returns {Promise<unknown>}
- */
-export default function pinJSONToIPFS(config, body, options) {
+export default function pinJSONToIPFS(config: PinataConfig, body: any, options? : PinataPinOptions):Promise<PinataPinResponse> {
 
-    let requestBody = body;
+    let requestBody: any = body;
 
     if (typeof body !== 'object') {
         throw new Error('body must be a valid JSON object');

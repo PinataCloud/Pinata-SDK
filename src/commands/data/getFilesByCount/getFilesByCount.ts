@@ -1,9 +1,10 @@
-import pinList from '../pinList/pinList';
+import { PinataConfig } from '../../..';
+import pinList, { PinataPin, PinataPinListFilterOptions } from '../pinList/pinList';
 
 export default function getFilesByCount(
-    config,
+    config: PinataConfig,
 
-    filters = {},
+    filters: PinataPinListFilterOptions = {},
     maxCount = -1
 ) {
     if (maxCount === 0) {
@@ -15,7 +16,7 @@ export default function getFilesByCount(
             let i = 0;
             const pageLimit = 10;
             let pageOffset = 0;
-            let cache = [];
+            let cache: PinataPin[] = [];
             let keepLooping = false;
 
             return {
@@ -24,7 +25,7 @@ export default function getFilesByCount(
                         if (i === 0 || (i % pageLimit === 0 && keepLooping)) {
                             resolve(
                                 pinList(config, {
-                                    filters,
+                                    ...filters,
                                     ...{ pageOffset, pageLimit }
                                 }).then((resp) => {
                                     cache = resp.rows;
@@ -33,13 +34,11 @@ export default function getFilesByCount(
                                     // If the user requested all pins we have to keep looping if the limit page was not fulfill
                                     keepLooping =
                                         cache.length !== 0 &&
-                                        (maxCount === -1 ?
-                                            cache.length === pageLimit :
-                                            i < maxCount);
+                                        (maxCount === -1 ? cache.length === pageLimit : i < maxCount);
                                 })
                             );
                         }
-                        resolve();
+                        resolve(0);
                     }).then(() => {
                         const valueToReturn = cache[i % pageLimit];
 

@@ -1,26 +1,21 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import NodeFormData from 'form-data';
 import {createConfigForAxiosHeadersWithFormData, validateMetadata, validatePinataOptions} from '../../util/validators';
 import basePathConverter from 'base-path-converter';
 import { handleError } from '../../util/errorResponse';
-const fs = require('fs');
-const recursive = require('recursive-fs');
+import { PinataConfig } from '../..';
+import { PinataPinOptions, PinataPinResponse } from './pinFileToIPFS';
+import * as fs from 'fs';
+import * as recursive from 'recursive-fs';
 
-/**
- * PinFromFS
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {string} sourcePath
- * @param {*} options
- * @returns {Promise<unknown>}
- */
-export default function pinFromFS(config, sourcePath, options) {
+export default function pinFromFS(config: PinataConfig, sourcePath: string, options?: PinataPinOptions): Promise<PinataPinResponse> {
 
     return new Promise((resolve, reject) => {
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
-        fs.stat(sourcePath, (err, stats) => {
+        // eslint-disable-next-line consistent-return
+        fs.stat(sourcePath, (err: any, stats: any) => {
             if (err) {
                 return reject(err);
             }
@@ -44,7 +39,7 @@ export default function pinFromFS(config, sourcePath, options) {
                 axios.post(
                     endpoint,
                     data,
-                    createConfigForAxiosHeadersWithFormData(config, data._boundary))
+                    createConfigForAxiosHeadersWithFormData(config, data.getBoundary()))
                 .then(function (result) {
                     if (result.status !== 200) {
                         reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
@@ -55,14 +50,14 @@ export default function pinFromFS(config, sourcePath, options) {
                     reject(formattedError);
                 });
             } else {
-                recursive.readdirr(sourcePath, function (err, dirs, files) {
+                recursive.readdirr(sourcePath, function (err: any, dirs: any, files: any) {
                     if (err) {
                         reject(new Error(err));
                     }
 
-                    let data = new NodeFormData();
+                    const data = new NodeFormData();
 
-                    files.forEach((file) => {
+                    files.forEach((file: any) => {
                         //for each file stream, we need to include the correct relative file path
                         data.append('file', fs.createReadStream(file), {
                             filepath: basePathConverter(sourcePath, file)
@@ -83,7 +78,7 @@ export default function pinFromFS(config, sourcePath, options) {
                     axios.post(
                         endpoint,
                         data,
-                        createConfigForAxiosHeadersWithFormData(config, data._boundary))
+                        createConfigForAxiosHeadersWithFormData(config, data.getBoundary()))
                     .then(function (result) {
                         if (result.status !== 200) {
                             reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));

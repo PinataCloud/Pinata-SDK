@@ -1,17 +1,11 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import { createConfigForAxiosHeaders } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
+import { PinataConfig } from '../..';
 
-/**
- * Unpin
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {string} hashToUnpin
- * @returns {Promise<unknown>}
- */
-export default function unpin(config, hashToUnpin) {
+export default function unpin(config: PinataConfig, hashToUnpin: string) {
     if (!hashToUnpin) {
         throw new Error('hashToUnpin value is required for removing a pin from Pinata');
     }

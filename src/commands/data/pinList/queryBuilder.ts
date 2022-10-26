@@ -1,10 +1,6 @@
-/**
- * Validate and return data
- * @param {*} dateToValidate
- * @returns {*}
- */
-function validateAndReturnDate(dateToValidate) {
-    let dateParsed = new Date(Date.parse(dateToValidate));
+
+function validateAndReturnDate(dateToValidate: any): any {
+    const dateParsed = new Date(Date.parse(dateToValidate));
 
     try {
         if (dateParsed.toISOString() === dateToValidate) {
@@ -17,13 +13,7 @@ function validateAndReturnDate(dateToValidate) {
     }
 }
 
-/**
- * Query Builder
- * @param {string} baseUrl
- * @param {*} filters
- * @returns {string}
- */
-export default function queryBuilder(baseUrl, filters) {
+export default function queryBuilder(baseUrl: string, filters: any): string {
     if (!baseUrl) {
         throw new Error('no baseUrl provided');
     }
@@ -106,11 +96,11 @@ export default function queryBuilder(baseUrl, filters) {
                     throw new Error('metadata keyvalues must be an object');
                 }
 
-                const prunedKeyValues = {}; // we want to make sure we're only grabbing the values we want for the query, and nothing extra
+                const prunedKeyValues: any = {}; // we want to make sure we're only grabbing the values we want for the query, and nothing extra
 
                 Object.entries(filters.metadata.keyvalues).forEach((keyValue) => {
                     const key = keyValue[0];
-                    const value = keyValue[1];
+                    const value: any = keyValue[1];
 
                     if (typeof value !== 'object') {
                         throw new Error(`keyValue: ${key} is not an object`);

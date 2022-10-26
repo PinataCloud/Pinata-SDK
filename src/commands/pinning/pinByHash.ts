@@ -1,18 +1,25 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import { createConfigForAxiosHeaders, validateMetadata } from '../../util/validators';
 import isIPFS from 'is-ipfs';
 import { handleError } from '../../util/errorResponse';
+import { PinataConfig } from '../..';
+import { PinataOptions } from './pinFileToIPFS';
+import { PinataMetadata } from '../data/pinList/pinList';
 
-/**
- * Pin By Hash
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} hashToPin
- * @param {*} options
- * @returns {Promise<unknown>}
- */
-export default function pinByHash(config, hashToPin, options) {
+export interface PinataPinByHashPinOptions {
+    pinataMetadata?: PinataMetadata;
+    pinataOptions?: PinataOptions ;
+}
+
+export interface PinataPinByHashResponse {
+    id: number | string;
+    ipfsHash: string;
+    status: string;
+    name: string;
+}
+
+export default function pinByHash(config: PinataConfig, hashToPin: string, options: any): Promise<any> {
     if (!hashToPin) {
         throw new Error('hashToPin value is required for pinning by hash');
     }
@@ -21,7 +28,11 @@ export default function pinByHash(config, hashToPin, options) {
     }
 
     const endpoint = `${baseUrl}/pinning/pinByHash`;
-    const body = {
+    const body : {
+        hashToPin: any,
+        pinataOptions: any,
+        pinataMetadata?: any,
+    } = {
         hashToPin: hashToPin,
         pinataOptions: {}
     };

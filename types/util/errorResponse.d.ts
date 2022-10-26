@@ -1,1 +1,1 @@
-export function handleError(error: any): any;
+export declare const handleError: (error: any) => any;

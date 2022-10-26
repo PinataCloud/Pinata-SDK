@@ -1,16 +1,11 @@
 import axios from 'axios';
-import { baseUrl } from './../../constants';
+import { baseUrl } from '../../constants';
 import { createConfigForAxiosHeaders } from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
+import { PinataConfig } from '../..';
 
-/**
- * User Pinned Data Total
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @returns {Promise<unknown>}
- */
-export default function userPinnedDataTotal(config) {
-    let endpoint = `${baseUrl}/data/userPinnedDataTotal`;
+export default function userPinnedDataTotal(config: PinataConfig): Promise<number> {
+    const endpoint = `${baseUrl}/data/userPinnedDataTotal`;
 
     return new Promise((resolve, reject) => {
         axios.get(
