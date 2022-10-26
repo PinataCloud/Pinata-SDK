@@ -12,16 +12,16 @@ declare class PinataClient {
     constructor(pinataApiKey?: string | PinataConfig, pinataSecretApiKey?: string);
     pinByHash(hashToPin: string, options?: PinataPinByHashPinOptions): Promise<any>;
     hashMetadata(ipfsPinHash: string, metadata: PinataMetadata): Promise<any>;
-    pinFileToIPFS(readableStream: any, options?: PinataPinOptions): Promise<import("./commands/pinning/pinFileToIPFS").PinataPinResponse>;
-    pinFromFS(sourcePath: string, options?: PinataPinOptions): Promise<import("./commands/pinning/pinFileToIPFS").PinataPinResponse>;
-    pinJSONToIPFS(body: any, options?: PinataPinOptions): Promise<import("./commands/pinning/pinFileToIPFS").PinataPinResponse>;
-    pinJobs(filters?: PinataPinJobsFilterOptions): Promise<import("./commands/pinning/pinJobs/pinJobs").PinataPinJobsResponse>;
+    pinFileToIPFS(readableStream: any, options?: PinataPinOptions): Promise<import("./commands/pinning").PinataPinResponse>;
+    pinFromFS(sourcePath: string, options?: PinataPinOptions): Promise<import("./commands/pinning").PinataPinResponse>;
+    pinJSONToIPFS(body: any, options?: PinataPinOptions): Promise<import("./commands/pinning").PinataPinResponse>;
+    pinJobs(filters?: PinataPinJobsFilterOptions): Promise<import("./commands/pinning").PinataPinJobsResponse>;
     unpin(hashToUnpin: string): Promise<unknown>;
-    pinList(filters: PinataPinListFilterOptions): Promise<import("./commands/data/pinList/pinList").PinataPinListResponse>;
+    pinList(filters: PinataPinListFilterOptions): Promise<import("./commands/data").PinataPinListResponse>;
     getFilesByCount(filters: PinataPinListFilterOptions, maxCount?: number): {
         [Symbol.asyncIterator]: () => {
             next(): Promise<{
-                value: import("./commands/data/pinList/pinList").PinataPin;
+                value: import("./commands/data").PinataPin;
                 done: boolean;
             }>;
             return(): Promise<{
@@ -30,7 +30,9 @@ declare class PinataClient {
             }>;
         };
     };
-    testAuthentication(): Promise<import("./commands/data/testAuthentication").PinataTestAuthenticationResponse>;
+    testAuthentication(): Promise<import("./commands/data").PinataTestAuthenticationResponse>;
     userPinnedDataTotal(): Promise<number>;
 }
+export * from "./commands/data";
+export * from "./commands/pinning";
 export default PinataClient;
