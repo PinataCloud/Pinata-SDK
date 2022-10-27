@@ -24,7 +24,7 @@ test('200 status is returned', () => {
         status: 200,
         data: 'testData'
     };
-    axios.delete.mockResolvedValue(goodStatus);
+    (axios.delete as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).resolves.toEqual(goodStatus.data);
 });
@@ -33,13 +33,13 @@ test('Result other than 200 status is returned', () => {
     const badStatus = {
         status: 700
     };
-    axios.delete.mockResolvedValue(badStatus);
+    (axios.delete as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
     expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).rejects.toEqual(Error(`unknown server response while removing pin from IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
-    axios.delete.mockRejectedValue('test error');
+    (axios.delete as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
     expect(unpin({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHashToUnpin)).rejects.toEqual('test error');
 });

@@ -13,7 +13,7 @@ function validateAndReturnDate(dateToValidate: any): any {
     }
 }
 
-export default function queryBuilder(baseUrl: string, filters: any): string {
+export default function queryBuilder(baseUrl: string, filters?: any): string {
     if (!baseUrl) {
         throw new Error('no baseUrl provided');
     }

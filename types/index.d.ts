@@ -33,6 +33,6 @@ declare class PinataClient {
     testAuthentication(): Promise<import("./commands/data").PinataTestAuthenticationResponse>;
     userPinnedDataTotal(): Promise<number>;
 }
-export * from "./commands/data";
-export * from "./commands/pinning";
+export * from './commands/data';
+export * from './commands/pinning';
 export default PinataClient;

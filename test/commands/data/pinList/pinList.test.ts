@@ -1,5 +1,5 @@
 import axios from 'axios';
-import pinList from './../../../../src/commands/data/pinList/pinList';
+import pinList from '../../../../src/commands/data/pinList/pinList';
 import {
     pinListAxiosMockPages,
     fakeHeaders
@@ -13,7 +13,7 @@ describe('Pin List by page', () => {
     });
 
     test('Call two pages in a row', async () => {
-        axios.get
+        (axios.get as jest.Mock)
             .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response);
 
@@ -49,7 +49,7 @@ describe('Pin List by page', () => {
     });
 
     test('Call empty page', async () => {
-        axios.get.mockResolvedValueOnce(
+        (axios.get as jest.Mock).mockResolvedValueOnce(
             pinListAxiosMockPages.firstPageEmpty.response
         );
 
@@ -75,7 +75,7 @@ describe('Pin List by page', () => {
         const badStatus = {
             status: 700
         };
-        axios.get.mockResolvedValue(badStatus);
+        (axios.get as jest.Mock).mockResolvedValue(badStatus);
         expect.assertions(1);
         expect(pinList({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).rejects.toEqual(
             Error(
@@ -89,13 +89,13 @@ describe('Pin List by page', () => {
             status: 200,
             data: 'testData'
         };
-        axios.get.mockResolvedValue(goodStatus);
+        (axios.get as jest.Mock).mockResolvedValue(goodStatus);
         expect.assertions(1);
         expect(pinList({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).resolves.toEqual(goodStatus.data);
     });
 
     test('Rejection handled', () => {
-        axios.get.mockRejectedValue('test error');
+        (axios.get as jest.Mock).mockRejectedValue('test error');
         expect.assertions(1);
         expect(pinList({ pinataApiKey: 'test', pinataSecretApiKey: 'test' })).rejects.toEqual('test error');
     });

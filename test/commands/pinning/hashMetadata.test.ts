@@ -44,7 +44,7 @@ test('One keyvalue pair is added', () => {
         status: 200,
         data: 'testData'
     };
-    axios.put.mockResolvedValue(goodStatus);
+    (axios.put as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).resolves.toEqual(goodStatus.data);
 });
@@ -54,7 +54,7 @@ test('Two keyvalue pairs is added', () => {
         status: 200,
         data: 'testData'
     };
-    axios.put.mockResolvedValue(goodStatus);
+    (axios.put as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadataTwo)).resolves.toEqual(goodStatus.data);
 });
@@ -63,13 +63,13 @@ test('Result other than 200 status is returned', () => {
     const badStatus = {
         status: 700
     };
-    axios.put.mockResolvedValue(badStatus);
+    (axios.put as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
     expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
-    axios.put.mockRejectedValue('test error');
+    (axios.put as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
     expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual('test error');
 });

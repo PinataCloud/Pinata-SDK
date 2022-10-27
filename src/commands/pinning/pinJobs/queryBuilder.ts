@@ -1,6 +1,6 @@
 import isIPFS from 'is-ipfs';
 
-export default function queryBuilder(baseUrl: string, filters: any): string {
+export default function queryBuilder(baseUrl: string, filters?: any): string {
     if (!baseUrl) {
         throw new Error('no baseUrl provided');
     }

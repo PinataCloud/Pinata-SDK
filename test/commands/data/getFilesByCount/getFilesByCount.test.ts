@@ -5,14 +5,15 @@ import {
     pinListAxiosMockPages,
     fakeHeaders
 } from '../pinlist-sample-api';
+import { PinataConfig, PinataPin, PinataPinListFilterOptions } from '../../../../src';
 
 jest.mock('axios');
 
 const metadataName = (item) => {
     return item.metadata.name;
 };
-const callIterableObject = async (config, filterToApply, pinsCount) => {
-    const pins = [];
+const callIterableObject = async (config: PinataConfig, filterToApply: PinataPinListFilterOptions, pinsCount?: number) => {
+    const pins: PinataPin[] = [];
     for await (const item of getFilesByCount(
         config,
         filterToApply,
@@ -40,7 +41,7 @@ describe('Get Files By Count', () => {
     test('Request 17 pins, pins available', async () => {
         const pinsToRequest = 17;
 
-        axios.get
+        (axios.get as jest.Mock)
             .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response);
 
@@ -71,7 +72,7 @@ describe('Get Files By Count', () => {
     test('Request 6 pins, pins available', async () => {
         const pinsToRequest = 6;
 
-        axios.get.mockResolvedValueOnce(
+        (axios.get as jest.Mock).mockResolvedValueOnce(
             pinListAxiosMockPages.firstPage.response
         );
         const pins = await callIterableObject(
@@ -95,7 +96,7 @@ describe('Get Files By Count', () => {
     test('Request 25 pins, pins not available', async () => {
         const pinsToRequest = 25;
 
-        axios.get
+        (axios.get as jest.Mock)
             .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response)
             .mockResolvedValueOnce(
@@ -134,7 +135,7 @@ describe('Get Files By Count', () => {
     test('Request 3 pins, pins not available', async () => {
         const pinsToRequest = 3;
 
-        axios.get.mockResolvedValueOnce(
+        (axios.get as jest.Mock).mockResolvedValueOnce(
             pinListAxiosMockPages.firstPageEmpty.response
         );
         const pins = await callIterableObject(
@@ -156,7 +157,7 @@ describe('Get Files By Count', () => {
     });
 
     test('Request all pins, pins available', async () => {
-        axios.get
+        (axios.get as jest.Mock)
             .mockResolvedValueOnce(pinListAxiosMockPages.firstPage.response)
             .mockResolvedValueOnce(pinListAxiosMockPages.secondPage.response)
             .mockResolvedValueOnce(
@@ -189,7 +190,7 @@ describe('Get Files By Count', () => {
     });
 
     test('Request all pins, pins not available', async () => {
-        axios.get.mockResolvedValueOnce(
+        (axios.get as jest.Mock).mockResolvedValueOnce(
             pinListAxiosMockPages.firstPageEmpty.response
         );
         const pins = await callIterableObject(

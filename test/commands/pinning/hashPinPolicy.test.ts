@@ -42,7 +42,7 @@ test('200 status is returned', () => {
         status: 200,
         data: 'testData'
     };
-    axios.put.mockResolvedValue(goodStatus);
+    (axios.put as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).resolves.toEqual(goodStatus.data);
 });
@@ -51,13 +51,13 @@ test('Result other than 200 status is returned', () => {
     const badStatus = {
         status: 700
     };
-    axios.put.mockResolvedValue(badStatus);
+    (axios.put as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
     expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
-    axios.put.mockRejectedValue('test error');
+    (axios.put as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
     expect(hashPinPolicy({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, newPinPolicy)).rejects.toEqual('test error');
 });

@@ -21,7 +21,7 @@ test('200 status is returned with valid stream', () => {
         status: 200,
         data: 'testData'
     };
-    axios.post.mockResolvedValue(goodStatus);
+    (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).resolves.toEqual(goodStatus.data);
 });
@@ -31,7 +31,7 @@ test('200 status is returned with valid form data', () => {
         status: 200,
         data: 'testData'
     };
-    axios.post.mockResolvedValue(goodStatus);
+    (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validFormData)).resolves.toEqual(goodStatus.data);
 });
@@ -40,13 +40,13 @@ test('Result other than 200 status is returned', () => {
     const badStatus = {
         status: 700
     };
-    axios.post.mockResolvedValue(badStatus);
+    (axios.post as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
     expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).rejects.toEqual(Error(`unknown server response while pinning File to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
-    axios.post.mockRejectedValue('test error');
+    (axios.post as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
     expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).rejects.toEqual('test error');
 });

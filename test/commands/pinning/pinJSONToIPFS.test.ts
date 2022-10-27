@@ -20,7 +20,7 @@ test('200 status is returned', () => {
         status: 200,
         data: 'testData'
     };
-    axios.post.mockResolvedValue(goodStatus);
+    (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
     expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).resolves.toEqual(goodStatus.data);
 });
@@ -29,13 +29,13 @@ test('Result other than 200 status is returned', () => {
     const badStatus = {
         status: 700
     };
-    axios.post.mockResolvedValue(badStatus);
+    (axios.post as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
     expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).rejects.toEqual(Error(`unknown server response while pinning JSON to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
-    axios.post.mockRejectedValue('test error');
+    (axios.post as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
     expect(pinJSONToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodJSON)).rejects.toEqual('test error');
 });
