@@ -4,7 +4,7 @@ import NodeFormData from 'form-data';
 import stream from 'stream';
 import {createConfigForAxiosHeadersWithFormData, validateMetadata, validatePinataOptions} from '../../util/validators';
 import { handleError } from '../../util/errorResponse';
-import { PinataConfig } from '../..';
+import { PinataConfig, PinataMetadata } from '../..';
 
 export interface PinataPinPolicyItem {
     id: string;
@@ -25,7 +25,7 @@ export interface PinataPinResponse {
     Timestamp: string;
 }
 export interface PinataPinOptions {
-    pinataMetadata?: { [key: string]: string | number | null },
+    pinataMetadata?: PinataMetadata,
     pinataOptions?: PinataOptions | undefined;
 }
 

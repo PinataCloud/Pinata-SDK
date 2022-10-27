@@ -11,7 +11,7 @@ export interface PinataMetadataFilter {
     name?: string | undefined;
     keyvalues: {
         [key: string]: {
-            value: string;
+            value: string | number | null;
             op: string;
         };
     };
