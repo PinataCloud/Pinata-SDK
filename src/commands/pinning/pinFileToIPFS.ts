@@ -28,14 +28,7 @@ export interface PinataPinOptions {
     pinataMetadata?: { [key: string]: string | number | null },
     pinataOptions?: PinataOptions | undefined;
 }
-/**
- * Pin File to IPFS
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} readStream
- * @param {*} options
- * @returns {Promise<unknown>}
- */
+
 export default function pinFileToIPFS(config: PinataConfig, readStream: any, options?: PinataPinOptions):Promise<PinataPinResponse> {
     return new Promise((resolve, reject) => {
 
