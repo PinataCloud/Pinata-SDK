@@ -16,7 +16,7 @@ module.exports = (env) => {
     }
     return {
         mode: mode,
-        entry: ['babel-polyfill', __dirname + '/src/index.js'],
+        entry: ['babel-polyfill', __dirname + '/src/index.ts'],
         devtool: 'inline-source-map',
         output: {
             path: __dirname + '/lib',
@@ -29,15 +29,16 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
-                    test: /(\.jsx|\.js)$/,
+                    test: /\.ts?$/,
                     loader: 'babel-loader',
                     exclude: /(node_modules|bower_components)/
-                },
-                {
-                    test: /(\.jsx|\.js)$/,
-                    loader: 'eslint-loader',
-                    exclude: /node_modules/
-                }
+             },
+                // {
+                //     test: /\.ts?$/,
+                //     loader: 'eslint-loader',
+                //     exclude: /node_modules/,
+                      
+                // }
             ]
         },
         target: 'node',
@@ -51,7 +52,7 @@ module.exports = (env) => {
         ],
         resolve: {
             modules: [path.resolve('./node_modules'), path.resolve('./src')],
-            extensions: ['.json', '.js']
+            extensions: ['.json', '.js', '.ts']
         }
     };
 };

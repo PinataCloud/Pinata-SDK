@@ -1,77 +1,86 @@
 {
-  "name": "@pinata/sdk",
-  "version": "1.2.1",
-  "description": "Official SDK for the Pinata IPFS platform",
-  "main": "lib/pinata-sdk.js",
-  "types": "types/index.d.ts",
-  "scripts": {
-    "prepare": "husky install",
-    "build": "npm run build-dev && npm run build-prod && npm run test && tsc",
-    "build-dev": "webpack --env dev",
-    "build-prod": "webpack --env build",
-    "coverage": "jest --coverage",
-    "dev": "webpack --progress --colors --watch --env dev",
-    "html": "open coverage/index.html",
-    "lint": "eslint src --quiet ",
-    "lint:fix": "eslint src test *.js --fix",
-    "test": "./node_modules/.bin/jest --env=node",
-    "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PinataCloud/Pinata-SDK.git"
-  },
-  "keywords": [
-    "webpack",
-    "es6",
-    "starter",
-    "library",
-    "universal",
-    "umd",
-    "commonjs"
-  ],
-  "author": "Matt Ober",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
-  },
-  "homepage": "https://github.com/PinataCloud/Pinata-SDK",
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-transform-runtime": "^7.19.1",
-    "@babel/preset-env": "^7.19.4",
-    "@babel/register": "^7.8.3",
-    "@types/node": "^15.6.1",
-    "acorn": "^7.1.0",
-    "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-add-module-exports": "^1.0.2",
-    "babel-polyfill": "^6.26.0",
-    "eslint": "^6.8.0",
-    "eslint-loader": "^3.0.3",
-    "husky": "^8.0.0",
-    "jest": "^25.1.0",
-    "typescript": "^4.2.3",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "base-path-converter": "^1.0.2",
-    "form-data": "^2.3.3",
-    "is-ipfs": "^0.6.0",
-    "recursive-fs": "^1.1.2"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "coverageReporters": [
-      "text",
-      "html"
+    "name": "@pinata/sdk",
+    "version": "2.0.0-beta.0",
+    "description": "Official SDK for the Pinata IPFS platform",
+    "main": "lib/pinata-sdk.js",
+    "types": "types/index.d.ts",
+    "scripts": {
+        "prepare": "husky install",
+        "build": "npm run build-dev && npm run build-prod && npm run test && tsc",
+        "build-dev": "webpack --env dev",
+        "build-prod": "webpack --env build",
+        "coverage": "jest --coverage",
+        "dev": "webpack --progress --colors --watch --env dev",
+        "html": "open coverage/index.html",
+        "lint": "eslint src --quiet ",
+        "lint:fix": "eslint src test --fix",
+        "test": "./node_modules/.bin/jest --env=node",
+        "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PinataCloud/Pinata-SDK.git"
+    },
+    "keywords": [
+        "webpack",
+        "es6",
+        "starter",
+        "library",
+        "universal",
+        "umd",
+        "commonjs"
     ],
-    "moduleFileExtensions": [
-      "js"
-    ]
-  }
+    "author": "Matt Ober",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
+    },
+    "homepage": "https://github.com/PinataCloud/Pinata-SDK",
+    "devDependencies": {
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.8.4",
+        "@babel/plugin-transform-runtime": "^7.19.1",
+        "@babel/preset-env": "^7.19.4",
+        "@babel/preset-typescript": "^7.18.6",
+        "@babel/register": "^7.8.3",
+        "@types/jest": "^29.2.0",
+        "@types/node": "^15.6.1",
+        "@typescript-eslint/eslint-plugin": "^5.41.0",
+        "@typescript-eslint/parser": "^5.41.0",
+        "acorn": "^7.1.0",
+        "babel-eslint": "^10.0.3",
+        "babel-loader": "^8.0.6",
+        "babel-plugin-add-module-exports": "^1.0.2",
+        "babel-polyfill": "^6.26.0",
+        "eslint": "^8.26.0",
+        "eslint-loader": "^3.0.3",
+        "husky": "^8.0.0",
+        "jest": "^25.1.0",
+        "source-map-loader": "^4.0.1",
+        "typescript": "^4.8.4",
+        "uglifyjs-webpack-plugin": "^2.2.0",
+        "webpack": "^4.41.6",
+        "webpack-cli": "^3.3.11"
+    },
+    "dependencies": {
+        "axios": "^0.21.1",
+        "base-path-converter": "^1.0.2",
+        "form-data": "^2.3.3",
+        "is-ipfs": "^0.6.0",
+        "recursive-fs": "^1.1.2"
+    },
+    "jest": {
+        "collectCoverage": true,
+        "coverageReporters": [
+            "text",
+            "html"
+        ],
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json"
+        ]
+    }
 }
