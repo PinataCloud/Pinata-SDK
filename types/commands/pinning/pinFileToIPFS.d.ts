@@ -1,4 +1,4 @@
-import { PinataConfig } from '../..';
+import { PinataConfig, PinataMetadata } from '../..';
 export interface PinataPinPolicyItem {
     id: string;
     desiredReplicationCount: number;
@@ -17,17 +17,7 @@ export interface PinataPinResponse {
     Timestamp: string;
 }
 export interface PinataPinOptions {
-    pinataMetadata?: {
-        [key: string]: string | number | null;
-    };
+    pinataMetadata?: PinataMetadata;
     pinataOptions?: PinataOptions | undefined;
 }
-/**
- * Pin File to IPFS
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} readStream
- * @param {*} options
- * @returns {Promise<unknown>}
- */
 export default function pinFileToIPFS(config: PinataConfig, readStream: any, options?: PinataPinOptions): Promise<PinataPinResponse>;
