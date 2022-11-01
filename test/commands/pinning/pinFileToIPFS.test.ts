@@ -23,7 +23,7 @@ test('200 status is returned with valid stream', () => {
     };
     (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).resolves.toEqual(goodStatus.data);
+    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream, {pinataMetadata: { name: 'text.txt'}})).resolves.toEqual(goodStatus.data);
 });
 
 test('200 status is returned with valid form data', () => {
@@ -33,7 +33,7 @@ test('200 status is returned with valid form data', () => {
     };
     (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validFormData)).resolves.toEqual(goodStatus.data);
+    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validFormData, {pinataMetadata: { name: 'text.txt'}})).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -42,12 +42,12 @@ test('Result other than 200 status is returned', () => {
     };
     (axios.post as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).rejects.toEqual(Error(`unknown server response while pinning File to IPFS: ${badStatus}`));
+    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream, {pinataMetadata: { name: 'text.txt'}})).rejects.toEqual(Error(`unknown server response while pinning File to IPFS: ${badStatus}`));
 });
 
 test('Rejection handled', () => {
     (axios.post as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream)).rejects.toEqual('test error');
+    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream, {pinataMetadata: { name: 'text.txt'}})).rejects.toEqual('test error');
 });
 
