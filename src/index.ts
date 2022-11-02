@@ -114,7 +114,10 @@ class PinataClient {
     }
 }
 
+module.exports = PinataClient;
+
 export * from './commands/data';
 export * from './commands/pinning';
 
 export default PinataClient;
+
