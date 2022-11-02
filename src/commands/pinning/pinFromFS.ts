@@ -1,95 +1,50 @@
-import axios from 'axios';
-import { baseUrl } from '../../constants';
+
 import NodeFormData from 'form-data';
-import {createConfigForAxiosHeadersWithFormData, validateMetadata, validatePinataOptions} from '../../util/validators';
+
 import basePathConverter from 'base-path-converter';
-import { handleError } from '../../util/errorResponse';
 import { PinataConfig } from '../..';
-import { PinataPinOptions, PinataPinResponse } from './pinFileToIPFS';
-import * as fs from 'fs';
-import * as recursive from 'recursive-fs';
+import {
+    PinataPinOptions,
+    PinataPinResponse,
+    uploadToIPFS
+} from './pinFileToIPFS';
+import fs from 'fs';
 
-export default function pinFromFS(config: PinataConfig, sourcePath: string, options?: PinataPinOptions): Promise<PinataPinResponse> {
+import path from 'path';
 
-    return new Promise((resolve, reject) => {
-        const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
+export default async function pinFromFS(
+    config: PinataConfig,
+    sourcePath: string,
+    options?: PinataPinOptions
+): Promise<PinataPinResponse> {
+    try {
+        const stats = await fs.promises.stat(sourcePath);
+        if (stats.isFile()) {
 
-        // eslint-disable-next-line consistent-return
-        fs.stat(sourcePath, (err: any, stats: any) => {
-            if (err) {
-                return reject(err);
-            }
-            if (stats.isFile()) {
-                //we need to create a single read stream instead of reading the directory recursively
-                const data = new NodeFormData();
+            const stream = fs.createReadStream(sourcePath);
+            const data = new NodeFormData();
 
-                data.append('file', fs.createReadStream(sourcePath));
+            data.append('file', stream, {
+                filename: path.basename(sourcePath)
+            });
 
-                if (options) {
-                    if (options.pinataMetadata) {
-                        validateMetadata(options.pinataMetadata);
-                        data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
-                    }
-                    if (options.pinataOptions) {
-                        validatePinataOptions(options.pinataOptions);
-                        data.append('pinataOptions', JSON.stringify(options.pinataOptions));
-                    }
-                }
+            return uploadToIPFS(config, data, options);
+        }
+            const files = await fs.promises.readdir(sourcePath);
+            const data = new NodeFormData();
 
-                axios.post(
-                    endpoint,
-                    data,
-                    createConfigForAxiosHeadersWithFormData(config, data.getBoundary()))
-                .then(function (result) {
-                    if (result.status !== 200) {
-                        reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
-                    }
-                    resolve(result.data);
-                }).catch(function (error) {
-                    const formattedError = handleError(error);
-                    reject(formattedError);
+            files.forEach((file: string) => {
+                //for each file stream, we need to include the correct relative file path
+                data.append('file', fs.createReadStream(file), {
+                    filepath: basePathConverter(sourcePath, file)
                 });
-            } else {
-                recursive.readdirr(sourcePath, function (err: any, dirs: any, files: any) {
-                    if (err) {
-                        reject(new Error(err));
-                    }
+            });
 
-                    const data = new NodeFormData();
+            return uploadToIPFS(config, data, options);
 
-                    files.forEach((file: any) => {
-                        //for each file stream, we need to include the correct relative file path
-                        data.append('file', fs.createReadStream(file), {
-                            filepath: basePathConverter(sourcePath, file)
-                        });
-                    });
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
 
-                    if (options) {
-                        if (options.pinataMetadata) {
-                            validateMetadata(options.pinataMetadata);
-                            data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
-                        }
-                        if (options.pinataOptions) {
-                            validatePinataOptions(options.pinataOptions);
-                            data.append('pinataOptions', JSON.stringify(options.pinataOptions));
-                        }
-                    }
-
-                    axios.post(
-                        endpoint,
-                        data,
-                        createConfigForAxiosHeadersWithFormData(config, data.getBoundary()))
-                    .then(function (result) {
-                        if (result.status !== 200) {
-                            reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
-                        }
-                        resolve(result.data);
-                    }).catch(function (error) {
-                        const formattedError = handleError(error);
-                        reject(formattedError);
-                    });
-                });
-            }
-        });
-    });
 }

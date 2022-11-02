@@ -2,6 +2,15 @@ import isIPFS from 'is-ipfs';
 import { PinataConfig } from '..';
 import { ERROR_NO_CREDENTIALS_PROVIDED} from '../constants';
 
+export interface axiosHeaders
+    { maxContentLength: number;
+        maxBodyLength: number;
+        headers: {
+            [key: string]: any
+        };
+        withCredentials?: boolean;
+    }
+
 export function validateApiKeys(pinataApiKey?: string, pinataSecretApiKey?: string) {
     if (!pinataApiKey || pinataApiKey === '') {
         throw new Error(
@@ -41,15 +50,13 @@ export function createConfigForAxiosHeaders(config: PinataConfig) {
 }
 
 export function createConfigForAxiosHeadersWithFormData(config: PinataConfig, boundaryValue: string) {
-    const requestOptions = {
+    const requestOptions: axiosHeaders = {
         ...createConfigForAxiosHeaders(config),
         maxContentLength: Infinity, //this is needed to prevent axios from erroring out with large files
-        maxBodyLength: Infinity,
-        headers: {
-            'Content-type': `multipart/form-data; boundary= ${boundaryValue}`
-        }
+        maxBodyLength: Infinity
     };
 
+    requestOptions.headers['Content-type'] = `multipart/form-data; boundary=${boundaryValue}`;
     return requestOptions;
 }
 
