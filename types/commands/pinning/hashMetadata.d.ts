@@ -1,9 +1,3 @@
-/**
- * Hash Meta Data
- * @param {string} pinataApiKey
- * @param {string} pinataSecretApiKey
- * @param {*} ipfsPinHash
- * @param {*} metadata
- * @returns {Promise<unknown>}
- */
-export default function hashMetadata(config: any, ipfsPinHash: any, metadata: any): Promise<unknown>;
+import { PinataConfig } from '../..';
+import { PinataMetadata } from '../data/pinList/pinList';
+export default function hashMetadata(config: PinataConfig, ipfsPinHash: string, metadata: PinataMetadata): Promise<any>;

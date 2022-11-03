@@ -20,20 +20,20 @@ In the example below we provided with 3 ways to call the pinata SDK.
 ```javascript
 // Use the api keys by providing the strings directly 
 const pinataSDK = require('@pinata/sdk');
-const pinata = pinataSDK('yourPinataApiKey', 'yourPinataSecretApiKey');
+const pinata = new pinataSDK('yourPinataApiKey', 'yourPinataSecretApiKey');
 ```
 
 ```javascript
 // Use the api keys by specifying your api key and api secret
 const pinataSDK = require('@pinata/sdk');
-const pinata = pinataSDK({ pinataApiKey: 'yourPinataApiKey', pinataSecretApiKey: 'yourPinataSecretApiKey' });
+const pinata = new pinataSDK({ pinataApiKey: 'yourPinataApiKey', pinataSecretApiKey: 'yourPinataSecretApiKey' });
 
 ```
 
 ```javascript
 // Use the JWT key
 const pinataSDK = require('@pinata/sdk');
-const pinata = pinataSDK({ pinataJWTKey: 'yourPinataJWTKey'});
+const pinata = new pinataSDK({ pinataJWTKey: 'yourPinataJWTKey'});
 ```
 
 Quickly test that you can connect to the API with the following call:

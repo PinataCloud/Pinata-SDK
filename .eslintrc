@@ -1,9 +1,13 @@
 {
-
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "root": true,
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
 
   "globals": {
@@ -16,14 +20,10 @@
     "before": true,
     "it": true,
     "expect": true,
-    "sinon": true
+    "sinon": true    
   },
 
-  "parser": "babel-eslint",
 
-  "plugins": [
-    
-  ],
 
   "rules": {
     "block-scoped-var": 2,
