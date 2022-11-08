@@ -1,3 +1,4 @@
+import './require-babel-polyfill';
 import pinByHash, {
     PinataPinByHashPinOptions
 } from './commands/pinning/pinByHash';

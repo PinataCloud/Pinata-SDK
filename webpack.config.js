@@ -16,7 +16,7 @@ module.exports = (env) => {
     }
     return {
         mode: mode,
-        entry: ['babel-polyfill', __dirname + '/src/index.ts'],
+        entry: [ __dirname + '/src/index.ts'],
         devtool: 'inline-source-map',
         output: {
             path: __dirname + '/lib',

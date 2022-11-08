@@ -1,3 +1,4 @@
+import './require-babel-polyfill';
 import { PinataPinByHashPinOptions } from './commands/pinning/pinByHash';
 import { PinataPinOptions } from './commands/pinning/pinFileToIPFS';
 import { PinataPinJobsFilterOptions } from './commands/pinning/pinJobs/pinJobs';
