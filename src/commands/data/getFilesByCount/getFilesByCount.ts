@@ -14,8 +14,8 @@ export default function getFilesByCount(
     const asyncIterable = {
         [Symbol.asyncIterator]: () => {
             let i = 0;
-            const pageLimit = 10;
-            let pageOffset = 0;
+            const pageLimit = filters.pageLimit ?? 10;
+            let pageOffset = filters.pageOffset ?? 0;
             let cache: PinataPin[] = [];
             let keepLooping = false;
 
