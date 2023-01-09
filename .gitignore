@@ -1,3 +1,7 @@
+# Test sdk on real data
+auto-test/
+
+upload.sh
 # Logs
 logs
 *.log

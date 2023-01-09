@@ -1,8 +1,9 @@
-import './require-babel-polyfill';
-import { PinataPinByHashPinOptions } from './commands/pinning/pinByHash';
-import { PinataPinOptions } from './commands/pinning/pinFileToIPFS';
-import { PinataPinJobsFilterOptions } from './commands/pinning/pinJobs/pinJobs';
-import { PinataMetadata, PinataPinListFilterOptions } from './commands/data/pinList/pinList';
+import "./require-babel-polyfill";
+import { PinataPinByHashPinOptions } from "./commands/pinning/pinByHash";
+import { PinataPinOptions } from "./commands/pinning/pinFileToIPFS";
+import { PinataPinJobsFilterOptions } from "./commands/pinning/pinJobs/pinJobs";
+import { PinataMetadata, PinataPinListFilterOptions } from "./commands/data/pinList/pinList";
+import SubmarineWidget from "./react-components/submarine-video";
 export interface PinataConfig {
     pinataApiKey?: string;
     pinataSecretApiKey?: string;
@@ -11,6 +12,7 @@ export interface PinataConfig {
 declare class PinataClient {
     config: PinataConfig;
     constructor(pinataApiKey?: string | PinataConfig, pinataSecretApiKey?: string);
+    static SubmarineWidget: typeof SubmarineWidget;
     pinByHash(hashToPin: string, options?: PinataPinByHashPinOptions): Promise<any>;
     hashMetadata(ipfsPinHash: string, metadata: PinataMetadata): Promise<any>;
     pinFileToIPFS(readableStream: any, options?: PinataPinOptions): Promise<import("./commands/pinning").PinataPinResponse>;
@@ -33,7 +35,8 @@ declare class PinataClient {
     };
     testAuthentication(): Promise<import("./commands/data").PinataTestAuthenticationResponse>;
     userPinnedDataTotal(): Promise<number>;
+    renderPlayer(optionToRender: any): void;
 }
-export * from './commands/data';
-export * from './commands/pinning';
+export * from "./commands/data";
+export * from "./commands/pinning";
 export default PinataClient;

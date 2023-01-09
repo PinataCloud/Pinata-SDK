@@ -1,7 +1,8 @@
 {
   "include": [
-    "src/**/*.ts",   "src/**/*.js"],
+    "src/**/*.ts",   "src/**/*.js", "src/index.tsx",],
   "compilerOptions": {
+    "jsx": "react",
     "declaration": true,
     "emitDeclarationOnly": true,
     "sourceMap": true,
@@ -18,6 +19,8 @@
     "node_modules",
     "lib",
     "test",
-    "coverage"
+    "coverage",
+    "auto-test",
+    ".husky"
   ]
 }

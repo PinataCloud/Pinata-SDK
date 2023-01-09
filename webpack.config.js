@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const libraryName = 'pinata-sdk';
 
 module.exports = (env) => {
@@ -16,20 +16,20 @@ module.exports = (env) => {
     }
     return {
         mode: mode,
-        entry: [ __dirname + '/src/index.ts'],
+        entry: [ __dirname + '/src/index.tsx'],
         devtool: 'inline-source-map',
         output: {
             path: __dirname + '/lib',
             filename: outputFile,
-            library: libraryName,
+            library: 'PinataSDK',
             libraryTarget: 'umd',
             umdNamedDefine: true,
-            globalObject: "typeof self !== 'undefined' ? self : this"
+            globalObject: 'this'
         },
         module: {
             rules: [
                 {
-                    test: /\.ts?$/,
+                    test: /\.(js|jsx|ts|tsx)$/,
                     loader: 'babel-loader',
                     exclude: /(node_modules|bower_components)/
              },
@@ -37,22 +37,27 @@ module.exports = (env) => {
                 //     test: /\.ts?$/,
                 //     loader: 'eslint-loader',
                 //     exclude: /node_modules/,
-                      
                 // }
             ]
         },
-        target: 'node',
+       // target: 'node',
         node: {
+            fs: 'empty',
             process: false
         },
         plugins: [
+            
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-            })
+            }),
+            new webpack.ProvidePlugin({
+                process: 'process/browser'
+              }),
+              new BundleAnalyzerPlugin({analyzerMode: 'static'}),
         ],
         resolve: {
             modules: [path.resolve('./node_modules'), path.resolve('./src')],
-            extensions: ['.json', '.js', '.ts']
+            extensions: [ '.js', '.ts', '.tsx']
         }
     };
 };

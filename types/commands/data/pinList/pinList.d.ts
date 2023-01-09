@@ -26,7 +26,7 @@ export interface PinataPin {
     metadata: PinataMetadata;
     regions: PinataPinRegion[];
 }
-export declare type PinataPinListFilterOptions = {
+export type PinataPinListFilterOptions = {
     hashContains?: string | undefined;
     pinStart?: string | undefined;
     pinEnd?: string | undefined;
