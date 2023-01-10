@@ -6,7 +6,7 @@
     "types": "types/index.d.ts",
     "scripts": {
         "prepare": "husky install",
-        "build": "npm run build-dev && npm run build-prod && npm run test && tsc",
+        "build": "npm run build-dev && npm run build-prod && npm run test",
         "build-dev": "webpack --env dev",
         "build-prod": "webpack --env build",
         "coverage": "jest --coverage",
@@ -36,9 +36,6 @@
         "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
     },
     "homepage": "https://github.com/PinataCloud/Pinata-SDK",
-    "resolutions": {
-        "acorn": "npm:acorn-with-stage3"
-    },
     "devDependencies": {
         "@babel/cli": "^7.8.4",
         "@babel/core": "^7.8.4",
@@ -66,12 +63,13 @@
         "source-map-loader": "^4.0.1",
         "typescript": "^4.8.4",
         "uglifyjs-webpack-plugin": "^2.2.0",
-        "webpack": "^4.46.0",
+        "webpack": "^5.75.0",
         "webpack-bundle-analyzer": "^4.7.0",
-        "webpack-cli": "^3.3.11"
+        "webpack-cli": "^5.0.1"
     },
     "dependencies": {
         "axios": "^0.21.1",
+        "ethers": "^5.7.2",
         "form-data": "^2.3.3",
         "is-ipfs": "^0.6.0",
         "path": "^0.12.7",
@@ -79,7 +77,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-player": "^2.11.0",
-        "wagmi": "^0.9.6"
+        "wagmi": "^0.10.7"
     },
     "jest": {
         "collectCoverage": true,

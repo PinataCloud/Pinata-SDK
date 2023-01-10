@@ -1,9 +1,9 @@
-import "./require-babel-polyfill";
-import { PinataPinByHashPinOptions } from "./commands/pinning/pinByHash";
-import { PinataPinOptions } from "./commands/pinning/pinFileToIPFS";
-import { PinataPinJobsFilterOptions } from "./commands/pinning/pinJobs/pinJobs";
-import { PinataMetadata, PinataPinListFilterOptions } from "./commands/data/pinList/pinList";
-import SubmarineWidget from "./react-components/submarine-video";
+import './require-babel-polyfill';
+import { PinataPinByHashPinOptions } from './commands/pinning/pinByHash';
+import { PinataPinOptions } from './commands/pinning/pinFileToIPFS';
+import { PinataPinJobsFilterOptions } from './commands/pinning/pinJobs/pinJobs';
+import { PinataMetadata, PinataPinListFilterOptions } from './commands/data/pinList/pinList';
+import SubmarineWidget from './react-components/submarine-video';
 export interface PinataConfig {
     pinataApiKey?: string;
     pinataSecretApiKey?: string;
@@ -37,6 +37,6 @@ declare class PinataClient {
     userPinnedDataTotal(): Promise<number>;
     renderPlayer(optionToRender: any): void;
 }
-export * from "./commands/data";
-export * from "./commands/pinning";
+export * from './commands/data';
+export * from './commands/pinning';
 export default PinataClient;

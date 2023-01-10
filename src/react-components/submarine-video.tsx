@@ -7,11 +7,15 @@ import { useAccount, useSignMessage } from 'wagmi';
 const submarineServiceURL = 'https://submarine-5wfv90xfh-pinata.vercel.app';
 
 export default function SubmarineWidget(options: any) {
+    let signMessageAsync: any;
+    let address: any;
     const [skeletonType, setSkeletonType] = useState('');
     const [urlToPlayVideo, setUrlToPlayVideo] = useState('');
-    const { address } = useAccount();
 
-    const { signMessageAsync } = useSignMessage();
+    if (options.type === 'etherum-wallet') {
+        signMessageAsync = useSignMessage().signMessageAsync;
+        address = useAccount().address;
+    }
 
     const [grantedAccessToLocation, setGrantedAccessToLocation] = useState<
         null | any
