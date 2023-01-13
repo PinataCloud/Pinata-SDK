@@ -37,6 +37,9 @@ module.exports = (env) => {
         // target: 'node',
     
         plugins: [
+            new webpack.optimize.LimitChunkCountPlugin({
+                maxChunks: 1,
+              }),
             
             new webpack.ProvidePlugin({
                 process: "process/browser",
