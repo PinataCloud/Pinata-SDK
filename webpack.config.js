@@ -5,7 +5,7 @@ const BundleAnalyzerPlugin =
 const libraryName = "pinata-sdk";
 
 module.exports = (env) => {
-    let outputFile =  libraryName + ".min.js";
+    let outputFile = libraryName + ".min.js";
 
     // }
     return {
@@ -35,12 +35,12 @@ module.exports = (env) => {
             ],
         },
         // target: 'node',
-    
+
         plugins: [
             new webpack.optimize.LimitChunkCountPlugin({
                 maxChunks: 1,
-              }),
-            
+            }),
+
             new webpack.ProvidePlugin({
                 process: "process/browser",
             }),
@@ -52,8 +52,8 @@ module.exports = (env) => {
             fallback: {
                 stream: false,
                 fs: false,
-                process: false
-            }
+                process: false,
+            },
         },
     };
 };

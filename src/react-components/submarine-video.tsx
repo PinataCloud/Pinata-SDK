@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
-import Skeleton from './skeleton';
+import PlaceholderMessage, { MESSAGES_TYPES } from './PlaceholderMessage';
 import { useAccount, useSignMessage } from 'wagmi';
 
 const submarineServiceURL = 'https://app.submarine.me';
@@ -9,7 +9,7 @@ const submarineServiceURL = 'https://app.submarine.me';
 export default function SubmarineWidget(options: any) {
     let signMessageAsync: any;
     let address: any;
-    const [skeletonType, setSkeletonType] = useState('');
+    const [placeholderType, setPlaceholderType] = useState(MESSAGES_TYPES.LOADING);
     const [urlToPlayVideo, setUrlToPlayVideo] = useState('');
 
     if (options.type === 'etherum-wallet') {
@@ -35,7 +35,7 @@ export default function SubmarineWidget(options: any) {
                 options;
 
             if (!contract || !blockchain || !network) {
-                setSkeletonType('wallet-missing-info');
+                setPlaceholderType(MESSAGES_TYPES.WALLET_MISSING_INFO);
                 return;
             }
             const messageToSign: any = await axios.get(
@@ -46,7 +46,7 @@ export default function SubmarineWidget(options: any) {
                 message: messageData
             }).catch((error) => {
                 console.log('error', error);
-                setSkeletonType('wallet-signature-error');
+                setPlaceholderType(MESSAGES_TYPES.WALLET_SIGNATURE_ERROR);
                 throw new Error('Signature error');
             });
             try {
@@ -71,7 +71,7 @@ export default function SubmarineWidget(options: any) {
                 );
                 return;
             } catch (err) {
-                setSkeletonType('wallet-incorrect-payload');
+                setPlaceholderType(MESSAGES_TYPES.WALLET_INVALID_OPTION);
             }
         };
         const fetchWalletFlow = async () => {
@@ -99,7 +99,7 @@ export default function SubmarineWidget(options: any) {
         };
 
         if (options.type === 'location' && navigator?.geolocation) {
-            setSkeletonType('location-access-needed');
+            setPlaceholderType(MESSAGES_TYPES.LOCATION_ACCESS_NEEDED);
             navigator.geolocation.getCurrentPosition(
                 (location) => {
                     if (location) {
@@ -111,7 +111,7 @@ export default function SubmarineWidget(options: any) {
                     }
                 },
                 () => {
-                    setSkeletonType('location-access-denied');
+                    setPlaceholderType(MESSAGES_TYPES.LOCATION_ACCESS_DENIED);
                 }
             );
         }
@@ -123,7 +123,8 @@ export default function SubmarineWidget(options: any) {
 
         // https://submarine-lpblan4s0-pinata.vercel.app/api/flow/verify
 
-        if (!options.type &&
+        if (
+            !options.type &&
             typeof options?.gatewayURL === 'string' &&
             typeof options?.cid === 'string'
         ) {
@@ -164,7 +165,7 @@ export default function SubmarineWidget(options: any) {
         };
 
         if (grantedAccessToLocation?.lat && grantedAccessToLocation?.long) {
-            setSkeletonType('');
+            setPlaceholderType('');
 
             try {
                 fetchLocation();
@@ -174,7 +175,7 @@ export default function SubmarineWidget(options: any) {
                         grantedAccessToLocation?.long
                 );
             } catch (error) {
-                setSkeletonType('error-content-outside-location');
+                setPlaceholderType(MESSAGES_TYPES.LOCATION_ERROR_OUT_OF_BOUNDARY);
             }
         }
 
@@ -184,7 +185,7 @@ export default function SubmarineWidget(options: any) {
     }, [grantedAccessToLocation]);
 
     if (
-        skeletonType !== 'error' &&
+        placeholderType.message === MESSAGES_TYPES.ERROR_GENERAL.message &&
         urlToPlayVideo?.length &&
         urlToPlayVideo.length > 0
     ) {
@@ -205,5 +206,5 @@ export default function SubmarineWidget(options: any) {
         );
     }
 
-    return <Skeleton type={skeletonType}></Skeleton>;
+    return <PlaceholderMessage placeholderContent={placeholderType}></PlaceholderMessage>;
 }
