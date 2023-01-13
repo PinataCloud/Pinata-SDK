@@ -4,7 +4,7 @@ import axios from 'axios';
 import Skeleton from './skeleton';
 import { useAccount, useSignMessage } from 'wagmi';
 
-const submarineServiceURL = 'https://submarine-5wfv90xfh-pinata.vercel.app';
+const submarineServiceURL = 'https://app.submarine.me';
 
 export default function SubmarineWidget(options: any) {
     let signMessageAsync: any;
@@ -44,7 +44,8 @@ export default function SubmarineWidget(options: any) {
             const messageData: string = messageToSign.data.message;
             const signature = await signMessageAsync({
                 message: messageData
-            }).catch(() => {
+            }).catch((error) => {
+                console.log('error', error);
                 setSkeletonType('wallet-signature-error');
                 throw new Error('Signature error');
             });
@@ -122,7 +123,7 @@ export default function SubmarineWidget(options: any) {
 
         // https://submarine-lpblan4s0-pinata.vercel.app/api/flow/verify
 
-        if (
+        if (!options.type &&
             typeof options?.gatewayURL === 'string' &&
             typeof options?.cid === 'string'
         ) {

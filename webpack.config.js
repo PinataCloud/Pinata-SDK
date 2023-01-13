@@ -5,23 +5,11 @@ const BundleAnalyzerPlugin =
 const libraryName = "pinata-sdk";
 
 module.exports = (env) => {
-    let outputFile, mode;
+    let outputFile =  libraryName + ".min.js";
 
-    console.log("env", env)
-
-    mode = "production";
-
-    outputFile = libraryName + ".min.js";
-    // if (env === "build") {
-    //     mode = "production";
-
-    //     outputFile = libraryName + ".min.js";
-    // } else {
-    //     mode = "development";
-    //     outputFile = libraryName + ".js";
     // }
     return {
-        mode: mode,
+        mode: "production",
         entry: [__dirname + "/src/index.tsx"],
         devtool: "inline-source-map",
         output: {
@@ -47,21 +35,16 @@ module.exports = (env) => {
             ],
         },
         // target: 'node',
-        node: {
-            // fs: false,
-            // process: false,
-        },
+    
         plugins: [
-            new webpack.DefinePlugin({
-                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-            }),
+            
             new webpack.ProvidePlugin({
                 process: "process/browser",
             }),
             new BundleAnalyzerPlugin({ analyzerMode: "static" }),
         ],
         resolve: {
-            modules: [path.resolve("./node_modules"), path.resolve("./src")],
+            modules: ["src", "node_modules"],
             extensions: [".js", ".ts", ".tsx"],
             fallback: {
                 stream: false,
