@@ -19,8 +19,6 @@ import pinList, {
 } from './commands/data/pinList/pinList';
 import getFilesByCount from './commands/data/getFilesByCount/getFilesByCount';
 import userPinnedDataTotal from './commands/data/userPinnedDataTotal';
-import renderWidget from './react-components/render';
-import SubmarineWidget from './react-components/submarine-video';
 
 // import { useAccount, useConnect, useSignMessage } from 'wagmi';
 
@@ -78,8 +76,6 @@ class PinataClient {
         this.config = sanitizeConfig(pinataApiKey, pinataSecretApiKey);
     }
 
-    static SubmarineWidget = SubmarineWidget;
-
     pinByHash(hashToPin: string, options?: PinataPinByHashPinOptions) {
         return pinByHash(this.config, hashToPin, options);
     }
@@ -118,10 +114,6 @@ class PinataClient {
     }
     userPinnedDataTotal() {
         return userPinnedDataTotal(this.config);
-    }
-
-    renderPlayer(optionToRender: any) {
-        renderWidget(optionToRender);
     }
 }
 module.exports = PinataClient;

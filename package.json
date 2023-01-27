@@ -60,9 +60,10 @@
         "eslint-loader": "^3.0.3",
         "husky": "^8.0.0",
         "jest": "^25.1.0",
+        "lerna": "^6.4.1",
         "source-map-loader": "^4.0.1",
+        "terser-webpack-plugin": "^5.3.6",
         "typescript": "^4.8.4",
-        "uglifyjs-webpack-plugin": "^2.2.0",
         "webpack": "^5.75.0",
         "webpack-bundle-analyzer": "^4.7.0",
         "webpack-cli": "^5.0.1"
@@ -77,6 +78,7 @@
         "form-data": "^2.3.3",
         "is-ipfs": "^0.6.0",
         "path": "^0.12.7",
+        "pino": "^8.8.0",
         "process": "^0.11.10",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -96,5 +98,8 @@
             "jsx",
             "json"
         ]
-    }
+    },
+    "workspaces": [
+        "packages/*"
+    ]
 }

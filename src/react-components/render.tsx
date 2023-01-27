@@ -1,10 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import SubmarineWidget from './submarine-video';
-import WalletProvider from './WalletProvider';
+// import SubmarineWidget from './submarine-video';
+import SubmarineWidget from './SubmarineWidget';
 
 export default function renderWidget(optionToRender: any) {
-    console.log('render widget');
     if (!document) {
         throw Error('impossible to render');
     }
@@ -15,13 +14,7 @@ export default function renderWidget(optionToRender: any) {
     }
 
     const root = createRoot(div);
-    if (optionToRender.type === 'etherum-wallet') {
-        root.render(
-            <WalletProvider>
-                <SubmarineWidget {...optionToRender} />
-            </WalletProvider>
-        );
-    } else {
-        root.render(<SubmarineWidget {...optionToRender} />);
-    }
+    root.render(<SubmarineWidget {...optionToRender} />);
 }
+
+module.exports = {renderWidget};
