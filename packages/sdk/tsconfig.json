@@ -1,0 +1,26 @@
+{
+  "include": [
+    "src/**/*.ts",   "src/**/*.js", "src/index.tsx",],
+  "compilerOptions": {
+    "jsx": "react",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": "types",
+    "target": "ES2018",
+    "module": "commonjs",
+    "lib": ["es2017", "es7", "es6", "dom"],
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "test",
+    "coverage",
+    "auto-test",
+    ".husky"
+  ]
+}

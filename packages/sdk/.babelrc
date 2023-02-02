@@ -1,0 +1,5 @@
+{
+  "presets": ["@babel/preset-typescript", "@babel/preset-react", ["@babel/env", { "modules": "commonjs" , "useBuiltIns": "usage"}]  ],
+  "plugins": ["add-module-exports", "@babel/plugin-transform-runtime"]
+}
+
