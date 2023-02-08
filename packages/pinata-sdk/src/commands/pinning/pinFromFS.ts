@@ -7,7 +7,6 @@ import {
     PinataPinResponse,
     uploadToIPFS
 } from './pinFileToIPFS';
-import fs from 'fs';
 
 import path from 'path';
 
@@ -26,6 +25,13 @@ export default async function pinFromFS(
     sourcePath: string,
     options?: PinataPinOptions
 ): Promise<PinataPinResponse> {
+    if (typeof document === 'undefined') {
+        throw new Error('Function cannot run on browser');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const fs = require('fs');
+
     try {
         const stats = await fs.promises.stat(sourcePath);
         if (stats.isFile()) {

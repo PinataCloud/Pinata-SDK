@@ -6,7 +6,7 @@ import hashMetadata from './commands/pinning/hashMetadata';
 import pinFileToIPFS, {
     PinataPinOptions
 } from './commands/pinning/pinFileToIPFS';
-import pinFromFS from './commands/pinning/pinFromFS';
+// import pinFromFS from './commands/pinning/pinFromFS';
 import pinJSONToIPFS from './commands/pinning/pinJSONToIPFS';
 import pinJobs, {
     PinataPinJobsFilterOptions
@@ -88,9 +88,9 @@ class PinataClient {
         return pinFileToIPFS(this.config, readableStream, options);
     }
 
-    pinFromFS(sourcePath: string, options?: PinataPinOptions) {
-        return pinFromFS(this.config, sourcePath, options);
-    }
+    // pinFromFS(sourcePath: string, options?: PinataPinOptions) {
+    //     return pinFromFS(this.config, sourcePath, options);
+    // }
     pinJSONToIPFS(body: any, options?: PinataPinOptions) {
         return pinJSONToIPFS(this.config, body, options);
     }
