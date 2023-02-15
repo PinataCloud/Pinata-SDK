@@ -7,7 +7,12 @@ import Wallet from "./UnlockFrame/Wallet";
 import WalletProvider from "./WalletProvider";
 // import LoggerService from "../Logger";
 
+export interface SubmarineWidgetOption {
+    [key: string]: any;
+}
+
 function UnlockSelector(props) {
+    console.log("Props", props);
     let unlockComponent = <Open {...props}></Open>;
 
     if (props.type === "etherum-wallet") {
@@ -23,7 +28,7 @@ function UnlockSelector(props) {
     }
     return <>{unlockComponent}</>;
 }
-export default function SubmarineWidget(props: any) {
+export default function SubmarineWidget(props: SubmarineWidgetOption) {
     // const loggerClient = LoggerService.getInstance();
     // loggerClient.attachToConsole();
     return (

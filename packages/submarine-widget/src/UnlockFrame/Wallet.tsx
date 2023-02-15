@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import SentinelUnlockContent from "./SentinelUnlockContent";
 
 import { useAccount, useConnect, useSignMessage } from "wagmi";
-import { verifyContract, verifyWallet } from "../../SubmarineAPI";
+import { verifyContract, verifyWallet } from "../SubmarineAPI";
 
 export default function Wallet(options: any) {
     const { address, isConnected } = useAccount();

@@ -1,5 +1,5 @@
 import React from "react";
-import { verifyLocation } from "../../SubmarineAPI";
+import { verifyLocation } from "../SubmarineAPI";
 import SentinelUnlockContent from "./SentinelUnlockContent";
 
 
@@ -25,6 +25,7 @@ export default function Location(options: any) {
                             content.data?.gateway &&
                             content.data?.cid
                         ) {
+                            console.log(content.data);
                             resolve({
                                 gatewayURL: content.data.gateway,
                                 cid: content.data.cid,

@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*.ts",   "src/**/*.js", "src/index.tsx",],
+    "src/**/*.ts","src/**/*.tsx",   "src/**/*.js", "src/index.tsx",],
   "compilerOptions": {
     "jsx": "react",
     "declaration": true,
@@ -13,7 +13,8 @@
     "lib": ["es2017", "es7", "es6", "dom"],
     "strict": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noImplicitAny": false
   },
   "exclude": [
     "node_modules",

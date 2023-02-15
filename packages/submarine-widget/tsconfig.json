@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "umd",
-    "lib": [
-      "ESNext",
-      "dom"
-    ],
-    "jsx": "react",
-    "noEmit": true,    
+    "declaration": true,
+    
+   
+    "jsx": "react-jsx", 
+
+    "skipLibCheck": true,
     "sourceMap": true,
     /* Strict Type-Checking Options */
     "strict": true,
-    "noImplicitAny": true,
+    "outDir": "types",
+    "emitDeclarationOnly": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
    
     /* Module Resolution Options */
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
   "include": ["src"]
 }

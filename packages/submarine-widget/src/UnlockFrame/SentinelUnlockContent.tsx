@@ -4,7 +4,7 @@ import { MESSAGE_TYPES_SUB, useSubmarine } from "../SubmarineContext";
 import ContentDisplay, { FILE_TYPE } from "../ContentDisplay";
 
 export default function SentinelUnlockContent(props) {
-    const { dispatch, state } = useSubmarine();
+    const { dispatch, state } = useSubmarine() as any;
     const handleUnlock = async () => {
         try {
             const submarinedContent = await props.unlockContent();
@@ -24,6 +24,14 @@ export default function SentinelUnlockContent(props) {
             //   setVerifying(false);
         }
     };
+    console.log("state", state);
+    // return state.fileURL && state.fileURL.length > 0 ? (
+    //     <>
+    //         <ContentDisplay {...props}></ContentDisplay>
+    //     </>
+    // ) : (<button onClick={handleUnlock}>
+    //     Activate Lasers
+    //   </button>);
 
     return state.fileURL && state.fileURL.length > 0 ? (
         <>
