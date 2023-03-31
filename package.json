@@ -1,6 +1,6 @@
 {
     "name": "@pinata/sdk",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Official SDK for the Pinata IPFS platform",
     "main": "lib/pinata-sdk.js",
     "types": "types/index.d.ts",

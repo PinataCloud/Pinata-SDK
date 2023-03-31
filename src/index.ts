@@ -61,6 +61,17 @@ function sanitizeConfig(
         config = refactorConfig(pinataApiKey);
     }
 
+    if (
+        (process?.env?.PINATA_API_KEY && process?.env?.PINATA_SECRET_API_KEY) ||
+        process?.env?.PINATA_JWT_KEY
+    ) {
+        config = refactorConfig({
+            pinataApiKey: process.env.PINATA_API_KEY,
+            pinataSecretApiKey: process.env.PINATA_SECRET_API_KEY,
+            pinataJWTKey: process.env.PINATA_JWT_KEY
+        });
+    }
+
     return config;
 }
 
@@ -121,4 +132,3 @@ export * from './commands/data';
 export * from './commands/pinning';
 
 export default PinataClient;
-
