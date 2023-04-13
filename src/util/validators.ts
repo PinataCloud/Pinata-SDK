@@ -57,6 +57,8 @@ export function createConfigForAxiosHeadersWithFormData(config: PinataConfig, bo
     };
 
     requestOptions.headers['Content-type'] = `multipart/form-data; boundary=${boundaryValue}`;
+    requestOptions.headers['x-pinata-origin'] = 'sdk';
+
     return requestOptions;
 }
 
