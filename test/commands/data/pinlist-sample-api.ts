@@ -1,9 +1,12 @@
 import { baseUrl } from '../../../src/constants';
+import { version } from '../../../package.json';
 
 export const fakeHeaders = {
     headers: {
         pinata_api_key: 'anykey',
-        pinata_secret_api_key: 'anysecret'
+        pinata_secret_api_key: 'anysecret',
+        'x-pinata-origin': 'sdk',
+        'x-version': version
     },
     withCredentials: true
 };

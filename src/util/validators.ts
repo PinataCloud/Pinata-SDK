@@ -1,17 +1,25 @@
 import isIPFS from 'is-ipfs';
 import { PinataConfig } from '..';
-import { ERROR_NO_CREDENTIALS_PROVIDED} from '../constants';
+import { ERROR_NO_CREDENTIALS_PROVIDED } from '../constants';
+import { version } from '../../package.json';
 
-export interface axiosHeaders
-    { maxContentLength: number;
-        maxBodyLength: number;
-        headers: {
-            [key: string]: any
-        };
-        withCredentials?: boolean;
-    }
+const commonHeaders = {
+    'x-pinata-origin': 'sdk',
+    'x-version': version
+};
+export interface axiosHeaders {
+    maxContentLength: number;
+    maxBodyLength: number;
+    headers: {
+        [key: string]: any;
+    };
+    withCredentials?: boolean;
+}
 
-export function validateApiKeys(pinataApiKey?: string, pinataSecretApiKey?: string) {
+export function validateApiKeys(
+    pinataApiKey?: string,
+    pinataSecretApiKey?: string
+) {
     if (!pinataApiKey || pinataApiKey === '') {
         throw new Error(
             'No pinataApiKey provided! Please provide your pinata api key as an argument when you start this script'
@@ -26,12 +34,15 @@ export function validateApiKeys(pinataApiKey?: string, pinataSecretApiKey?: stri
 
 export function createConfigForAxiosHeaders(config: PinataConfig) {
     if (
-        config.pinataApiKey && config.pinataApiKey.length > 0 &&
-        config.pinataSecretApiKey && config.pinataSecretApiKey.length > 0
+        config.pinataApiKey &&
+        config.pinataApiKey.length > 0 &&
+        config.pinataSecretApiKey &&
+        config.pinataSecretApiKey.length > 0
     ) {
         return {
             withCredentials: true,
             headers: {
+                ...commonHeaders,
                 pinata_api_key: config.pinataApiKey,
                 pinata_secret_api_key: config.pinataSecretApiKey
             }
@@ -41,6 +52,7 @@ export function createConfigForAxiosHeaders(config: PinataConfig) {
     if (config.pinataJWTKey && config.pinataJWTKey.length > 0) {
         return {
             headers: {
+                ...commonHeaders,
                 Authorization: `Bearer ${config.pinataJWTKey}`
             }
         };
@@ -49,14 +61,21 @@ export function createConfigForAxiosHeaders(config: PinataConfig) {
     throw new Error(ERROR_NO_CREDENTIALS_PROVIDED);
 }
 
-export function createConfigForAxiosHeadersWithFormData(config: PinataConfig, boundaryValue: string) {
+export function createConfigForAxiosHeadersWithFormData(
+    config: PinataConfig,
+    boundaryValue: string
+) {
     const requestOptions: axiosHeaders = {
         ...createConfigForAxiosHeaders(config),
         maxContentLength: Infinity, //this is needed to prevent axios from erroring out with large files
         maxBodyLength: Infinity
     };
 
-    requestOptions.headers['Content-type'] = `multipart/form-data; boundary=${boundaryValue}`;
+    requestOptions.headers[
+        'Content-type'
+    ] = `multipart/form-data; boundary=${boundaryValue}`;
+
+    requestOptions.headers = { ...requestOptions.headers, ...commonHeaders };
     return requestOptions;
 }
 
@@ -115,7 +134,7 @@ export function validateMetadata(metadata: any) {
     }
 }
 
-export function validatePinPolicyStructure(pinPolicy: { regions: any[]; }) {
+export function validatePinPolicyStructure(pinPolicy: { regions: any[] }) {
     //this function takes in a pin policy and checks the JSON structure to make sure it's valid
     if (!pinPolicy) {
         throw new Error('No pin policy provided');
@@ -149,7 +168,12 @@ export function validatePinPolicyStructure(pinPolicy: { regions: any[]; }) {
     }
 }
 
-export function validatePinataOptions(options: { cidVersion?: number; wrapWithDirectory?: boolean; hostNodes?: any; customPinPolicy?: any; }) {
+export function validatePinataOptions(options: {
+    cidVersion?: number;
+    wrapWithDirectory?: boolean;
+    hostNodes?: any;
+    customPinPolicy?: any;
+}) {
     if (typeof options !== 'object') {
         throw new Error('options must be an object');
     }
