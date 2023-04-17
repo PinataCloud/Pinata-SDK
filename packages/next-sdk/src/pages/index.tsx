@@ -20,8 +20,9 @@ export default function Home() {
         <div className={styles.description}>
           <SubmarineWidget
             {...{
-              shortId: "eywmvLWnruCqWZLSikw6Wn",
-              type: "location",
+              shortId: "vu4cUwy1JnnpD62z4q8bvu",
+              apiURL: "http://localhost:3001",
+              
             }}
           />
           <p>

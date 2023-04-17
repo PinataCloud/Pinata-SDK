@@ -9,6 +9,9 @@ function frontBundle(env) {
 
   // }
   return {
+    optimization: {
+      minimize: false,
+    },
     mode: "production",
     target: "web",
     entry: [__dirname + "/src/render.tsx"],
