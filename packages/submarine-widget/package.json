@@ -60,6 +60,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.11.4",
     "axios": "^0.21.1",
     "buffer": "^6.0.3",
@@ -67,6 +68,7 @@
     "form-data": "^2.3.3",
     "pino": "^8.8.0",
     "react-player": "^2.11.0",
+    "react-twitter-embed": "^4.0.4",
     "wagmi": "^0.6.8"
   },
   "directories": {
