@@ -8,10 +8,18 @@ jest.mock('axios');
 const nonStream = 'test';
 const validStream = fs.createReadStream('./pinata.png');
 const validFormData = new NodeFormData();
-validFormData.append('file', validStream, {filepath: 'test/filepath'});
+validFormData.append('file', validStream, { filepath: 'test/filepath' });
 
 test('non-readableStream and non-formData is passed in', () => {
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, nonStream)).rejects.toEqual(Error('readStream is not a readable stream or form data'));
+    expect(
+        pinFileToIPFS(
+            { pinataApiKey: 'test', pinataSecretApiKey: 'test' },
+            nonStream,
+            { pinataMetadata: { name: 'text.txt' } }
+        )
+    ).rejects.toEqual(
+        Error('readStream is not a readable stream or form data')
+    );
 
     return undefined;
 });
@@ -23,7 +31,13 @@ test('200 status is returned with valid stream', () => {
     };
     (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream, {pinataMetadata: { name: 'text.txt'}})).resolves.toEqual(goodStatus.data);
+    expect(
+        pinFileToIPFS(
+            { pinataApiKey: 'test', pinataSecretApiKey: 'test' },
+            validStream,
+            { pinataMetadata: { name: 'text.txt' } }
+        )
+    ).resolves.toEqual(goodStatus.data);
 });
 
 test('200 status is returned with valid form data', () => {
@@ -33,7 +47,13 @@ test('200 status is returned with valid form data', () => {
     };
     (axios.post as jest.Mock).mockResolvedValue(goodStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validFormData, {pinataMetadata: { name: 'text.txt'}})).resolves.toEqual(goodStatus.data);
+    expect(
+        pinFileToIPFS(
+            { pinataApiKey: 'test', pinataSecretApiKey: 'test' },
+            validFormData,
+            { pinataMetadata: { name: 'text.txt' } }
+        )
+    ).resolves.toEqual(goodStatus.data);
 });
 
 test('Result other than 200 status is returned', () => {
@@ -42,12 +62,27 @@ test('Result other than 200 status is returned', () => {
     };
     (axios.post as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream, {pinataMetadata: { name: 'text.txt'}})).rejects.toEqual(Error(`unknown server response while pinning File to IPFS: ${badStatus}`));
+    expect(
+        pinFileToIPFS(
+            { pinataApiKey: 'test', pinataSecretApiKey: 'test' },
+            validStream,
+            { pinataMetadata: { name: 'text.txt' } }
+        )
+    ).rejects.toEqual(
+        Error(
+            `unknown server response while pinning File to IPFS: ${badStatus}`
+        )
+    );
 });
 
 test('Rejection handled', () => {
     (axios.post as jest.Mock).mockRejectedValue('test error');
     expect.assertions(1);
-    expect(pinFileToIPFS({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, validStream, {pinataMetadata: { name: 'text.txt'}})).rejects.toEqual('test error');
+    expect(
+        pinFileToIPFS(
+            { pinataApiKey: 'test', pinataSecretApiKey: 'test' },
+            validStream,
+            { pinataMetadata: { name: 'text.txt' } }
+        )
+    ).rejects.toEqual('test error');
 });
-

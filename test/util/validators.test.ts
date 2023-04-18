@@ -7,6 +7,7 @@ import {
     validatePinataOptions
 } from '../../src/util/validators';
 import { ERROR_NO_CREDENTIALS_PROVIDED } from '../../src/constants';
+import { version } from '../../package.json';
 
 describe('validateApiKeys function testing', () => {
     test('check to throw if either pinataApiKey or pinataSecretApiKey are not provided', () => {
@@ -45,7 +46,9 @@ describe('createConfigForAxiosHeaders function testing', () => {
         withCredentials: true,
         headers: {
             pinata_api_key: 'some api key',
-            pinata_secret_api_key: 'some api secret'
+            pinata_secret_api_key: 'some api secret',
+            'x-pinata-origin': 'sdk',
+            'x-version': version
         }
     });
 });

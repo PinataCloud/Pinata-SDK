@@ -65,7 +65,7 @@ test('Result other than 200 status is returned', () => {
     };
     (axios.put as jest.Mock).mockResolvedValue(badStatus);
     expect.assertions(1);
-    expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual(Error(`unknown server response while changing pin policy for hash: ${badStatus}`));
+    expect(hashMetadata({ pinataApiKey: 'test', pinataSecretApiKey: 'test' }, goodHash, metadata)).rejects.toEqual(Error(`unknown server response while changing metadata for hash: ${JSON.stringify(badStatus, null, 2)}`));
 });
 
 test('Rejection handled', () => {

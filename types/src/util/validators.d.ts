@@ -13,13 +13,14 @@ export declare function createConfigForAxiosHeaders(config: PinataConfig): {
     headers: {
         pinata_api_key: string;
         pinata_secret_api_key: string;
-        Authorization?: undefined;
+        'x-pinata-origin': string;
+        'x-version': string;
     };
 } | {
     headers: {
         Authorization: string;
-        pinata_api_key?: undefined;
-        pinata_secret_api_key?: undefined;
+        'x-pinata-origin': string;
+        'x-version': string;
     };
     withCredentials?: undefined;
 };

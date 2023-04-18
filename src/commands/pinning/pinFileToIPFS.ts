@@ -108,9 +108,8 @@ export default function pinFileToIPFS(
                 readStream instanceof NodeFormData
             )
         ) {
-            reject(
-                new Error('readStream is not a readable stream or form data')
-            );
+            throw Error('readStream is not a readable stream or form data')
+            ;
         }
 
         resolve(uploadToIPFS(config, data, options));
