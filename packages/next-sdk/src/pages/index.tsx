@@ -1,4 +1,4 @@
-import react from "react"
+import react from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
@@ -22,7 +22,48 @@ export default function Home() {
             {...{
               shortId: "vu4cUwy1JnnpD62z4q8bvu",
               apiURL: "http://localhost:3001",
-              
+            }}
+          />
+
+          <SubmarineWidget
+            {...{
+              shortId: "ob4Fj5vKUCT2n8fmcAiEb5",
+              apiURL: "http://localhost:3001",
+            }}
+          />
+
+          <SubmarineWidget
+            {...{
+              shortId: "7x6FQWTKD8XTLJ99kbiDHY",
+              apiURL: "http://localhost:3001",
+            }}
+          />
+
+          <SubmarineWidget
+            {...{
+              shortId: "9bVCRXGABXhrN7kD8yCe7o",
+              apiURL: "http://localhost:3001",
+            }}
+          />
+
+          <SubmarineWidget
+            {...{
+              shortId: "ejMr4JV4RUyS1wuRNM1mDq",
+              apiURL: "http://localhost:3001",
+            }}
+          />
+
+          <SubmarineWidget
+            {...{
+              shortId: "eis763JCU1NbGjv2yFJa78",
+              apiURL: "http://localhost:3001",
+            }}
+          />
+
+          <SubmarineWidget
+            {...{
+              shortId: "oqH3AWhr8KqLfRSx8KGPx3",
+              apiURL: "http://localhost:3001",
             }}
           />
           <p>

@@ -34,6 +34,7 @@ function setupPinOnVideo(gatewayURL: string, cid: string, token?: string) {
   return url;
 }
 function SubmarineReducer(state, action) {
+  console.log("SubmarineReducer", state, action)
   switch (action.type) {
     case MESSAGE_TYPES_SUB.LOAD_API: {
       return { ...state, apiURL: action.apiURL };

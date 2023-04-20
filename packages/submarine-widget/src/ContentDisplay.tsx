@@ -35,7 +35,7 @@ function File(props: any) {
 
 export default function ContentDisplay(props: any) {
   const { state } = useSubmarine() as any;
-  console.log("state", state);
+  console.log("ContentDisplay", state);
 
   if (state.fileType === FILE_TYPE.VIDEO) {
     return <Video fileURL={state.fileURL}></Video>;

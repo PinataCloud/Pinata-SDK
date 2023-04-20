@@ -42,41 +42,7 @@ const SubmarineUnlockSelector = (props) => {
     );
   }
 
-  // if (submarineUnlockInfo.type === UNLOCK_TYPES.twitch) {
-  //   return (
-  //     <Twitch
-  //       unlockInfo={unlockInfo}
-  //       customizations={fileInfo.customizations}
-  //     />
-  //   );
-  // }
-  // if (submarineUnlockInfo.type === UNLOCK_TYPES.evm) {
-  //   return (
-  //     <WalletProvider>
-  //       <Wallet {...props}></Wallet>
-  //     </WalletProvider>
-  //   );
-  // }
-
-  // if (submarineUnlockInfo.type === UNLOCK_TYPES.solana) {
-  //   return (
-  //     <SolanaProvider>
-  //       <Solana
-  //         unlockInfo={unlockInfo}
-  //         customizations={fileInfo.customizations}
-  //       />
-  //     </SolanaProvider>
-  //   );
-  // }
-
-  // if (submarineUnlockInfo.type === UNLOCK_TYPES.flow) {
-  //   return (
-  //     <FlowUnlock
-  //       unlockInfo={unlockInfo}
-  //       customizations={fileInfo.customizations}
-  //     />
-  //   );
-  // }
+ 
 
   return null;
 };
@@ -99,9 +65,8 @@ const SubmarineContent = () => {
 function SubmarineLocker(props) {
   const UNLOCK_METHOD_SUPPORTED = [
     UNLOCK_TYPES.location,
-    UNLOCK_TYPES.retweet,
-    UNLOCK_TYPES.twitch,
     UNLOCK_TYPES.evm,
+    UNLOCK_TYPES.solana,
   ];
   const [loadAPI, setLoadAPI] = useState(false);
   const [submarineContentError, setSubmarineContentError] = useState(false);
@@ -143,29 +108,35 @@ function SubmarineLocker(props) {
   }
 
   // There's one unlock method not supported
+  if (state?.submarineContent?.unlockInfo?.length === 0) {
+    return <>"error content not found"</>;
+  }
+
   if (
-    state?.submarineContent?.unlockInfo?.length > 0 &&
-    state.submarineContent.unlockInfo.find(
+    state?.submarineContent?.unlockInfo && state.submarineContent.unlockInfo.find(
       (info) => !UNLOCK_METHOD_SUPPORTED.includes(info.type)
     )
   ) {
     return <>Unlock Method not supported</>;
   }
-  if (state?.submarineContent?.id) {
+  if (state?.submarineContent?.submarineCID) {
     return <SubmarineContent></SubmarineContent>;
   }
 
   return <>Loading</>;
-  return <>
-     <Typography
-      variant="h6"
-      sx={{
-        padding: (theme) => theme.spacing(1),
-        color: (theme) => theme.palette.primary.contrastText,
-      }}
-    >
-      Loading...
-  </Typography></>;
+  return (
+    <>
+      <Typography
+        variant="h6"
+        sx={{
+          padding: (theme) => theme.spacing(1),
+          color: (theme) => theme.palette.primary.contrastText,
+        }}
+      >
+        Loading...
+      </Typography>
+    </>
+  );
 }
 export default function SubmarineWidget(props: SubmarineWidgetOption) {
   // const loggerClient = LoggerService.getInstance();

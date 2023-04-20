@@ -24,7 +24,7 @@ export default function SentinelUnlockContent(props) {
             //   setVerifying(false);
         }
     };
-    console.log("state", state);
+    console.log("SentinelUnlockContent", state);
     // return state.fileURL && state.fileURL.length > 0 ? (
     //     <>
     //         <ContentDisplay {...props}></ContentDisplay>
