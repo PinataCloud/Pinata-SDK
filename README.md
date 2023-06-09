@@ -1,4 +1,4 @@
-<img src="https://cdn-images-1.medium.com/max/1200/1*BTGStLRXsQUbkp0t-oxJhQ.png" width="200" />
+<img src="https://assets.pinata.cloud/pinnie.png" width="200" />
 
 # Pinata SDK
 
