@@ -8,7 +8,7 @@ export interface PinataConfig {
     pinataSecretApiKey?: string;
     pinataJWTKey?: string;
 }
-declare class PinataClient {
+export declare class PinataClient {
     config: PinataConfig;
     constructor(pinataApiKey?: string | PinataConfig, pinataSecretApiKey?: string);
     pinByHash(hashToPin: string, options?: PinataPinByHashPinOptions): Promise<any>;

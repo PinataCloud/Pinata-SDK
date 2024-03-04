@@ -75,7 +75,7 @@ function sanitizeConfig(
     return config;
 }
 
-class PinataClient {
+export class PinataClient {
     config: PinataConfig;
 
     constructor(
