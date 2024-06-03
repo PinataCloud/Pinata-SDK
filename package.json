@@ -1,32 +1,42 @@
 {
-    "name": "@pinata/sdk",
-    "version": "2.1.1",
-    "description": "Official SDK for the Pinata IPFS platform",
-    "main": "lib/pinata-sdk.js",
-    "types": "types/index.d.ts",
-    "scripts": {
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/PinataCloud/Pinata-SDK.git"
-    },
-    "keywords": [
-        "webpack",
-        "es6",
-        "starter",
-        "library",
-        "universal",
-        "umd",
-        "commonjs"
-    ],
-    "author": "Matt Ober",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
-    },
-    "homepage": "https://github.com/PinataCloud/Pinata-SDK",
-    "devDependencies": {
-    },
-    "dependencies": {
-    }
+  "name": "@pinata/sdk",
+  "version": "3.0.0",
+  "description": "Official SDK for the Pinata IPFS platform",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PinataCloud/Pinata-SDK.git"
+  },
+  "keywords": [
+    "webpack",
+    "es6",
+    "starter",
+    "library",
+    "universal",
+    "umd",
+    "commonjs"
+  ],
+  "author": "Steve Simkins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PinataCloud/Pinata-SDK/issues"
+  },
+  "homepage": "https://github.com/PinataCloud/Pinata-SDK",
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.1"
+  }
 }
