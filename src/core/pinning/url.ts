@@ -1,30 +1,37 @@
 /**
- * Uploads multiple file types
+ * Uploads multiple file types 
  * @returns message
  */
 
 import { PinataConfig, PinResponse, UploadOptions } from "../types";
 
-export const uploadFileArray = async (
+export const uploadUrl = async (
   config: PinataConfig | undefined,
-  files: any,
+  url: string,
   options?: UploadOptions
 ) => {
   try {
-    const folder = options?.metadata?.name ? options?.metadata?.name : "folder_from_sdk";
-    const data = new FormData();
+    const data = new FormData()
+    
+    const stream = await fetch(url)
 
-    Array.from(files).forEach((file: any) => {
-      data.append("file", file, `${folder}/${file.name}`);
-    });
+    const arrayBuffer = await stream.arrayBuffer()
 
-    data.append("pinataMetadata", JSON.stringify({
-      name: folder,
-      keyvalues: options?.metadata?.keyValues
-    }))
+    const blob = new Blob([arrayBuffer])
+
+    const name = options?.metadata ? options.metadata.name : `url_upload`
+
+    const file = new File([blob], name!)
+    
+    data.append("file", file, name)
 
     data.append("pinataOptions", JSON.stringify({
       cidVersion: 1
+    }))
+
+    data.append("pinataMetadata", JSON.stringify({
+      name: name,
+      keyvalues: options?.metadata?.keyValues
     }))
 
     const request = await fetch(
@@ -34,11 +41,11 @@ export const uploadFileArray = async (
         headers: {
           Authorization: `Bearer ${config?.pinata_jwt}`,
         },
-        body: data,
+        body: data
       },
     );
     const res: PinResponse = await request.json();
-    return res;
+    return res
   } catch (error) {
     throw error;
   }

@@ -5,27 +5,37 @@
 
 import { PinataConfig, PinResponse, UploadOptions } from "../types";
 
-export const uploadFileArray = async (
+export const uploadBase64 = async (
   config: PinataConfig | undefined,
-  files: any,
-  options?: UploadOptions
+  base64String: string,
+  options?: UploadOptions,
 ) => {
   try {
-    const folder = options?.metadata?.name ? options?.metadata?.name : "folder_from_sdk";
+
+    const name = options?.metadata?.name ? options?.metadata?. name : "base64 string"
+
+    const buffer = Buffer.from(base64String, 'base64')
+
+    const blob = new Blob([buffer])
+
     const data = new FormData();
 
-    Array.from(files).forEach((file: any) => {
-      data.append("file", file, `${folder}/${file.name}`);
-    });
+    data.append("file", blob, name);
 
-    data.append("pinataMetadata", JSON.stringify({
-      name: folder,
-      keyvalues: options?.metadata?.keyValues
-    }))
+    data.append(
+      "pinataOptions",
+      JSON.stringify({
+        cidVersion: 1,
+      }),
+    );
 
-    data.append("pinataOptions", JSON.stringify({
-      cidVersion: 1
-    }))
+    data.append(
+      "pinataMetadata",
+      JSON.stringify({
+        name: name,
+        keyvalues: options?.metadata?.keyValues,
+      }),
+    );
 
     const request = await fetch(
       `https://api.pinata.cloud/pinning/pinFileToIPFS`,

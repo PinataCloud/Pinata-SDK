@@ -2,6 +2,8 @@ import { FileObject, PinResponse, PinataConfig, UploadOptions } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
 import { uploadFileArray } from "./pinning/fileArray";
+import { uploadBase64 } from "./pinning/base64";
+import { uploadUrl } from "./pinning/url";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinata_gateway;
@@ -42,5 +44,13 @@ class Upload {
 
   fileArray(files: FileObject[], options?: UploadOptions): Promise<PinResponse> {
     return uploadFileArray(this.config, files, options)
+  }
+
+  base64(base64String: string, options?: UploadOptions): Promise<PinResponse> {
+    return uploadBase64(this.config, base64String, options)
+  }
+
+  url(url: string, options?: UploadOptions): Promise<PinResponse> {
+    return uploadUrl(this.config, url, options)
   }
 }
