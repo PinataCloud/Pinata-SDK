@@ -3,19 +3,36 @@
  * @returns message
  */
 
-import { PinataConfig, PinResponse } from "../types";
+import { PinataConfig, PinResponse, UploadOptions } from "../types";
 
 export const uploadFileArray = async (
   config: PinataConfig | undefined,
   files: any,
+  options?: UploadOptions,
 ) => {
   try {
     const folder = "folder";
     const data = new FormData();
 
     Array.from(files).forEach((file: any) => {
-      data.append("file", file, `${folder}/${file.name}`);
+      const name = options?.metadata ? options.metadata.name : file.name;
+      data.append("file", file, `${folder}/${name}`);
     });
+
+    data.append(
+      "pinataOptions",
+      JSON.stringify({
+        cidVersion: 1,
+      }),
+    );
+
+    data.append(
+      "pinataMetadata",
+      JSON.stringify({
+        name: options?.metadata ? options.metadata.name : files[0].name,
+        keyvalues: options?.metadata?.keyValues,
+      }),
+    );
 
     const request = await fetch(
       `https://api.pinata.cloud/pinning/pinFileToIPFS`,

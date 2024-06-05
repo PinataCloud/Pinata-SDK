@@ -3,12 +3,12 @@
  * @returns message
  */
 
-import { PinataConfig, PinataMetadata, PinResponse } from "../types";
+import { PinataConfig, PinResponse, UploadOptions } from "../types";
 
 export const uploadFile = async (
   config: PinataConfig | undefined,
   file: any,
-  options: PinataMetadata
+  options?: UploadOptions
 ) => {
   try {
     const data = new FormData()
@@ -19,7 +19,8 @@ export const uploadFile = async (
     }))
 
     data.append("pinataMetadata", JSON.stringify({
-      name: options ? options.name : file.name
+      name: options?.metadata ? options.metadata.name : file.name,
+      keyvalues: options?.metadata?.keyValues
     }))
 
     const request = await fetch(

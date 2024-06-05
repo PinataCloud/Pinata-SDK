@@ -7,8 +7,8 @@ export type PinResponse = {
   IpfsHash: string;
   PinSize: number;
   Timestamp: string;
-  isDuplicate?: boolean; 
-}
+  isDuplicate?: boolean;
+};
 
 export type FileObject = {
   name: string;
@@ -16,10 +16,14 @@ export type FileObject = {
   type: string;
   lastModified: number;
   arrayBuffer: () => Promise<ArrayBuffer>;
-}
+};
 
 export type PinataMetadata = {
-  name: string;
-}
+  name?: string;
+  keyValues?: Record<string, string | number >;
+};
 
-
+export type UploadOptions = {
+  metadata?: PinataMetadata;
+  pinType?: "async" | "sync" | "cidOnly";
+};

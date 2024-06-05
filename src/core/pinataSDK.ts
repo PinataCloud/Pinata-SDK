@@ -1,4 +1,4 @@
-import { FileArray, FileObject, PinResponse, PinataConfig, PinataMetadata } from "./types";
+import { FileObject, PinResponse, PinataConfig, UploadOptions } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
 import { uploadFileArray } from "./pinning/fileArray";
@@ -36,12 +36,11 @@ class Upload {
     this.config = formatConfig(config);
   }
 
-  file(file: FileObject, options: PinataMetadata): Promise<PinResponse> {
+  file(file: FileObject, options?: UploadOptions): Promise<PinResponse> {
     return uploadFile(this.config, file, options)
   }
 
-  fileArray(files: FileObject[]): Promise<PinResponse> {
-    return uploadFileArray(this.config, files)
+  fileArray(files: FileObject[], options?: UploadOptions): Promise<PinResponse> {
+    return uploadFileArray(this.config, files, options)
   }
 }
-
