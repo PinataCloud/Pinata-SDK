@@ -8,31 +8,24 @@ import { PinataConfig, PinResponse, UploadOptions } from "../types";
 export const uploadFileArray = async (
   config: PinataConfig | undefined,
   files: any,
-  options?: UploadOptions,
+  options?: UploadOptions
 ) => {
   try {
-    const folder = "folder";
+    const folder = options?.metadata?.name ? options?.metadata?.name : "sdk_file_array";
     const data = new FormData();
 
     Array.from(files).forEach((file: any) => {
-      const name = options?.metadata ? options.metadata.name : file.name;
-      data.append("file", file, `${folder}/${name}`);
+      data.append("file", file, `${folder}/${file.name}`);
     });
 
-    data.append(
-      "pinataOptions",
-      JSON.stringify({
-        cidVersion: 1,
-      }),
-    );
+    data.append("pinataMetadata", JSON.stringify({
+      name: folder,
+      keyvalues: options?.metadata?.keyValues
+    }))
 
-    data.append(
-      "pinataMetadata",
-      JSON.stringify({
-        name: options?.metadata ? options.metadata.name : files[0].name,
-        keyvalues: options?.metadata?.keyValues,
-      }),
-    );
+    data.append("pinataOptions", JSON.stringify({
+      cidVersion: 1
+    }))
 
     const request = await fetch(
       `https://api.pinata.cloud/pinning/pinFileToIPFS`,
