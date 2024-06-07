@@ -1,9 +1,12 @@
-import { FileObject, PinResponse, PinataConfig, UploadOptions } from "./types";
+import { FileObject, PinByCIDResponse, PinResponse, PinataConfig, PinataMetadata, UploadCIDOptions, UploadOptions } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
 import { uploadFileArray } from "./pinning/fileArray";
 import { uploadBase64 } from "./pinning/base64";
 import { uploadUrl } from "./pinning/url";
+import { uploadJson } from "./pinning/json";
+import { uploadCid } from "./pinning/cid";
+import { unpinFile } from "./pinning/unpin";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinata_gateway;
@@ -29,6 +32,10 @@ export class PinataSDK {
     return testAuthentication(this.config);
   }
 
+  unpin(files: string[]): Promise<any> {
+    return unpinFile(this.config, files)
+  }
+
 }
 
 class Upload {
@@ -52,5 +59,13 @@ class Upload {
 
   url(url: string, options?: UploadOptions): Promise<PinResponse> {
     return uploadUrl(this.config, url, options)
+  }
+
+  json(data: object, options?: UploadOptions): Promise<PinResponse> {
+    return uploadJson(this.config, data, options)
+  }
+
+  cid(cid: string, options?: UploadCIDOptions): Promise<PinByCIDResponse> {
+    return uploadCid(this.config, cid, options)
   }
 }

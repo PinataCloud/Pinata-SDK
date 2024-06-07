@@ -10,6 +10,14 @@ export type PinResponse = {
   isDuplicate?: boolean;
 };
 
+export type PinByCIDResponse = {
+  id: string;
+  ipfsHash: string;
+  status: "prechecking" | "retrieving";
+  name: string;
+  updated?: boolean;
+}
+
 export type FileObject = {
   name: string;
   size: number;
@@ -27,3 +35,13 @@ export type UploadOptions = {
   metadata?: PinataMetadata;
   pinType?: "async" | "sync" | "cidOnly";
 };
+
+export type UploadCIDOptions = {
+  metadata?: PinataMetadata;
+  peerAddresses?: string[];
+}
+
+export type UnpinResponse = {
+  hash: string;
+  status: string;
+}
