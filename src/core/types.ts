@@ -16,7 +16,7 @@ export type PinByCIDResponse = {
   status: "prechecking" | "retrieving";
   name: string;
   updated?: boolean;
-}
+};
 
 export type FileObject = {
   name: string;
@@ -28,7 +28,7 @@ export type FileObject = {
 
 export type PinataMetadata = {
   name?: string;
-  keyValues?: Record<string, string | number >;
+  keyValues?: Record<string, string | number>;
 };
 
 export type UploadOptions = {
@@ -39,9 +39,62 @@ export type UploadOptions = {
 export type UploadCIDOptions = {
   metadata?: PinataMetadata;
   peerAddresses?: string[];
-}
+};
 
 export type UnpinResponse = {
   hash: string;
   status: string;
-}
+};
+
+export type PinListItem = {
+  id: string;
+  ipfs_pin_hash: string;
+  size: number;
+  user_id: string;
+  date_pinned: string;
+  date_unpinned: string | null;
+  metadata: {
+    name: string;
+    keyvalues: string[] | null;
+  };
+  regions: {
+    regionId: string;
+    currentReplicationCount: number;
+    desiredReplicationCount: number;
+  }[];
+  mime_type: string;
+  number_of_files: number;
+};
+
+export type PinListResponse = {
+  rows: PinListItem[];
+};
+
+export type PinListQuery = {
+  cid?: string;
+  pinStart?: string;
+  pinEnd?: string;
+  pinSizeMin?: number;
+  pinSizeMax?: number;
+  pageLimit?: number;
+  pageOffset?: number;
+  name?: string;
+  key?: string;
+  value?: string;
+  secondValue?: string;
+  operator?:
+    | "gt"
+    | "gte"
+    | "lt"
+    | "lte"
+    | "ne"
+    | "eq"
+    | "between"
+    | "notBetween"
+    | "like"
+    | "notLike"
+    | "iLike"
+    | "notILike"
+    | "regexp"
+    | "iRegexp";
+};

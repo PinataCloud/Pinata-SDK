@@ -1,4 +1,14 @@
-import { FileObject, PinByCIDResponse, PinResponse, PinataConfig, PinataMetadata, UploadCIDOptions, UploadOptions } from "./types";
+import {
+  FileObject,
+  PinByCIDResponse,
+  PinListItem,
+  PinListQuery,
+  PinResponse,
+  PinataConfig,
+  PinataMetadata,
+  UploadCIDOptions,
+  UploadOptions,
+} from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
 import { uploadFileArray } from "./pinning/fileArray";
@@ -7,6 +17,7 @@ import { uploadUrl } from "./pinning/url";
 import { uploadJson } from "./pinning/json";
 import { uploadCid } from "./pinning/cid";
 import { unpinFile } from "./pinning/unpin";
+import { listFiles } from "./data/listFiles";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinata_gateway;
@@ -19,9 +30,112 @@ const formatConfig = (config: PinataConfig | undefined) => {
   return config;
 };
 
+class UploadBuilder<T> {
+  private config: PinataConfig | undefined;
+  private uploadFunction: (
+    config: PinataConfig | undefined,
+    ...args: any[]
+  ) => Promise<T>;
+  private args: any[];
+  private metadata: PinataMetadata | undefined;
+
+  constructor(
+    config: PinataConfig | undefined,
+    uploadFunction: (
+      config: PinataConfig | undefined,
+      ...args: any[]
+    ) => Promise<T>,
+    ...args: any[]
+  ) {
+    this.config = config;
+    this.uploadFunction = uploadFunction;
+    this.args = args;
+  }
+
+  addMetadata(metadata: PinataMetadata): UploadBuilder<T> {
+    this.metadata = metadata;
+    return this;
+  }
+
+  then(onfulfilled?: ((value: T) => any) | null): Promise<any> {
+    const options: UploadOptions = this.args[this.args.length - 1] || {};
+    if (this.metadata) {
+      options.metadata = this.metadata;
+    }
+    this.args[this.args.length - 1] = options;
+    return this.uploadFunction(this.config, ...this.args).then(onfulfilled);
+  }
+}
+
+class FilterBuilder {
+  private config: PinataConfig | undefined;
+  private query: PinListQuery = {};
+
+  constructor(config: PinataConfig | undefined) {
+    this.config = config;
+  }
+
+  cid(cid: string): FilterBuilder {
+    this.query.cid = cid;
+    return this;
+  }
+
+  pinStart(date: string): FilterBuilder {
+    this.query.pinStart = date;
+    return this;
+  }
+
+  pinEnd(date: string): FilterBuilder {
+    this.query.pinEnd = date;
+    return this;
+  }
+
+  pinSizeMin(size: number): FilterBuilder {
+    this.query.pinSizeMin = size;
+    return this;
+  }
+
+  pinSizeMax(size: number): FilterBuilder {
+    this.query.pinSizeMax = size;
+    return this;
+  }
+
+  pageLimit(limit: number): FilterBuilder {
+    this.query.pageLimit = limit;
+    return this;
+  }
+
+  pageOffset(offset: number): FilterBuilder {
+    this.query.pageOffset = offset;
+    return this;
+  }
+
+  name(name: string): FilterBuilder {
+    this.query.name = name;
+    return this;
+  }
+
+  keyValue(
+    key: string,
+    value: string,
+    operator?: PinListQuery["operator"],
+  ): FilterBuilder {
+    this.query.key = key;
+    this.query.value = value;
+    if (operator) {
+      this.query.operator = operator;
+    }
+    return this;
+  }
+
+  then(onfulfilled?: ((value: PinListItem[]) => any) | null): Promise<any> {
+    return listFiles(this.config, this.query).then(onfulfilled);
+  }
+}
+
 export class PinataSDK {
   config: PinataConfig | undefined;
-  upload:  Upload;
+  upload: Upload;
 
   constructor(config?: PinataConfig) {
     this.config = formatConfig(config);
@@ -33,9 +147,12 @@ export class PinataSDK {
   }
 
   unpin(files: string[]): Promise<any> {
-    return unpinFile(this.config, files)
+    return unpinFile(this.config, files);
   }
 
+  list(): FilterBuilder {
+    return new FilterBuilder(this.config);
+  }
 }
 
 class Upload {
@@ -45,27 +162,36 @@ class Upload {
     this.config = formatConfig(config);
   }
 
-  file(file: FileObject, options?: UploadOptions): Promise<PinResponse> {
-    return uploadFile(this.config, file, options)
+  file(file: FileObject, options?: UploadOptions): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadFile, file, options);
   }
 
-  fileArray(files: FileObject[], options?: UploadOptions): Promise<PinResponse> {
-    return uploadFileArray(this.config, files, options)
+  fileArray(
+    files: FileObject[],
+    options?: UploadOptions,
+  ): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadFileArray, files, options);
   }
 
-  base64(base64String: string, options?: UploadOptions): Promise<PinResponse> {
-    return uploadBase64(this.config, base64String, options)
+  base64(
+    base64String: string,
+    options?: UploadOptions,
+  ): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadBase64, base64String, options);
   }
 
-  url(url: string, options?: UploadOptions): Promise<PinResponse> {
-    return uploadUrl(this.config, url, options)
+  url(url: string, options?: UploadOptions): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadUrl, url, options);
   }
 
-  json(data: object, options?: UploadOptions): Promise<PinResponse> {
-    return uploadJson(this.config, data, options)
+  json(data: object, options?: UploadOptions): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadJson, data, options);
   }
 
-  cid(cid: string, options?: UploadCIDOptions): Promise<PinByCIDResponse> {
-    return uploadCid(this.config, cid, options)
+  cid(
+    cid: string,
+    options?: UploadCIDOptions,
+  ): UploadBuilder<PinByCIDResponse> {
+    return new UploadBuilder(this.config, uploadCid, cid, options);
   }
 }
