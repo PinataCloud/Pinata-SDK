@@ -81,7 +81,6 @@ export type PinListQuery = {
   name?: string;
   key?: string;
   value?: string;
-  secondValue?: string;
   operator?:
     | "gt"
     | "gte"

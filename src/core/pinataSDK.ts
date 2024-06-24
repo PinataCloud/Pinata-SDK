@@ -30,6 +30,28 @@ const formatConfig = (config: PinataConfig | undefined) => {
   return config;
 };
 
+export class PinataSDK {
+  config: PinataConfig | undefined;
+  upload: Upload;
+
+  constructor(config?: PinataConfig) {
+    this.config = formatConfig(config);
+    this.upload = new Upload(this.config);
+  }
+
+  testAuthentication(): Promise<any> {
+    return testAuthentication(this.config);
+  }
+
+  unpin(files: string[]): Promise<any> {
+    return unpinFile(this.config, files);
+  }
+
+  listFiles(): FilterFiles {
+    return new FilterFiles(this.config);
+  }
+}
+
 class UploadBuilder<T> {
   private config: PinataConfig | undefined;
   private uploadFunction: (
@@ -67,7 +89,7 @@ class UploadBuilder<T> {
   }
 }
 
-class FilterBuilder {
+class FilterFiles {
   private config: PinataConfig | undefined;
   private query: PinListQuery = {};
 
@@ -75,42 +97,42 @@ class FilterBuilder {
     this.config = config;
   }
 
-  cid(cid: string): FilterBuilder {
+  cid(cid: string): FilterFiles {
     this.query.cid = cid;
     return this;
   }
 
-  pinStart(date: string): FilterBuilder {
+  pinStart(date: string): FilterFiles {
     this.query.pinStart = date;
     return this;
   }
 
-  pinEnd(date: string): FilterBuilder {
+  pinEnd(date: string): FilterFiles {
     this.query.pinEnd = date;
     return this;
   }
 
-  pinSizeMin(size: number): FilterBuilder {
+  pinSizeMin(size: number): FilterFiles {
     this.query.pinSizeMin = size;
     return this;
   }
 
-  pinSizeMax(size: number): FilterBuilder {
+  pinSizeMax(size: number): FilterFiles {
     this.query.pinSizeMax = size;
     return this;
   }
 
-  pageLimit(limit: number): FilterBuilder {
+  pageLimit(limit: number): FilterFiles {
     this.query.pageLimit = limit;
     return this;
   }
 
-  pageOffset(offset: number): FilterBuilder {
+  pageOffset(offset: number): FilterFiles {
     this.query.pageOffset = offset;
     return this;
   }
 
-  name(name: string): FilterBuilder {
+  name(name: string): FilterFiles {
     this.query.name = name;
     return this;
   }
@@ -119,7 +141,7 @@ class FilterBuilder {
     key: string,
     value: string,
     operator?: PinListQuery["operator"],
-  ): FilterBuilder {
+  ): FilterFiles {
     this.query.key = key;
     this.query.value = value;
     if (operator) {
@@ -130,28 +152,6 @@ class FilterBuilder {
 
   then(onfulfilled?: ((value: PinListItem[]) => any) | null): Promise<any> {
     return listFiles(this.config, this.query).then(onfulfilled);
-  }
-}
-
-export class PinataSDK {
-  config: PinataConfig | undefined;
-  upload: Upload;
-
-  constructor(config?: PinataConfig) {
-    this.config = formatConfig(config);
-    this.upload = new Upload(this.config);
-  }
-
-  testAuthentication(): Promise<any> {
-    return testAuthentication(this.config);
-  }
-
-  unpin(files: string[]): Promise<any> {
-    return unpinFile(this.config, files);
-  }
-
-  list(): FilterBuilder {
-    return new FilterBuilder(this.config);
   }
 }
 
