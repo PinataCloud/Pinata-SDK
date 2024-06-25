@@ -78,14 +78,25 @@ class UploadBuilder<T> {
     this.metadata = metadata;
     return this;
   }
-
-  then(onfulfilled?: ((value: T) => any) | null): Promise<any> {
+  then<TResult1 = T, TResult2 = never>(
+    onfulfilled?:
+      | ((value: T) => TResult1 | PromiseLike<TResult1>)
+      | null
+      | undefined,
+    onrejected?:
+      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+      | null
+      | undefined,
+  ): Promise<TResult1 | TResult2> {
     const options: UploadOptions = this.args[this.args.length - 1] || {};
     if (this.metadata) {
       options.metadata = this.metadata;
     }
     this.args[this.args.length - 1] = options;
-    return this.uploadFunction(this.config, ...this.args).then(onfulfilled);
+    return this.uploadFunction(this.config, ...this.args).then(
+      onfulfilled,
+      onrejected,
+    );
   }
 }
 
@@ -152,6 +163,37 @@ class FilterFiles {
 
   then(onfulfilled?: ((value: PinListItem[]) => any) | null): Promise<any> {
     return listFiles(this.config, this.query).then(onfulfilled);
+  }
+
+  async *[Symbol.asyncIterator](): AsyncGenerator<PinListItem, void, unknown> {
+    let hasMore = true;
+    let offset = 0;
+    const limit = this.query.pageLimit || 10; // Default limit if not set
+
+    while (hasMore) {
+      this.query.pageOffset = offset;
+      this.query.pageLimit = limit;
+
+      const items = await listFiles(this.config, this.query);
+
+      for (const item of items) {
+        yield item;
+      }
+
+      if (items.length < limit) {
+        hasMore = false;
+      } else {
+        offset += limit;
+      }
+    }
+  }
+
+  async all(): Promise<PinListItem[]> {
+    const allItems: PinListItem[] = [];
+    for await (const item of this) {
+      allItems.push(item);
+    }
+    return allItems;
   }
 }
 
