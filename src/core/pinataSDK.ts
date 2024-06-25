@@ -70,6 +70,7 @@ class UploadBuilder<T> {
   ) => Promise<T>;
   private args: any[];
   private metadata: PinataMetadata | undefined;
+  private peerAddresses: string[] | undefined;
 
   constructor(
     config: PinataConfig | undefined,
@@ -88,6 +89,12 @@ class UploadBuilder<T> {
     this.metadata = metadata;
     return this;
   }
+
+  peerAddress(peerAddresses: string[]): UploadBuilder<T> {
+    this.peerAddresses = peerAddresses;
+    return this;
+  }
+
   then<TResult1 = T, TResult2 = never>(
     onfulfilled?:
       | ((value: T) => TResult1 | PromiseLike<TResult1>)
@@ -102,11 +109,55 @@ class UploadBuilder<T> {
     if (this.metadata) {
       options.metadata = this.metadata;
     }
+    if (this.peerAddresses && "peerAddresses" in options) {
+      options.peerAddresses = this.peerAddresses;
+    }
     this.args[this.args.length - 1] = options;
     return this.uploadFunction(this.config, ...this.args).then(
       onfulfilled,
       onrejected,
     );
+  }
+}
+
+class Upload {
+  config: PinataConfig | undefined;
+
+  constructor(config?: PinataConfig) {
+    this.config = formatConfig(config);
+  }
+
+  file(file: FileObject, options?: UploadOptions): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadFile, file, options);
+  }
+
+  fileArray(
+    files: FileObject[],
+    options?: UploadOptions,
+  ): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadFileArray, files, options);
+  }
+
+  base64(
+    base64String: string,
+    options?: UploadOptions,
+  ): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadBase64, base64String, options);
+  }
+
+  url(url: string, options?: UploadOptions): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadUrl, url, options);
+  }
+
+  json(data: object, options?: UploadOptions): UploadBuilder<PinResponse> {
+    return new UploadBuilder(this.config, uploadJson, data, options);
+  }
+
+  cid(
+    cid: string,
+    options?: UploadCIDOptions,
+  ): UploadBuilder<PinByCIDResponse> {
+    return new UploadBuilder(this.config, uploadCid, cid, options);
   }
 }
 
@@ -225,47 +276,6 @@ class FilterFiles {
       allItems.push(item);
     }
     return allItems;
-  }
-}
-
-class Upload {
-  config: PinataConfig | undefined;
-
-  constructor(config?: PinataConfig) {
-    this.config = formatConfig(config);
-  }
-
-  file(file: FileObject, options?: UploadOptions): UploadBuilder<PinResponse> {
-    return new UploadBuilder(this.config, uploadFile, file, options);
-  }
-
-  fileArray(
-    files: FileObject[],
-    options?: UploadOptions,
-  ): UploadBuilder<PinResponse> {
-    return new UploadBuilder(this.config, uploadFileArray, files, options);
-  }
-
-  base64(
-    base64String: string,
-    options?: UploadOptions,
-  ): UploadBuilder<PinResponse> {
-    return new UploadBuilder(this.config, uploadBase64, base64String, options);
-  }
-
-  url(url: string, options?: UploadOptions): UploadBuilder<PinResponse> {
-    return new UploadBuilder(this.config, uploadUrl, url, options);
-  }
-
-  json(data: object, options?: UploadOptions): UploadBuilder<PinResponse> {
-    return new UploadBuilder(this.config, uploadJson, data, options);
-  }
-
-  cid(
-    cid: string,
-    options?: UploadCIDOptions,
-  ): UploadBuilder<PinByCIDResponse> {
-    return new UploadBuilder(this.config, uploadCid, cid, options);
   }
 }
 
