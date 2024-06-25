@@ -20,6 +20,8 @@ import { uploadCid } from "./pinning/cid";
 import { unpinFile } from "./pinning/unpin";
 import { listFiles } from "./data/listFiles";
 import { updateMetadata } from "./data/updateMetadata";
+import { getCid } from "./gateway/getCid";
+import { convertIPFSUrl } from "./gateway/convertIPFSUrl";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinata_gateway;
@@ -35,10 +37,12 @@ const formatConfig = (config: PinataConfig | undefined) => {
 export class PinataSDK {
   config: PinataConfig | undefined;
   upload: Upload;
+  gateways: Gateways;
 
   constructor(config?: PinataConfig) {
     this.config = formatConfig(config);
     this.upload = new Upload(this.config);
+    this.gateways = new Gateways(this.config);
   }
 
   testAuthentication(): Promise<any> {
@@ -262,5 +266,21 @@ class Upload {
     options?: UploadCIDOptions,
   ): UploadBuilder<PinByCIDResponse> {
     return new UploadBuilder(this.config, uploadCid, cid, options);
+  }
+}
+
+class Gateways {
+  config: PinataConfig | undefined;
+
+  constructor(config?: PinataConfig) {
+    this.config = formatConfig(config);
+  }
+
+  get(cid: string): Promise<any> {
+    return getCid(this.config, cid);
+  }
+
+  convert(url: string): string {
+    return convertIPFSUrl(this.config, url);
   }
 }
