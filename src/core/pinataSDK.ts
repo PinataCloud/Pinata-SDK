@@ -6,6 +6,7 @@ import {
   PinResponse,
   PinataConfig,
   PinataMetadata,
+  PinataMetadataUpdate,
   UploadCIDOptions,
   UploadOptions,
 } from "./types";
@@ -18,6 +19,7 @@ import { uploadJson } from "./pinning/json";
 import { uploadCid } from "./pinning/cid";
 import { unpinFile } from "./pinning/unpin";
 import { listFiles } from "./data/listFiles";
+import { updateMetadata } from "./data/updateMetadata";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinata_gateway;
@@ -49,6 +51,10 @@ export class PinataSDK {
 
   listFiles(): FilterFiles {
     return new FilterFiles(this.config);
+  }
+
+  updateMetadata(options: PinataMetadataUpdate): Promise<string> {
+    return updateMetadata(this.config, options);
   }
 }
 

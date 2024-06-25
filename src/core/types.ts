@@ -31,6 +31,12 @@ export type PinataMetadata = {
   keyValues?: Record<string, string | number>;
 };
 
+export type PinataMetadataUpdate = {
+  cid: string;
+  name?: string;
+  keyValues?: Record<string, string | number>;
+};
+
 export type UploadOptions = {
   metadata?: PinataMetadata;
   pinType?: "async" | "sync" | "cidOnly";
