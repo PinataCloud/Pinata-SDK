@@ -38,3 +38,4 @@ node_modules
 .envrc
 .next/
 issues/
+test/

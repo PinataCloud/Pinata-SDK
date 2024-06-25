@@ -103,6 +103,11 @@ class UploadBuilder<T> {
 class FilterFiles {
   private config: PinataConfig | undefined;
   private query: PinListQuery = {};
+  // rate limit vars
+  private requestCount: number = 0;
+  private lastRequestTime: number = 0;
+  private readonly MAX_REQUESTS_PER_MINUTE = 30;
+  private readonly MINUTE_IN_MS = 60000;
 
   constructor(config: PinataConfig | undefined) {
     this.config = config;
@@ -165,12 +170,28 @@ class FilterFiles {
     return listFiles(this.config, this.query).then(onfulfilled);
   }
 
+  // rate limit, hopefully temporary?
+  private async rateLimit(): Promise<void> {
+    this.requestCount++;
+    const now = Date.now();
+    if (this.requestCount >= this.MAX_REQUESTS_PER_MINUTE) {
+      const timePassedSinceLastRequest = now - this.lastRequestTime;
+      if (timePassedSinceLastRequest < this.MINUTE_IN_MS) {
+        const delayTime = this.MINUTE_IN_MS - timePassedSinceLastRequest;
+        await new Promise((resolve) => setTimeout(resolve, delayTime));
+      }
+      this.requestCount = 0;
+    }
+    this.lastRequestTime = Date.now();
+  }
+
   async *[Symbol.asyncIterator](): AsyncGenerator<PinListItem, void, unknown> {
     let hasMore = true;
     let offset = 0;
-    const limit = this.query.pageLimit || 10; // Default limit if not set
+    const limit = this.query.pageLimit || 10;
 
     while (hasMore) {
+      await this.rateLimit(); // applying rate limit
       this.query.pageOffset = offset;
       this.query.pageLimit = limit;
 
@@ -180,10 +201,10 @@ class FilterFiles {
         yield item;
       }
 
-      if (items.length < limit) {
+      if (items.length === 0) {
         hasMore = false;
       } else {
-        offset += limit;
+        offset += items.length;
       }
     }
   }
