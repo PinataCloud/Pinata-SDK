@@ -9,6 +9,7 @@ import {
   PinataMetadataUpdate,
   UploadCIDOptions,
   UploadOptions,
+  GetCIDResponse,
 } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
@@ -286,7 +287,7 @@ class Gateways {
     this.config = formatConfig(config);
   }
 
-  get(cid: string): Promise<any> {
+  get(cid: string): Promise<GetCIDResponse> {
     return getCid(this.config, cid);
   }
 

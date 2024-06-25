@@ -103,3 +103,8 @@ export type PinListQuery = {
     | "regexp"
     | "iRegexp";
 };
+
+export type GetCIDResponse = {
+  data?: string | Blob | null;
+  contentType: any;
+};

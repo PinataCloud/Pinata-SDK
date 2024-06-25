@@ -3,7 +3,7 @@
  * @returns
  */
 
-import { PinataConfig } from "../types";
+import { GetCIDResponse, PinataConfig } from "../types";
 
 export const getCid = async (
   config: PinataConfig | undefined,
@@ -11,6 +11,8 @@ export const getCid = async (
 ): Promise<any> => {
   try {
     let match: any;
+    let data: any;
+    let contentType: string | null;
     const cidRegex = /(Qm[1-9A-HJ-NP-Za-km-z]{44,}|bafy[A-Za-z2-7]{55,})/;
     match = cid.match(cidRegex);
     if (match) {
@@ -25,22 +27,22 @@ export const getCid = async (
         Authorization: `Bearer ${config?.pinata_jwt}`,
       },
     });
-    const contentType = request.headers.get("content-type");
+    contentType = request.headers.get("content-type");
 
     if (contentType?.includes("application/json")) {
-      return await request.json();
+      data = await request.json();
     } else if (contentType?.includes("text/")) {
-      return await request.text();
-    } else if (
-      contentType?.includes("image/") ||
-      contentType?.includes("video/") ||
-      contentType?.includes("audio/")
-    ) {
-      return await request.blob();
+      data = await request.text();
     } else {
-      // For other types, return as ArrayBuffer
-      return await request.arrayBuffer();
+      data = await request.blob();
     }
+
+    const res: GetCIDResponse = {
+      data: data,
+      contentType: contentType,
+    };
+
+    return res;
   } catch (error) {
     throw error;
   }
