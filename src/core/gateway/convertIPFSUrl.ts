@@ -3,6 +3,7 @@
  * @returns
  */
 
+import { convertToDesiredGateway } from "../../utils/gateway-tools";
 import { PinataConfig } from "../types";
 
 export const convertIPFSUrl = (
@@ -10,13 +11,8 @@ export const convertIPFSUrl = (
   url: string,
 ): string => {
   try {
-    const cidRegex = /(Qm[1-9A-HJ-NP-Za-km-z]{44,}|bafy[A-Za-z2-7]{55,})/;
-    const match = url.match(cidRegex);
-    if (match) {
-      return `${config?.pinata_gateway}/ipfs/${match[0]}`;
-    } else {
-      return url;
-    }
+    const newUrl = convertToDesiredGateway(url, config?.pinata_gateway);
+    return newUrl;
   } catch (error) {
     throw error;
   }

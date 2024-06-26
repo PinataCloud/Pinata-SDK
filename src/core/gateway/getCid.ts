@@ -3,6 +3,7 @@
  * @returns
  */
 
+import { convertToDesiredGateway } from "../../utils/gateway-tools";
 import { GetCIDResponse, PinataConfig } from "../types";
 
 export const getCid = async (
@@ -10,18 +11,11 @@ export const getCid = async (
   cid: string,
 ): Promise<any> => {
   try {
-    let match: any;
     let data: any;
     let contentType: string | null;
-    const cidRegex = /(Qm[1-9A-HJ-NP-Za-km-z]{44,}|bafy[A-Za-z2-7]{55,})/;
-    match = cid.match(cidRegex);
-    if (match) {
-      cid = match[0];
-    } else {
-      return cid;
-    }
+    const newUrl = convertToDesiredGateway(cid, config?.pinata_gateway);
 
-    const request = await fetch(`${config?.pinata_gateway}/ipfs/${cid}`, {
+    const request = await fetch(newUrl, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${config?.pinata_jwt}`,

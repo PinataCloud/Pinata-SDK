@@ -37,6 +37,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "is-ipfs": "^8.0.4",
     "node-fetch": "^3.3.1"
   }
 }
