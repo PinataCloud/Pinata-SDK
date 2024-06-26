@@ -13,12 +13,12 @@ export const getCid = async (
   try {
     let data: any;
     let contentType: string | null;
-    const newUrl = convertToDesiredGateway(cid, config?.pinata_gateway);
+    const newUrl = convertToDesiredGateway(cid, config?.pinataGateway);
 
     const request = await fetch(newUrl, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${config?.pinata_jwt}`,
+        Authorization: `Bearer ${config?.pinataJwt}`,
       },
     });
     contentType = request.headers.get("content-type");

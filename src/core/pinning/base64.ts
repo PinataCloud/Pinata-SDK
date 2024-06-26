@@ -11,12 +11,13 @@ export const uploadBase64 = async (
   options?: UploadOptions,
 ) => {
   try {
+    const name = options?.metadata?.name
+      ? options?.metadata?.name
+      : "base64 string";
 
-    const name = options?.metadata?.name ? options?.metadata?. name : "base64 string"
+    const buffer = Buffer.from(base64String, "base64");
 
-    const buffer = Buffer.from(base64String, 'base64')
-
-    const blob = new Blob([buffer])
+    const blob = new Blob([buffer]);
 
     const data = new FormData();
 
@@ -42,7 +43,7 @@ export const uploadBase64 = async (
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${config?.pinata_jwt}`,
+          Authorization: `Bearer ${config?.pinataJwt}`,
         },
         body: data,
       },

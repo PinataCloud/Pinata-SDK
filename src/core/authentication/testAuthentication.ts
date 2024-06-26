@@ -5,21 +5,19 @@
 
 import { PinataConfig } from "../types";
 
-export const testAuthentication = async (
-  config: PinataConfig | undefined,
-) => {
+export const testAuthentication = async (config: PinataConfig | undefined) => {
   try {
     const request = await fetch(
       `https://api.pinata.cloud/data/testAuthentication`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${config?.pinata_jwt}`,
-        }
+          Authorization: `Bearer ${config?.pinataJwt}`,
+        },
       },
     );
     const res = await request.json();
-    return res
+    return res;
   } catch (error) {
     throw error;
   }

@@ -5,6 +5,20 @@ function containsCID(url: string) {
     throw new Error("url is not string");
   }
   const splitUrl = url.split(/\/|\?/);
+
+  // Check for CID in subdomain
+  const urlObj = new URL(url);
+  const subdomains = urlObj.hostname.split(".");
+  for (const subdomain of subdomains) {
+    if (isIPFS.cid(subdomain)) {
+      return {
+        containsCid: true,
+        cid: subdomain,
+      };
+    }
+  }
+
+  // Check for CID in path
   for (const split of splitUrl) {
     if (isIPFS.cid(split)) {
       return {
@@ -36,25 +50,28 @@ export function convertToDesiredGateway(
   if (results.containsCid !== true) {
     throw new Error("url does not contain CID");
   }
-  const splitUrl = sourceUrl.split(results.cid!);
 
-  if (!sourceUrl.startsWith("https") || !sourceUrl.startsWith("ipfs")) {
-    return `${desiredGatewayPrefix}/ipfs/${results.cid}${splitUrl[1]}`;
-  }
+  const urlObj = new URL(sourceUrl);
+  const path = urlObj.pathname + urlObj.search + urlObj.hash;
 
   //case 1 - the ipfs://cid path
-  if (sourceUrl.includes(`ipfs://${results.cid}`)) {
-    return `${desiredGatewayPrefix}/ipfs/${results.cid}${splitUrl[1]}`;
+  if (sourceUrl.startsWith(`ipfs://${results.cid}`)) {
+    return `${desiredGatewayPrefix}/ipfs/${results.cid}${path}`;
   }
 
-  //case 2 - the /ipfs/cid path (this should cover ipfs://ipfs/cid as well
+  //case 2 - the /ipfs/cid path (this should cover ipfs://ipfs/cid as well)
   if (sourceUrl.includes(`/ipfs/${results.cid}`)) {
-    return `${desiredGatewayPrefix}/ipfs/${results.cid}${splitUrl[1]}`;
+    return `${desiredGatewayPrefix}/ipfs/${results.cid}${path}`;
   }
 
   //case 3 - the /ipns/cid path
   if (sourceUrl.includes(`/ipns/${results.cid}`)) {
-    return `${desiredGatewayPrefix}/ipns/${results.cid}${splitUrl[1]}`;
+    return `${desiredGatewayPrefix}/ipns/${results.cid}${path}`;
+  }
+
+  //case 4 - the CID is in the subdomain
+  if (urlObj.hostname.includes(results.cid)) {
+    return `${desiredGatewayPrefix}/ipfs/${results.cid}${path}`;
   }
 
   //this is the fallback if no supported patterns are provided

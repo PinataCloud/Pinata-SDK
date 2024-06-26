@@ -1,5 +1,5 @@
 /**
- * Uploads multiple file types 
+ * Uploads multiple file types
  * @returns message
  */
 
@@ -8,44 +8,50 @@ import { PinataConfig, PinResponse, UploadOptions } from "../types";
 export const uploadUrl = async (
   config: PinataConfig | undefined,
   url: string,
-  options?: UploadOptions
+  options?: UploadOptions,
 ) => {
   try {
-    const data = new FormData()
-    
-    const stream = await fetch(url)
+    const data = new FormData();
 
-    const arrayBuffer = await stream.arrayBuffer()
+    const stream = await fetch(url);
 
-    const blob = new Blob([arrayBuffer])
+    const arrayBuffer = await stream.arrayBuffer();
 
-    const name = options?.metadata ? options.metadata.name : `url_upload`
+    const blob = new Blob([arrayBuffer]);
 
-    const file = new File([blob], name!)
-    
-    data.append("file", file, name)
+    const name = options?.metadata ? options.metadata.name : `url_upload`;
 
-    data.append("pinataOptions", JSON.stringify({
-      cidVersion: 1
-    }))
+    const file = new File([blob], name!);
 
-    data.append("pinataMetadata", JSON.stringify({
-      name: name,
-      keyvalues: options?.metadata?.keyValues
-    }))
+    data.append("file", file, name);
+
+    data.append(
+      "pinataOptions",
+      JSON.stringify({
+        cidVersion: 1,
+      }),
+    );
+
+    data.append(
+      "pinataMetadata",
+      JSON.stringify({
+        name: name,
+        keyvalues: options?.metadata?.keyValues,
+      }),
+    );
 
     const request = await fetch(
       `https://api.pinata.cloud/pinning/pinFileToIPFS`,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${config?.pinata_jwt}`,
+          Authorization: `Bearer ${config?.pinataJwt}`,
         },
-        body: data
+        body: data,
       },
     );
     const res: PinResponse = await request.json();
-    return res
+    return res;
   } catch (error) {
     throw error;
   }

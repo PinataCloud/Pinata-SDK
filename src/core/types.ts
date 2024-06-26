@@ -1,6 +1,7 @@
 export type PinataConfig = {
-  pinata_jwt: string;
-  pinata_gateway: string;
+  pinataJwt: string;
+  pinataGateway?: string;
+  pinataGatewayKey?: string;
 };
 
 export type PinResponse = {

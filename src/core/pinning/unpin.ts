@@ -24,7 +24,7 @@ export const unpinFile = async (
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${config?.pinata_jwt}`,
+            Authorization: `Bearer ${config?.pinataJwt}`,
           },
         },
       );

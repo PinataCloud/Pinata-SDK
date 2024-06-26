@@ -11,7 +11,6 @@ export const uploadCid = async (
   options?: UploadCIDOptions,
 ) => {
   try {
-
     const data = JSON.stringify({
       hashToPin: cid,
       pinataMetadata: {
@@ -19,21 +18,18 @@ export const uploadCid = async (
         keyvalues: options?.metadata?.keyValues,
       },
       pinataOptions: {
-        hostNodes: options?.peerAddresses ? options.peerAddresses : ""
-      }
+        hostNodes: options?.peerAddresses ? options.peerAddresses : "",
+      },
     });
 
-    const request = await fetch(
-      `https://api.pinata.cloud/pinning/pinByHash`,
-      {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${config?.pinata_jwt}`,
-        },
-        body: data,
+    const request = await fetch(`https://api.pinata.cloud/pinning/pinByHash`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${config?.pinataJwt}`,
       },
-    );
+      body: data,
+    });
     const res: PinByCIDResponse = await request.json();
     return res;
   } catch (error) {

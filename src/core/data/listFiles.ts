@@ -55,7 +55,7 @@ export const listFiles = async (
     const request = await fetch(url, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${config?.pinata_jwt}`,
+        Authorization: `Bearer ${config?.pinataJwt}`,
       },
     });
     const res: PinListResponse = await request.json();
