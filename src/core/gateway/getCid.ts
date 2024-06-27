@@ -13,7 +13,13 @@ export const getCid = async (
   try {
     let data: any;
     let contentType: string | null;
-    const newUrl = convertToDesiredGateway(cid, config?.pinataGateway);
+    let newUrl: string;
+
+    newUrl = convertToDesiredGateway(cid, config?.pinataGateway);
+
+    if (config?.pinataGatewayKey) {
+      newUrl = `${newUrl}?pinataGatewayToken=${config?.pinataGatewayKey}`;
+    }
 
     const request = await fetch(newUrl, {
       method: "GET",

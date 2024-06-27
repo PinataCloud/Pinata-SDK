@@ -11,7 +11,11 @@ export const convertIPFSUrl = (
   url: string,
 ): string => {
   try {
-    const newUrl = convertToDesiredGateway(url, config?.pinata_gateway);
+    let newUrl: string;
+    newUrl = convertToDesiredGateway(url, config?.pinataGateway);
+    if (config?.pinataGatewayKey) {
+      newUrl + `?pinataGatewayToken=${config?.pinataGatewayKey}`;
+    }
     return newUrl;
   } catch (error) {
     throw error;
