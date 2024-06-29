@@ -26,6 +26,8 @@ import { updateMetadata } from "./data/updateMetadata";
 import { getCid } from "./gateway/getCid";
 import { convertIPFSUrl } from "./gateway/convertIPFSUrl";
 import { pinJobs } from "./data/pinJobs";
+import { pinnedFileCount } from "./data/pinnedFileUsage";
+import { totalStorageUsage } from "./data/totalStorageUsage";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinataGateway;
@@ -42,11 +44,13 @@ export class PinataSDK {
   config: PinataConfig | undefined;
   upload: Upload;
   gateways: Gateways;
+  usage: Usage;
 
   constructor(config?: PinataConfig) {
     this.config = formatConfig(config);
     this.upload = new Upload(this.config);
     this.gateways = new Gateways(this.config);
+    this.usage = new Usage(this.config);
   }
 
   testAuthentication(): Promise<any> {
@@ -385,5 +389,21 @@ class FilterPinJobs {
       allItems.push(item);
     }
     return allItems;
+  }
+}
+
+class Usage {
+  config: PinataConfig | undefined;
+
+  constructor(config?: PinataConfig) {
+    this.config = formatConfig(config);
+  }
+
+  pinnedFileCount(): Promise<number> {
+    return pinnedFileCount(this.config);
+  }
+
+  totalStorageSize(): Promise<number> {
+    return totalStorageUsage(this.config);
   }
 }

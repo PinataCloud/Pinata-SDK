@@ -145,3 +145,9 @@ export type GetCIDResponse = {
   data?: string | Blob | null;
   contentType: any;
 };
+
+export type UserPinnedDataResponse = {
+  pin_count: number;
+  pin_size_total: number;
+  pin_size_with_replications_total: number;
+};
