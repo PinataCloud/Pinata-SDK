@@ -10,6 +10,8 @@ import {
   UploadCIDOptions,
   UploadOptions,
   GetCIDResponse,
+  PinJobQuery,
+  PinJobItem,
 } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
@@ -23,6 +25,7 @@ import { listFiles } from "./data/listFiles";
 import { updateMetadata } from "./data/updateMetadata";
 import { getCid } from "./gateway/getCid";
 import { convertIPFSUrl } from "./gateway/convertIPFSUrl";
+import { pinJobs } from "./data/pinJobs";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinataGateway;
@@ -60,6 +63,10 @@ export class PinataSDK {
 
   updateMetadata(options: PinataMetadataUpdate): Promise<string> {
     return updateMetadata(this.config, options);
+  }
+
+  pinJobs(): FilterPinJobs {
+    return new FilterPinJobs(this.config);
   }
 }
 
@@ -293,5 +300,90 @@ class Gateways {
 
   convert(url: string): string {
     return convertIPFSUrl(this.config, url);
+  }
+}
+
+class FilterPinJobs {
+  private config: PinataConfig | undefined;
+  private query: PinJobQuery = {};
+  // rate limit vars
+  private requestCount: number = 0;
+  private lastRequestTime: number = 0;
+  private readonly MAX_REQUESTS_PER_MINUTE = 30;
+  private readonly MINUTE_IN_MS = 60000;
+
+  constructor(config: PinataConfig | undefined) {
+    this.config = config;
+  }
+
+  cid(cid: string): FilterPinJobs {
+    this.query.ipfs_pin_hash = cid;
+    return this;
+  }
+
+  pageLimit(limit: number): FilterPinJobs {
+    this.query.limit = limit;
+    return this;
+  }
+
+  pageOffset(offset: number): FilterPinJobs {
+    this.query.offset = offset;
+    return this;
+  }
+
+  sort(sort: "ASC" | "DSC"): FilterPinJobs {
+    this.query.sort = sort;
+    return this;
+  }
+
+  then(onfulfilled?: ((value: PinJobItem[]) => any) | null): Promise<any> {
+    return pinJobs(this.config, this.query).then(onfulfilled);
+  }
+
+  // rate limit, hopefully temporary?
+  private async rateLimit(): Promise<void> {
+    this.requestCount++;
+    const now = Date.now();
+    if (this.requestCount >= this.MAX_REQUESTS_PER_MINUTE) {
+      const timePassedSinceLastRequest = now - this.lastRequestTime;
+      if (timePassedSinceLastRequest < this.MINUTE_IN_MS) {
+        const delayTime = this.MINUTE_IN_MS - timePassedSinceLastRequest;
+        await new Promise((resolve) => setTimeout(resolve, delayTime));
+      }
+      this.requestCount = 0;
+    }
+    this.lastRequestTime = Date.now();
+  }
+
+  async *[Symbol.asyncIterator](): AsyncGenerator<PinJobItem, void, unknown> {
+    let hasMore = true;
+    let offset = 0;
+    const limit = this.query.limit || 10;
+
+    while (hasMore) {
+      await this.rateLimit(); // applying rate limit
+      this.query.offset = offset;
+      this.query.limit = limit;
+
+      const items = await pinJobs(this.config, this.query);
+
+      for (const item of items) {
+        yield item;
+      }
+
+      if (items.length === 0) {
+        hasMore = false;
+      } else {
+        offset += items.length;
+      }
+    }
+  }
+
+  async all(): Promise<PinJobItem[]> {
+    const allItems: PinJobItem[] = [];
+    for await (const item of this) {
+      allItems.push(item);
+    }
+    return allItems;
   }
 }

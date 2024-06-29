@@ -105,6 +105,42 @@ export type PinListQuery = {
     | "iRegexp";
 };
 
+export type PinJobQuery = {
+  sort?: "ASC" | "DSC";
+  status?:
+    | "prechecking"
+    | "retrieving"
+    | "expired"
+    | "over_free_limit"
+    | "over_max_size"
+    | "invalid_object"
+    | "bad_host_node";
+  ipfs_pin_hash?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export type PinJobItem = {
+  id: string;
+  ipfs_pin_hash: string;
+  date_queued: string;
+  name: string;
+  status: string;
+  keyvalues: any;
+  host_nodes: string[];
+  pin_policy: {
+    regions: {
+      id: string;
+      desiredReplicationCount: number;
+    }[];
+    version: number;
+  };
+};
+
+export type PinJobResponse = {
+  rows: PinJobItem[];
+};
+
 export type GetCIDResponse = {
   data?: string | Blob | null;
   contentType: any;
