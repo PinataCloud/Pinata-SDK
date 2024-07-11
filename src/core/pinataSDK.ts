@@ -12,6 +12,10 @@ import {
   GetCIDResponse,
   PinJobQuery,
   PinJobItem,
+  KeyOptions,
+  KeyResponse,
+  KeyListQuery,
+  KeyListItem,
 } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
@@ -28,6 +32,9 @@ import { convertIPFSUrl } from "./gateway/convertIPFSUrl";
 import { pinJobs } from "./data/pinJobs";
 import { pinnedFileCount } from "./data/pinnedFileUsage";
 import { totalStorageUsage } from "./data/totalStorageUsage";
+import { createKey } from "./keys/createKey";
+import { listKeys } from "./keys/listKeys";
+import { revokeKeys } from "./keys/revokeKeys";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinataGateway;
@@ -45,12 +52,14 @@ export class PinataSDK {
   upload: Upload;
   gateways: Gateways;
   usage: Usage;
+  keys: Keys;
 
   constructor(config?: PinataConfig) {
     this.config = formatConfig(config);
     this.upload = new Upload(this.config);
     this.gateways = new Gateways(this.config);
     this.usage = new Usage(this.config);
+    this.keys = new Keys(this.config);
   }
 
   testAuthentication(): Promise<any> {
@@ -82,6 +91,7 @@ class UploadBuilder<T> {
   ) => Promise<T>;
   private args: any[];
   private metadata: PinataMetadata | undefined;
+  private keys: string | undefined;
   private peerAddresses: string[] | undefined;
 
   constructor(
@@ -99,6 +109,11 @@ class UploadBuilder<T> {
 
   addMetadata(metadata: PinataMetadata): UploadBuilder<T> {
     this.metadata = metadata;
+    return this;
+  }
+
+  key(jwt: string): UploadBuilder<T> {
+    this.keys;
     return this;
   }
 
@@ -120,6 +135,9 @@ class UploadBuilder<T> {
     const options: UploadOptions = this.args[this.args.length - 1] || {};
     if (this.metadata) {
       options.metadata = this.metadata;
+    }
+    if (this.keys) {
+      options.keys = this.keys;
     }
     if (this.peerAddresses && "peerAddresses" in options) {
       options.peerAddresses = this.peerAddresses;
@@ -405,5 +423,113 @@ class Usage {
 
   totalStorageSize(): Promise<number> {
     return totalStorageUsage(this.config);
+  }
+}
+
+class Keys {
+  config: PinataConfig | undefined;
+
+  constructor(config?: PinataConfig) {
+    this.config = formatConfig(config);
+  }
+
+  create(options: KeyOptions): Promise<KeyResponse> {
+    return createKey(this.config, options);
+  }
+
+  list(): FilterKeys {
+    return new FilterKeys(this.config);
+  }
+
+  revoke(keys: string[]): Promise<any> {
+    return revokeKeys(this.config, keys);
+  }
+}
+
+class FilterKeys {
+  private config: PinataConfig | undefined;
+  private query: KeyListQuery = {};
+  // rate limit vars
+  private requestCount: number = 0;
+  private lastRequestTime: number = 0;
+  private readonly MAX_REQUESTS_PER_MINUTE = 30;
+  private readonly MINUTE_IN_MS = 60000;
+
+  constructor(config: PinataConfig | undefined) {
+    this.config = config;
+  }
+
+  offset(offset: number): FilterKeys {
+    this.query.offset = offset;
+    return this;
+  }
+
+  revoked(revoked: boolean): FilterKeys {
+    this.query.revoked = revoked;
+    return this;
+  }
+
+  limitedUse(limitedUse: boolean): FilterKeys {
+    this.query.limitedUse = limitedUse;
+    return this;
+  }
+
+  exhausted(exhausted: boolean): FilterKeys {
+    this.query.exhausted = exhausted;
+    return this;
+  }
+
+  name(name: string): FilterKeys {
+    this.query.name = name;
+    return this;
+  }
+
+  then(onfulfilled?: ((value: KeyListItem[]) => any) | null): Promise<any> {
+    return listKeys(this.config, this.query).then(onfulfilled);
+  }
+
+  // rate limit, hopefully temporary?
+  private async rateLimit(): Promise<void> {
+    this.requestCount++;
+    const now = Date.now();
+    if (this.requestCount >= this.MAX_REQUESTS_PER_MINUTE) {
+      const timePassedSinceLastRequest = now - this.lastRequestTime;
+      if (timePassedSinceLastRequest < this.MINUTE_IN_MS) {
+        const delayTime = this.MINUTE_IN_MS - timePassedSinceLastRequest;
+        await new Promise((resolve) => setTimeout(resolve, delayTime));
+      }
+      this.requestCount = 0;
+    }
+    this.lastRequestTime = Date.now();
+  }
+
+  async *[Symbol.asyncIterator](): AsyncGenerator<KeyListItem, void, unknown> {
+    let hasMore = true;
+    let offset = 0;
+
+    while (hasMore) {
+      await this.rateLimit(); // applying rate limit
+      this.query.offset = offset;
+
+      const items = await listKeys(this.config, this.query);
+
+      for (const item of items) {
+        yield item;
+      }
+
+      if (items.length === 0) {
+        hasMore = false;
+      } else {
+        offset += items.length;
+      }
+    }
+  }
+
+  async all(): Promise<KeyListItem[]> {
+    const allItems: KeyListItem[] = [];
+    for await (const item of this) {
+      allItems.push(item);
+    }
+    return allItems;
   }
 }

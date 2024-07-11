@@ -12,6 +12,12 @@ export const uploadFile = async (
 ) => {
   try {
     const data = new FormData();
+    let jwt;
+    if (options && options.keys) {
+      jwt = options.keys;
+    } else {
+      jwt = config?.pinataJwt;
+    }
     data.append("file", file, file.name);
 
     data.append(
@@ -34,7 +40,7 @@ export const uploadFile = async (
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${config?.pinataJwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: data,
       },

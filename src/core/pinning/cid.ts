@@ -11,6 +11,13 @@ export const uploadCid = async (
   options?: UploadCIDOptions,
 ) => {
   try {
+    let jwt;
+    if (options && options.keys) {
+      jwt = options.keys;
+    } else {
+      jwt = config?.pinataJwt;
+    }
+
     const data = JSON.stringify({
       hashToPin: cid,
       pinataMetadata: {
@@ -26,7 +33,7 @@ export const uploadCid = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${config?.pinataJwt}`,
+        Authorization: `Bearer ${jwt}`,
       },
       body: data,
     });

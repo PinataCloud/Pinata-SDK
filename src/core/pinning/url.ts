@@ -11,6 +11,12 @@ export const uploadUrl = async (
   options?: UploadOptions,
 ) => {
   try {
+    let jwt;
+    if (options && options.keys) {
+      jwt = options.keys;
+    } else {
+      jwt = config?.pinataJwt;
+    }
     const data = new FormData();
 
     const stream = await fetch(url);
@@ -45,7 +51,7 @@ export const uploadUrl = async (
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${config?.pinataJwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: data,
       },

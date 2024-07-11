@@ -11,6 +11,13 @@ export const uploadBase64 = async (
   options?: UploadOptions,
 ) => {
   try {
+    let jwt;
+    if (options && options.keys) {
+      jwt = options.keys;
+    } else {
+      jwt = config?.pinataJwt;
+    }
+
     const name = options?.metadata?.name
       ? options?.metadata?.name
       : "base64 string";
@@ -43,7 +50,7 @@ export const uploadBase64 = async (
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${config?.pinataJwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: data,
       },

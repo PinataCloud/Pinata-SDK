@@ -11,6 +11,13 @@ export const uploadFileArray = async (
   options?: UploadOptions,
 ) => {
   try {
+    let jwt;
+    if (options && options.keys) {
+      jwt = options.keys;
+    } else {
+      jwt = config?.pinataJwt;
+    }
+
     const folder = options?.metadata?.name
       ? options?.metadata?.name
       : "folder_from_sdk";
@@ -40,7 +47,7 @@ export const uploadFileArray = async (
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${config?.pinataJwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: data,
       },

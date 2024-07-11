@@ -11,6 +11,12 @@ export const uploadJson = async (
   options?: UploadOptions,
 ) => {
   try {
+    let jwt;
+    if (options && options.keys) {
+      jwt = options.keys;
+    } else {
+      jwt = config?.pinataJwt;
+    }
     const data = JSON.stringify({
       pinataContent: jsonData,
       pinataOptions: {
@@ -28,7 +34,7 @@ export const uploadJson = async (
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${config?.pinataJwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: data,
       },
