@@ -25,7 +25,7 @@ export const listKeys = async (
       if (limitedUse !== undefined)
         params.append("limitedUse", limitedUse.toString());
       if (exhausted !== undefined)
-        params.append("exhaused", exhausted.toString());
+        params.append("exhausted", exhausted.toString());
       if (name) params.append("name", name);
     }
 

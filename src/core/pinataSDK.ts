@@ -113,7 +113,7 @@ class UploadBuilder<T> {
   }
 
   key(jwt: string): UploadBuilder<T> {
-    this.keys;
+    this.keys = jwt;
     return this;
   }
 
