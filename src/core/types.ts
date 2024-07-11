@@ -42,6 +42,8 @@ export type UploadOptions = {
   metadata?: PinataMetadata;
   pinType?: "async" | "sync" | "cidOnly";
   keys?: string;
+  groupId?: string;
+  cidVersion?: 0 | 1;
 };
 
 export type UploadCIDOptions = {

@@ -17,10 +17,11 @@ export const uploadJson = async (
     } else {
       jwt = config?.pinataJwt;
     }
+
     const data = JSON.stringify({
       pinataContent: jsonData,
       pinataOptions: {
-        cidVersion: 1,
+        cidVersion: options?.cidVersion,
       },
       pinataMetadata: {
         name: options?.metadata ? options.metadata.name : "json",

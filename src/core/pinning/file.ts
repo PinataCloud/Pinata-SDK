@@ -11,19 +11,19 @@ export const uploadFile = async (
   options?: UploadOptions,
 ) => {
   try {
-    const data = new FormData();
     let jwt;
     if (options && options.keys) {
       jwt = options.keys;
     } else {
       jwt = config?.pinataJwt;
     }
+    const data = new FormData();
     data.append("file", file, file.name);
 
     data.append(
       "pinataOptions",
       JSON.stringify({
-        cidVersion: 1,
+        cidVersion: options?.cidVersion,
       }),
     );
 

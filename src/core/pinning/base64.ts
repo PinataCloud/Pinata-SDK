@@ -32,9 +32,7 @@ export const uploadBase64 = async (
 
     data.append(
       "pinataOptions",
-      JSON.stringify({
-        cidVersion: 1,
-      }),
+      JSON.stringify({ cidVersion: options?.cidVersion }),
     );
 
     data.append(

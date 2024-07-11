@@ -93,6 +93,7 @@ class UploadBuilder<T> {
   private metadata: PinataMetadata | undefined;
   private keys: string | undefined;
   private peerAddresses: string[] | undefined;
+  private version: 0 | 1 | undefined;
 
   constructor(
     config: PinataConfig | undefined,
@@ -105,6 +106,7 @@ class UploadBuilder<T> {
     this.config = config;
     this.uploadFunction = uploadFunction;
     this.args = args;
+    this.version = 1;
   }
 
   addMetadata(metadata: PinataMetadata): UploadBuilder<T> {
@@ -114,6 +116,11 @@ class UploadBuilder<T> {
 
   key(jwt: string): UploadBuilder<T> {
     this.keys = jwt;
+    return this;
+  }
+
+  cidVersion(v: 0 | 1): UploadBuilder<T> {
+    this.version = v;
     return this;
   }
 
@@ -138,6 +145,9 @@ class UploadBuilder<T> {
     }
     if (this.keys) {
       options.keys = this.keys;
+    }
+    if (this.version) {
+      options.cidVersion = this.version;
     }
     if (this.peerAddresses && "peerAddresses" in options) {
       options.peerAddresses = this.peerAddresses;

@@ -37,9 +37,7 @@ export const uploadFileArray = async (
 
     data.append(
       "pinataOptions",
-      JSON.stringify({
-        cidVersion: 1,
-      }),
+      JSON.stringify({ cidVersion: options?.cidVersion }),
     );
 
     const request = await fetch(
