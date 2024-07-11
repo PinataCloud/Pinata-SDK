@@ -94,6 +94,7 @@ class UploadBuilder<T> {
   private keys: string | undefined;
   private peerAddresses: string[] | undefined;
   private version: 0 | 1 | undefined;
+  private groupId: string | undefined;
 
   constructor(
     config: PinataConfig | undefined,
@@ -124,6 +125,11 @@ class UploadBuilder<T> {
     return this;
   }
 
+  group(groupId: string): UploadBuilder<T> {
+    this.groupId = groupId;
+    return this;
+  }
+
   peerAddress(peerAddresses: string[]): UploadBuilder<T> {
     this.peerAddresses = peerAddresses;
     return this;
@@ -145,6 +151,9 @@ class UploadBuilder<T> {
     }
     if (this.keys) {
       options.keys = this.keys;
+    }
+    if (this.groupId) {
+      options.groupId = this.groupId;
     }
     if (this.version) {
       options.cidVersion = this.version;
@@ -251,6 +260,11 @@ class FilterFiles {
 
   name(name: string): FilterFiles {
     this.query.name = name;
+    return this;
+  }
+
+  group(groupId: string): FilterFiles {
+    this.query.groupId = groupId;
     return this;
   }
 

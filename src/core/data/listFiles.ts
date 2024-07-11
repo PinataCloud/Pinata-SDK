@@ -32,6 +32,7 @@ export const listFiles = async (
         key,
         value,
         operator,
+        groupId,
       } = options;
 
       if (cid) params.append("cid", cid);
@@ -41,6 +42,7 @@ export const listFiles = async (
       if (pinSizeMax) params.append("pinSizeMax", pinSizeMax.toString());
       if (pageLimit) params.append("pageLimit", pageLimit.toString());
       if (pageOffset) params.append("pageOffset", pageOffset.toString());
+      if (groupId) params.append("groupId", groupId);
       if (name) params.append("metadata[name]", name);
       if (key && value) {
         const keyValueParam = JSON.stringify({

@@ -22,6 +22,7 @@ export const uploadJson = async (
       pinataContent: jsonData,
       pinataOptions: {
         cidVersion: options?.cidVersion,
+        groupId: options?.groupId,
       },
       pinataMetadata: {
         name: options?.metadata ? options.metadata.name : "json",

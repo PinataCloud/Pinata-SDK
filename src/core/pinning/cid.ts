@@ -26,6 +26,7 @@ export const uploadCid = async (
       },
       pinataOptions: {
         hostNodes: options?.peerAddresses ? options.peerAddresses : "",
+        groupId: options?.groupId,
       },
     });
 

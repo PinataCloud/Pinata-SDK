@@ -33,7 +33,10 @@ export const uploadUrl = async (
 
     data.append(
       "pinataOptions",
-      JSON.stringify({ cidVersion: options?.cidVersion }),
+      JSON.stringify({
+        cidVersion: options?.cidVersion,
+        groupId: options?.groupId,
+      }),
     );
 
     data.append(

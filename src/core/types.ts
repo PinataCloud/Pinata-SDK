@@ -50,6 +50,7 @@ export type UploadCIDOptions = {
   metadata?: PinataMetadata;
   peerAddresses?: string[];
   keys?: string;
+  groupId?: string;
 };
 
 export type UnpinResponse = {
@@ -90,6 +91,7 @@ export type PinListQuery = {
   pageLimit?: number;
   pageOffset?: number;
   name?: string;
+  groupId?: string;
   key?: string;
   value?: string;
   operator?:

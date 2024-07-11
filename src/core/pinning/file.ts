@@ -24,6 +24,7 @@ export const uploadFile = async (
       "pinataOptions",
       JSON.stringify({
         cidVersion: options?.cidVersion,
+        groupId: options?.groupId,
       }),
     );
 
