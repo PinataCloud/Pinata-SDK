@@ -231,3 +231,25 @@ export type RevokeKeyResponse = {
   key: string;
   status: string;
 };
+
+export type GroupOptions = {
+  name: string;
+};
+
+export type GroupResponseItem = {
+  id: string;
+  user_id: string;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+};
+
+export type GroupQueryOptions = {
+  nameContains?: string;
+  offset?: number;
+  limit?: number;
+};
+
+export type GroupCIDOptions = {
+  cids: string[];
+};
