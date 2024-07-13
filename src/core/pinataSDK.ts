@@ -16,6 +16,12 @@ import {
   KeyResponse,
   KeyListQuery,
   KeyListItem,
+  GroupOptions,
+  GroupResponseItem,
+  UpdateGroupOptions,
+  GroupCIDOptions,
+  GroupQueryOptions,
+  GetGroupOptions,
 } from "./types";
 import { testAuthentication } from "./authentication/testAuthentication";
 import { uploadFile } from "./pinning/file";
@@ -35,6 +41,13 @@ import { totalStorageUsage } from "./data/totalStorageUsage";
 import { createKey } from "./keys/createKey";
 import { listKeys } from "./keys/listKeys";
 import { revokeKeys } from "./keys/revokeKeys";
+import { createGroup } from "./groups/createGroup";
+import { listGroups } from "./groups/listGroups";
+import { getGroup } from "./groups/getGroup";
+import { addToGroup } from "./groups/addToGroup";
+import { updateGroup } from "./groups/updateGroup";
+import { removeFromGroup } from "./groups/removeFromGroup";
+import { deleteGroup } from "./groups/deleteGroup";
 
 const formatConfig = (config: PinataConfig | undefined) => {
   let gateway = config?.pinataGateway;
@@ -53,6 +66,7 @@ export class PinataSDK {
   gateways: Gateways;
   usage: Usage;
   keys: Keys;
+  groups: Groups;
 
   constructor(config?: PinataConfig) {
     this.config = formatConfig(config);
@@ -60,6 +74,7 @@ export class PinataSDK {
     this.gateways = new Gateways(this.config);
     this.usage = new Usage(this.config);
     this.keys = new Keys(this.config);
+    this.groups = new Groups(this.config);
   }
 
   testAuthentication(): Promise<any> {
@@ -551,6 +566,126 @@ class FilterKeys {
 
   async all(): Promise<KeyListItem[]> {
     const allItems: KeyListItem[] = [];
+    for await (const item of this) {
+      allItems.push(item);
+    }
+    return allItems;
+  }
+}
+
+class Groups {
+  config: PinataConfig | undefined;
+
+  constructor(config?: PinataConfig) {
+    this.config = formatConfig(config);
+  }
+
+  create(options: GroupOptions): Promise<GroupResponseItem> {
+    return createGroup(this.config, options);
+  }
+
+  list(): FilterGroups {
+    return new FilterGroups(this.config);
+  }
+
+  get(options: GetGroupOptions): Promise<GroupResponseItem> {
+    return getGroup(this.config, options);
+  }
+
+  addCids(options: GroupCIDOptions): Promise<string> {
+    return addToGroup(this.config, options);
+  }
+
+  removeCids(options: GroupCIDOptions): Promise<string> {
+    return removeFromGroup(this.config, options);
+  }
+
+  update(options: UpdateGroupOptions): Promise<GroupResponseItem> {
+    return updateGroup(this.config, options);
+  }
+
+  delete(options: GetGroupOptions): Promise<string> {
+    return deleteGroup(this.config, options);
+  }
+}
+
+class FilterGroups {
+  private config: PinataConfig | undefined;
+  private query: GroupQueryOptions = {};
+  // rate limit vars
+  private requestCount: number = 0;
+  private lastRequestTime: number = 0;
+  private readonly MAX_REQUESTS_PER_MINUTE = 30;
+  private readonly MINUTE_IN_MS = 60000;
+
+  constructor(config: PinataConfig | undefined) {
+    this.config = config;
+  }
+
+  offset(offset: number): FilterGroups {
+    this.query.offset = offset;
+    return this;
+  }
+
+  name(nameContains: string): FilterGroups {
+    this.query.nameContains = nameContains;
+    return this;
+  }
+
+  limit(limit: number): FilterGroups {
+    this.query.limit = limit;
+    return this;
+  }
+
+  then(
+    onfulfilled?: ((value: GroupResponseItem[]) => any) | null,
+  ): Promise<any> {
+    return listGroups(this.config, this.query).then(onfulfilled);
+  }
+
+  // rate limit, hopefully temporary?
+  private async rateLimit(): Promise<void> {
+    this.requestCount++;
+    const now = Date.now();
+    if (this.requestCount >= this.MAX_REQUESTS_PER_MINUTE) {
+      const timePassedSinceLastRequest = now - this.lastRequestTime;
+      if (timePassedSinceLastRequest < this.MINUTE_IN_MS) {
+        const delayTime = this.MINUTE_IN_MS - timePassedSinceLastRequest;
+        await new Promise((resolve) => setTimeout(resolve, delayTime));
+      }
+      this.requestCount = 0;
+    }
+    this.lastRequestTime = Date.now();
+  }
+
+  async *[Symbol.asyncIterator](): AsyncGenerator<
+    GroupResponseItem,
+    void,
+    unknown
+  > {
+    let hasMore = true;
+    let offset = 0;
+
+    while (hasMore) {
+      await this.rateLimit(); // applying rate limit
+      this.query.offset = offset;
+
+      const items = await listGroups(this.config, this.query);
+
+      for (const item of items) {
+        yield item;
+      }
+
+      if (items.length === 0) {
+        hasMore = false;
+      } else {
+        offset += items.length;
+      }
+    }
+  }
+
+  async all(): Promise<GroupResponseItem[]> {
+    const allItems: GroupResponseItem[] = [];
     for await (const item of this) {
       allItems.push(item);
     }

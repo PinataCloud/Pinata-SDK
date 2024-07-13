@@ -3,18 +3,19 @@
  * @returns message
  */
 
-import { PinataConfig, GroupCIDOptions } from "../types";
+import { GroupCIDOptions, PinataConfig } from "../types";
 
 export const removeFromGroup = async (
   config: PinataConfig | undefined,
-  groupId: string,
   options: GroupCIDOptions,
 ) => {
   try {
-    const data = JSON.stringify(options);
+    const data = JSON.stringify({
+      cids: options.cids,
+    });
 
     const request = await fetch(
-      `https://api.pinata.cloud/groups/${groupId}/cids`,
+      `https://api.pinata.cloud/groups/${options.groupId}/cids`,
       {
         method: "DELETE",
         headers: {
@@ -24,7 +25,7 @@ export const removeFromGroup = async (
         body: data,
       },
     );
-    const res: string = await request.json();
+    const res: string = await request.text();
     return res;
   } catch (error) {
     throw error;

@@ -5,7 +5,7 @@
 
 import { PinataConfig, GroupResponseItem, GroupQueryOptions } from "../types";
 
-export const getGroup = async (
+export const listGroups = async (
   config: PinataConfig | undefined,
   options?: GroupQueryOptions,
 ) => {

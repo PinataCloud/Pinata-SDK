@@ -236,6 +236,15 @@ export type GroupOptions = {
   name: string;
 };
 
+export type UpdateGroupOptions = {
+  name: string;
+  groupId: string;
+};
+
+export type GetGroupOptions = {
+  groupId: string;
+};
+
 export type GroupResponseItem = {
   id: string;
   user_id: string;
@@ -251,5 +260,6 @@ export type GroupQueryOptions = {
 };
 
 export type GroupCIDOptions = {
+  groupId: string;
   cids: string[];
 };
