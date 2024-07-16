@@ -52,7 +52,7 @@ export const listFiles = async (
       }
     }
 
-    const url = `https://api.pinata.cloud/data/pinList?status=pinned&includesCount=false&${params.toString()}`;
+    const url = `https://api.pinata.cloud/data/pinList?status=pinned&${params.toString()}`;
 
     const request = await fetch(url, {
       method: "GET",

@@ -66,8 +66,10 @@ export type PinListItem = {
   date_pinned: string;
   date_unpinned: string | null;
   metadata: {
-    name: string;
-    keyvalues: string[] | null;
+    name: string | null;
+    keyvalues: {
+      [key: string]: any;
+    } | null;
   };
   regions: {
     regionId: string;
