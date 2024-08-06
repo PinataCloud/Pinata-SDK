@@ -1,6 +1,6 @@
 {
     "name": "@pinata/sdk",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "Official SDK for the Pinata IPFS platform",
     "main": "lib/pinata-sdk.js",
     "types": "types/index.d.ts",
@@ -15,7 +15,8 @@
         "lint": "eslint src --quiet ",
         "lint:fix": "eslint src test --fix",
         "test": "./node_modules/.bin/jest --env=node",
-        "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\""
+        "repl": "node -i -e \"$(< ./lib/pinata-sdk.js)\"",
+        "postinstall": "node postinstall.js"
     },
     "repository": {
         "type": "git",
