@@ -1,6 +1,6 @@
-<img src="https://cdn-images-1.medium.com/max/1200/1*BTGStLRXsQUbkp0t-oxJhQ.png" width="200" />
+# Pinata SDK (Archived)
 
-# Archived Pinata SDK
+This is the older Node.js SDK that is no longer being maintained.
 
 A new Pinata SDK is available for download
 
